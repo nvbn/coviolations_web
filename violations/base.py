@@ -1,29 +1,10 @@
-from functools import partial
-from django.conf import settings
+from tools.library import BaseLibrary
 from .exceptions import ViolationDoesNotExists
 
 
-class ViolationsLibrary(object):
+class ViolationsLibrary(BaseLibrary):
     """Violations library"""
-
-    def __init__(self):
-        self._violations = {}
-
-    def _register_fnc(self, name, fnc):
-        if name in settings.ENABLED_VIOLATIONS:
-            self._violations[name] = fnc
-        return fnc
-
-    def register(self, name):
-        """Register violation in library"""
-        return partial(self._register_fnc, name)
-
-    def get(self, name):
-        """Get violation"""
-        try:
-            return self._violations[name]
-        except KeyError:
-            raise ViolationDoesNotExists(name)
-
+    exception = ViolationDoesNotExists
+    enabled_settings = 'ENABLED_VIOLATIONS'
 
 library = ViolationsLibrary()
