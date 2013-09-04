@@ -20,14 +20,6 @@ class DummyServiceCase(TestCase):
             ]
         })
 
-    def test_create_commit(self):
-        """Test create commit"""
-        self.assertEqual(Commit.objects.get().name, 'asdfg')
-
     def test_create_task(self):
         """Test create task"""
         self.assertEqual(Task.objects.count(), 1)
-
-    def test_create_violations(self):
-        """Test create violations"""
-        self.assertEqual(Violation.objects.count(), 2)

@@ -1,10 +1,34 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-from projects.models import Commit
+from projects.models import Commit, Branch
 from violations.base import library
 from violations.exceptions import ViolationDoesNotExists
 from . import const
 from .utils import logger
+
+
+class TaskManager(models.Manager):
+    """Task manager"""
+
+    def create_task(self, data):
+        """Create task from data dict"""
+        branch = Branch.objects.get(
+            name=data['branch'],
+            project__name=data['project'],
+        )
+        commit = Commit.objects.create(
+            name=data['commit'],
+            branch=branch,
+        )
+        task = Task.objects.create(
+            commit=commit,
+        )
+        for violation in data['violations']:
+            Violation.objects.create(
+                task=task,
+                violation=violation['name'],
+                raw_data=violation['data'],
+            )
 
 
 class Task(models.Model):
@@ -16,6 +40,8 @@ class Task(models.Model):
         choices=const.STATUSES, default=const.STATUS_NEW,
         verbose_name=_('status'),
     )
+
+    objects = TaskManager()
 
     class Meta:
         verbose_name = _('Task')
