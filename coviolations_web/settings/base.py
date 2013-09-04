@@ -99,7 +99,6 @@ INSTALLED_APPS = (
     'rest_framework',
     'django_extensions',
     'discover_runner',
-    'userena',
     'djangobower',
 )
 
@@ -110,13 +109,3 @@ AUTHENTICATION_BACKENDS = (
     'guardian.backends.ObjectPermissionBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
-
-ANONYMOUS_USER_ID = -1
-AUTH_PROFILE_MODULE = 'accounts.Profile'
-LOGIN_REDIRECT_URL = '/accounts/%(username)s/'
-LOGIN_URL = '/accounts/signin/'
-LOGOUT_URL = '/accounts/signout/'
-USERENA_ACTIVATION_REQUIRED = False
-USERENA_SIGNIN_AFTER_SIGNUP = True
-USERENA_WITHOUT_USERNAMES = True
-
