@@ -105,6 +105,7 @@ INSTALLED_APPS = (
     'projects',
     'tasks',
     'violations',
+    'services',
 )
 
 BOWER_COMPONENTS_ROOT = os.path.join(PROJECT_ROOT, 'components')
@@ -123,3 +124,11 @@ ENABLED_VIOLATIONS = (
 VIOLATIONS = (
     'violations.dummy',
 )
+
+ENABLED_SERVICES = (
+    'dummy',
+)
+SERVICES = (
+    'services.dummy',
+)
+
