@@ -22,8 +22,35 @@
     ></script>
 </head>
 <body>
-    <h1>Coviolations</h1>
-    {% block content %}
-    {% endblock %}
+    <div class='container'>
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="{% url 'home' %}">coviolations</a>
+            </div>
+            <div class="collapse navbar-collapse navbar-ex1-collapse">
+                {% if user.is_authenticated %}
+                    <a
+                        class='btn btn-default navbar-btn'
+                        href='#'>
+                        Manage projects
+                    </a>
+                    <a
+                        class='btn btn-default navbar-btn pull-right'
+                        href='{% url 'logout' %}'>
+                        Sign out
+                    </a>
+                {% else %}
+                    <a
+                        class='btn btn-default navbar-btn pull-right'
+                        href='{% url 'socialauth_begin' 'github' %}'
+                    >
+                        Sign in with github
+                    </a>
+                {% endif %}
+            </div>
+        </nav>
+        {% block content %}
+        {% endblock %}
+    </div>
 </body>
 </html>
