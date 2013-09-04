@@ -1,7 +1,10 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from projects.models import Commit
+from violations.base import library
+from violations.exceptions import ViolationDoesNotExists
 from . import const
+from .utils import logger
 
 
 class Task(models.Model):
@@ -45,3 +48,13 @@ class Violation(models.Model):
 
     def __unicode__(self):
         return '{}: {}'.format(self.task, self.violation)
+
+    def prepare(self):
+        """Prepare violation result"""
+        try:
+            violation = library.get(self.violation)
+            self.prepared_data = violation(self.raw_data)
+            self.status = const.STATUS_SUCCESS
+        except ViolationDoesNotExists:
+            self.status = const.STATUS_FAILED
+            logger.warning('Prepare violation failed')

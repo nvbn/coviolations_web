@@ -15,6 +15,7 @@ class ViolationFactory(factory.DjangoModelFactory):
     """Violation factory"""
     FACTORY_FOR = models.Violation
     raw_data = factory.Sequence(lambda n: 'raw {}'.format(n))
+    task = factory.SubFactory(TaskFactory)
 
     @factory.sequence
     def violation(n):

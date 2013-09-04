@@ -10,7 +10,7 @@ class ViolationsLibrary(object):
         self._violations = {}
 
     def _register_fnc(self, name, fnc):
-        if name in settings.VIOLATIONS:
+        if name in settings.ENABLED_VIOLATIONS:
             self._violations[name] = fnc
         return fnc
 

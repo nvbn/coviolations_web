@@ -116,6 +116,9 @@ AUTHENTICATION_BACKENDS = (
 
 TEST_RUNNER = 'discover_runner.DiscoverRunner'
 
-VIOLATIONS = (
+ENABLED_VIOLATIONS = (
     'dummy',
+)
+VIOLATIONS = (
+    'violations.dummy',
 )
