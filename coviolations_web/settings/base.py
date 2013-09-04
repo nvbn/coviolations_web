@@ -96,7 +96,6 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admin',
     'south',
-    'rest_framework',
     'django_extensions',
     'discover_runner',
     'djangobower',

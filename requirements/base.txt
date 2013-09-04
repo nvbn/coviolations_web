@@ -2,7 +2,6 @@ django
 django-bower
 south
 django-extensions
-djangorestframework
 django-discover-runner
 pillow
 django-rq
