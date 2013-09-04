@@ -20,6 +20,7 @@
         type="text/javascript"
         src='{% static 'bootstrap/dist/js/bootstrap.min.js' %}'
     ></script>
+    {% block extrahead %}{% endblock %}
 </head>
 <body>
     <div class='container'>
@@ -31,7 +32,7 @@
                 {% if user.is_authenticated %}
                     <a
                         class='btn btn-default navbar-btn'
-                        href='#'>
+                        href='{% url 'projects_manage' %}'>
                         Manage projects
                     </a>
                     <a
