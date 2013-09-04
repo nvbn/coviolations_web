@@ -2,7 +2,8 @@ from mock import MagicMock
 from django.test import TestCase
 from django_rq import get_worker
 from projects.tests.factories import BranchFactory
-from .. import jobs, models
+from .. import jobs, models, const
+from . import factories
 
 
 class CreateTaskJobCase(TestCase):
@@ -41,3 +42,37 @@ class CreateTaskJobCase(TestCase):
         """Test propagating to prepare violations"""
         task = models.Task.objects.get()
         jobs.prepare_violations.assert_called_once_with(task)
+
+
+class PrepareViolationsJobCase(TestCase):
+    """Prepare violations job case"""
+
+    def test_prepare(self):
+        """Test prepare"""
+        task = factories.TaskFactory.create()
+        factories.ViolationFactory.create_batch(
+            10, task=task, violation='dummy',
+        )
+        jobs.prepare_violations(task)
+        get_worker().work(burst=True)
+        self.assertEqual(models.Violation.objects.filter(
+            status=const.STATUS_SUCCESS,
+        ).count(), 10)
+
+    def test_not_fail_all(self):
+        """Not fail all if fail one"""
+        task = factories.TaskFactory.create()
+        factories.ViolationFactory.create_batch(
+            7, task=task, violation='dummy',
+        )
+        factories.ViolationFactory.create_batch(
+            3, task=task, violation='dummy!!!',
+        )
+        jobs.prepare_violations(task)
+        get_worker().work(burst=True)
+        self.assertEqual(models.Violation.objects.filter(
+            status=const.STATUS_SUCCESS,
+        ).count(), 7)
+        self.assertEqual(models.Violation.objects.filter(
+            status=const.STATUS_FAILED,
+        ).count(), 3)

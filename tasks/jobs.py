@@ -12,3 +12,6 @@ def create_task(service, data):
 @job
 def prepare_violations(task):
     """Prepare violations"""
+    for violation in task.violations.all():
+        violation.prepare()
+        violation.save()
