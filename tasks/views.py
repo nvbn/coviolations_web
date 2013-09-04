@@ -1,11 +1,11 @@
 import json
-from django.http import HttpResponse
 from django.views.generic import View
 from django.conf import settings
+from braces.views import JSONResponseMixin
 from .jobs import create_task
 
 
-class CreateTaskView(View):
+class CreateTaskView(JSONResponseMixin, View):
     """Create task view"""
 
     def post(self, request, *args, **kwargs):
@@ -16,4 +16,6 @@ class CreateTaskView(View):
             ok = True
         else:
             ok = False
-        return HttpResponse(content=json.dumps({'ok': ok}))
+        return self.render_json_response({
+            'ok': ok,
+        })
