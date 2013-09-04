@@ -1,5 +1,19 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block extrahead %}
+    <script
+        type="text/javascript"
+        src='{% static 'coffee/manage.js' %}'
+    ></script>
+    {% include 'projects/manage/project_line.html' %}
+{% endblock %}
 
 {% block content %}
     <h1>Manage projects</h1>
+    <div class='col-lg-8 row'>
+        <table class="table table-hover col-lg-8 js-manage-projects">
+            <tr><td>Loading...</td></tr>
+        </table>
+    </div>
 {% endblock %}

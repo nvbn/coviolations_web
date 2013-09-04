@@ -1,0 +1,24 @@
+<script id="manage-project-line-tmpl" type="text/template">
+    <td>
+        <a href='<%= url %>' target="_blank"><%= name %></a>
+    </td>
+    <td>
+        <div class="btn-group pull-right">
+            <button type="button"
+                class="btn js-yes
+                    <% if (is_enabled){ %>
+                        btn-success
+                    <% } else { %>
+                        btn-default
+                    <% } %>">Yes</button>
+            <button type="button"
+                class="btn js-no
+                    <% if (is_enabled){ %>
+                        btn-default
+                    <% } else { %>
+                        btn-danger
+                    <% } %>
+                ">No</button>
+        </div>
+    </td>
+</script>

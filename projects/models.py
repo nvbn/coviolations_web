@@ -17,13 +17,11 @@ class ProjectManager(models.Manager):
     def get_or_create_for_user(self, user):
         """Get or create for user"""
         for repo in self._get_remote_projects(user):
-            # TODO: add organization support
-            if not repo.organization:
-                Project.objects.get_or_create(
-                    owner=user,
-                    name=repo.name,
-                    url=repo.url,
-                )
+            Project.objects.get_or_create(
+                owner=user,
+                name=repo.name,
+                url=repo.url,
+            )
         return self.filter(owner=user)
 
 
