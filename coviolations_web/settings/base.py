@@ -100,6 +100,8 @@ INSTALLED_APPS = (
     'django_extensions',
     'discover_runner',
     'djangobower',
+
+    'projects',
 )
 
 BOWER_COMPONENTS_ROOT = os.path.join(PROJECT_ROOT, 'components')
@@ -109,3 +111,5 @@ AUTHENTICATION_BACKENDS = (
     'guardian.backends.ObjectPermissionBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
+
+TEST_RUNNER = 'discover_runner.DiscoverRunner'
