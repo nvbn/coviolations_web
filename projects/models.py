@@ -19,7 +19,7 @@ class ProjectManager(models.Manager):
         for repo in self._get_remote_projects(user):
             Project.objects.get_or_create(
                 owner=user,
-                name=repo.name,
+                name=repo.full_name,
                 url=repo.url,
             )
         return self.filter(owner=user)

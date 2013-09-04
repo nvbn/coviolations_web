@@ -24,5 +24,5 @@ class MockGithubMixin(object):
             url='http://test{}.com'.format(n),
             organization=None,
         )
-        repo.name = 'project {}'.format(n)
+        repo.full_name = 'project {}'.format(n)
         return repo
