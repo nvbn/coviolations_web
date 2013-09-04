@@ -24,7 +24,8 @@ class CreateTaskJobCase(TestCase):
     def _create_task(self):
         """Create task"""
         BranchFactory(project__name='test', name='develop')
-        jobs.create_task('dummy', {
+        jobs.create_task({
+            'service': 'dummy',
             'project': 'test',
             'branch': 'develop',
             'commit': 'asdfg',

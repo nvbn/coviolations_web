@@ -3,9 +3,9 @@ import services.base
 
 
 @job
-def create_task(service, data):
+def create_task(data):
     """Create task job"""
-    task = services.base.library.get(service)(data)
+    task = services.base.library.get(data['service'])(data)
     prepare_violations(task)
 
 
