@@ -101,6 +101,7 @@ INSTALLED_APPS = (
     'djangobower',
     'django_rq',
     'social_auth',
+    'tastypie',
 
     'app',
     'projects',
@@ -115,6 +116,9 @@ BOWER_INSTALLED_APPS = (
     'jquery',
     'bootstrap',
     'font-awesome',
+    'underscore',
+    'backbone',
+    'backbone-tastypie',
 )
 
 TEST_RUNNER = 'discover_runner.DiscoverRunner'
