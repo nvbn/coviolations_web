@@ -1,6 +1,7 @@
 from django.test import TestCase
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
+from . import factories
 
 
 class ManageProjectViewCase(TestCase):
@@ -16,5 +17,18 @@ class ManageProjectViewCase(TestCase):
             username='test',
             password='test',
         )
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+
+
+class ProjectViewCase(TestCase):
+    """Project view case"""
+
+    def setUp(self):
+        project = factories.ProjectFactory.create()
+        self.url = reverse('projects_project', args=(project.id,))
+
+    def test_ok(self):
+        """Test status=200"""
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)

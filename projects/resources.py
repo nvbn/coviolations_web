@@ -41,6 +41,7 @@ class UserProjectsAuthorization(Authorization):
 
 class UserProjectsResource(ModelResource):
     """User projects resource"""
+    id = fields.CharField(attribute='id', readonly=True)
     name = fields.CharField(attribute='name', readonly=True)
     url = fields.CharField(attribute='url', readonly=True)
 
@@ -48,4 +49,4 @@ class UserProjectsResource(ModelResource):
         queryset = Project.objects.all()
         authentication = Authentication()
         authorization = UserProjectsAuthorization()
-        fields = ('name', 'is_enabled')
+        fields = ('name', 'is_enabled', 'id')
