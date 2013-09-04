@@ -27,6 +27,23 @@ RQ_QUEUES = {
     }
 }
 
+ENABLED_VIOLATIONS = (
+    'dummy',
+)
+VIOLATIONS = (
+    'violations.dummy',
+)
+
+ENABLED_SERVICES = (
+    'dummy',
+)
+SERVICES = (
+    'services.dummy',
+)
+
+GITHUB_APP_ID = ''
+GITHUB_API_SECRET = ''
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,

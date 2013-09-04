@@ -100,6 +100,7 @@ INSTALLED_APPS = (
     'discover_runner',
     'djangobower',
     'django_rq',
+    'social_auth',
 
     'app',
     'projects',
@@ -118,17 +119,9 @@ BOWER_INSTALLED_APPS = (
 
 TEST_RUNNER = 'discover_runner.DiscoverRunner'
 
-ENABLED_VIOLATIONS = (
-    'dummy',
-)
-VIOLATIONS = (
-    'violations.dummy',
+AUTHENTICATION_BACKENDS = (
+    'social_auth.backends.contrib.github.GithubBackend',
+    'django.contrib.auth.backends.ModelBackend',
 )
 
-ENABLED_SERVICES = (
-    'dummy',
-)
-SERVICES = (
-    'services.dummy',
-)
-
+LOGIN_REDIRECT_URL = '/'

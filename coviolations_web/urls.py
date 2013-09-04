@@ -9,4 +9,5 @@ urlpatterns = patterns(
     url(r'^', include('app.urls')),
     url(r'^tasks/', include('tasks.urls')),
     url(r'^admin/', include(admin.site.urls)),
+    url(r'', include('social_auth.urls')),
 )

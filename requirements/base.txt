@@ -6,3 +6,6 @@ django-discover-runner
 pillow
 django-rq
 redis
+PyGithub
+django-social-auth
+oauth2
