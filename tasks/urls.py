@@ -4,5 +4,5 @@ from .views import CreateTaskView
 
 urlpatterns = patterns(
     'tasks',
-    url(r'create/$', CreateTaskView.as_view(), name='tasks_create'),
+    url(r'^create/$', CreateTaskView.as_view(), name='tasks_create'),
 )

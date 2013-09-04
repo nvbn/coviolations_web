@@ -101,6 +101,7 @@ INSTALLED_APPS = (
     'djangobower',
     'django_rq',
 
+    'app',
     'projects',
     'tasks',
     'violations',
