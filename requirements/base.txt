@@ -1,0 +1,7 @@
+django
+django-bower
+south
+django-extensions
+django-userena
+djangorestframework
+django-discover-runner
