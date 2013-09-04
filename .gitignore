@@ -38,6 +38,9 @@ static_collected/
 crontab.sh
 gunicorn.conf.py
 
+*.js
+*.map
+
 components/*
 !componens/.gitkeep
 static/*

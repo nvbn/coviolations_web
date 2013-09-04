@@ -11,3 +11,4 @@ django-social-auth
 oauth2
 django-braces
 django-tastypie
+mimeparse

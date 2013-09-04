@@ -3,6 +3,7 @@ from django.test import TestCase
 from django.contrib.auth.models import User
 from .. import models
 from . import factories
+from .base import MockGithubMixin
 
 
 class RelationsCase(TestCase):
@@ -21,31 +22,12 @@ class RelationsCase(TestCase):
         self.assertEqual(branch.commits.count(), 10)
 
 
-class ProjectManagerCase(TestCase):
+class ProjectManagerCase(MockGithubMixin, TestCase):
     """Project manager case"""
 
     def setUp(self):
-        self._mock_github_call()
+        super(ProjectManagerCase, self).setUp()
         self.user = User.objects.create_user('user')
-
-    def _mock_github_call(self):
-        """Mock github call"""
-        self._orig_get_remote_projects =\
-            models.ProjectManager._get_remote_projects
-        models.ProjectManager._get_remote_projects = MagicMock()
-
-    def tearDown(self):
-        models.ProjectManager._get_remote_projects =\
-            self._orig_get_remote_projects
-
-    def _create_repo(self, n):
-        """Create repo"""
-        repo = MagicMock(
-            url='http://test{}.com'.format(n),
-            organization=None,
-        )
-        repo.name = 'project {}'.format(n)
-        return repo
 
     def test_create(self):
         """Test create"""
