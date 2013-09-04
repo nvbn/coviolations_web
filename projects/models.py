@@ -39,6 +39,7 @@ class Project(models.Model):
     class Meta:
         verbose_name = _('Project')
         verbose_name_plural = _('Projects')
+        ordering = ('-id',)
 
 
 class Branch(models.Model):
