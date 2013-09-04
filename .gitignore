@@ -38,3 +38,10 @@ static_collected/
 crontab.sh
 gunicorn.conf.py
 
+components/*
+!componens/.gitkeep
+static/*
+!static/.gitkeep
+media/*
+!media/.gitkeep
+

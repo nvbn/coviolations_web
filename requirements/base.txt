@@ -5,3 +5,4 @@ django-extensions
 django-userena
 djangorestframework
 django-discover-runner
+pillow
