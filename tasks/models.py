@@ -29,6 +29,7 @@ class TaskManager(models.Manager):
                 violation=violation['name'],
                 raw_data=violation['data'],
             )
+        return task
 
 
 class Task(models.Model):

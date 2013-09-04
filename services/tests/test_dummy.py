@@ -1,7 +1,6 @@
 from django.test import TestCase
 from projects.tests.factories import BranchFactory
-from projects.models import Commit
-from tasks.models import Violation, Task
+from tasks.models import Task
 from ..dummy import dummy_service
 
 
