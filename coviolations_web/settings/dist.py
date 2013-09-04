@@ -18,6 +18,15 @@ DATABASES = {
     }
 }
 
+RQ_QUEUES = {
+    'default': {
+        'HOST': 'localhost',
+        'PORT': 6379,
+        'DB': 0,
+        'PASSWORD': '',
+    }
+}
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,

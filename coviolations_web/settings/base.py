@@ -100,6 +100,7 @@ INSTALLED_APPS = (
     'django_extensions',
     'discover_runner',
     'djangobower',
+    'django_rq',
 
     'projects',
     'tasks',
