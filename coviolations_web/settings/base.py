@@ -110,10 +110,10 @@ INSTALLED_APPS = (
 
 BOWER_COMPONENTS_ROOT = os.path.join(PROJECT_ROOT, 'components')
 
-AUTHENTICATION_BACKENDS = (
-    'userena.backends.UserenaAuthenticationBackend',
-    'guardian.backends.ObjectPermissionBackend',
-    'django.contrib.auth.backends.ModelBackend',
+BOWER_INSTALLED_APPS = (
+    'jquery',
+    'bootstrap',
+    'font-awesome',
 )
 
 TEST_RUNNER = 'discover_runner.DiscoverRunner'

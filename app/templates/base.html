@@ -1,9 +1,28 @@
 <!DOCTYPE html>
+{% load static %}
 <html>
 <head>
-    <title></title>
+    <meta charset="utf-8" />
+    <title>coviolations/{% block title %}{% endblock %}</title>
+    <link
+        rel="stylesheet"
+        href="{% static 'bootstrap/dist/css/bootstrap.min.css' %}"
+    />
+    <link
+        rel="stylesheet"
+        href="{% static 'font-awesome/css/font-awesome.min.css' %}"
+    />
+    <script
+        type="text/javascript"
+        src='{% static 'jquery/jquery.min.js' %}'
+    ></script>
+    <script
+        type="text/javascript"
+        src='{% static 'bootstrap/dist/js/bootstrap.min.js' %}'
+    ></script>
 </head>
 <body>
-
+    {% block content %}
+    {% endblock %}
 </body>
 </html>
