@@ -5,3 +5,4 @@ django-extensions
 djangorestframework
 django-discover-runner
 pillow
+rq

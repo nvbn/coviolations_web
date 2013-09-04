@@ -102,6 +102,8 @@ INSTALLED_APPS = (
     'djangobower',
 
     'projects',
+    'tasks',
+    'violations',
 )
 
 BOWER_COMPONENTS_ROOT = os.path.join(PROJECT_ROOT, 'components')
@@ -113,3 +115,7 @@ AUTHENTICATION_BACKENDS = (
 )
 
 TEST_RUNNER = 'discover_runner.DiscoverRunner'
+
+VIOLATIONS = (
+    'dummy',
+)
