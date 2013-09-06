@@ -1,45 +1,52 @@
 import json
 from django.test import TestCase
 from django.core.urlresolvers import reverse
+from tastypie.test import ResourceTestCase
 from projects.tests.factories import ProjectFactory
 from tools.mongo import MongoFlushMixin
 from .. import models
 
 
-class CreateTaskViewCase(MongoFlushMixin, TestCase):
+class CreateTaskViewCase(MongoFlushMixin, ResourceTestCase):
     """Create task view case"""
     mongo_flush = ['tasks']
 
     def setUp(self):
-        super(CreateTaskViewCase, self).setUp()
-        self.url = reverse('tasks_create')
+        MongoFlushMixin.setUp(self)
+        ResourceTestCase.setUp(self)
+
+        self.url = '/api/v1/tasks/'
         ProjectFactory(name='test')
 
     def test_create_on_post(self):
         """Test create on post"""
-        response = self.client.post(self.url, data=json.dumps({
-            'service': 'dummy',
+        self.api_client.post(self.url, data={
+            'service': {
+                'name': 'dummy',
+            },
             'project': 'test',
-            'branch': 'develop',
-            'commit': 'asdfg',
+            'commit': {
+                'branch': 'develop',
+                'commit': 'asdfg',
+                'author': 'nvbn',
+            },
             'violations': [
                 {'name': 'dummy', 'raw': '1'},
             ]
-        }), content_type='application/json')
-        data = json.loads(response.content)
-        self.assertTrue(data['ok'])
+        })
         self.assertEqual(1, models.Tasks.count())
 
     def test_error_on_wrong_service(self):
         """Test error on wrong service"""
-        response = self.client.post(self.url, data=json.dumps({
-            'service': 'dummy!!!',
+        response = self.api_client.post(self.url, data={
+            'service': {
+                'name': 'dummy!!!',
+            },
             'project': 'test',
             'branch': 'develop',
             'commit': 'asdfg',
             'violations': [
                 {'name': 'dummy', 'raw': '1'},
             ]
-        }), content_type='application/json')
-        data = json.loads(response.content)
-        self.assertFalse(data['ok'])
+        })
+        self.assertEqual(response.status_code, 404)

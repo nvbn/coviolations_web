@@ -27,7 +27,9 @@ class CreateTaskJobCase(MongoFlushMixin, TestCase):
         """Create task"""
         ProjectFactory(name='test')
         jobs.create_task({
-            'service': 'dummy',
+            'service': {
+                'name': 'dummy',
+            },
             'project': 'test',
             'branch': 'develop',
             'commit': 'asdfg',

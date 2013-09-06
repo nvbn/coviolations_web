@@ -9,7 +9,7 @@ from . import const
 @job
 def create_task(data):
     """Create task job"""
-    task = services.base.library.get(data['service'])(data)
+    task = services.base.library.get(data['service']['name'])(data)
     prepare_violations(task)
 
 
