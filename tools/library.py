@@ -1,5 +1,4 @@
 from functools import partial
-from django.conf import settings
 
 
 class BaseLibrary(object):
@@ -11,8 +10,7 @@ class BaseLibrary(object):
         self._items = {}
 
     def _register_fnc(self, name, fnc):
-        if name in getattr(settings, self.enabled_settings):
-            self._items[name] = fnc
+        self._items[name] = fnc
         return fnc
 
     def register(self, name):
@@ -21,7 +19,11 @@ class BaseLibrary(object):
 
     def get(self, name):
         """Get item"""
-        try:
+        if self.has(name):
             return self._items[name]
-        except KeyError:
+        else:
             raise self.exception(name)
+
+    def has(self, name):
+        """Has item"""
+        return name in self._items

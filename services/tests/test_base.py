@@ -17,16 +17,16 @@ class ServicesLibraryCase(TestCase):
 
         self.assertEqual(self.library.get('dummy'), service)
 
-    def test_not_register_not_enabled(self):
-        """Test not register not enabled"""
-        @self.library.register('dummy!!!')
-        def service():
-            pass
-
-        with self.assertRaises(ServiceDoesNotExists):
-            self.library.get('dummy!!!')
-
     def test_not_found(self):
         """Test service not found"""
         with self.assertRaises(ServiceDoesNotExists):
             self.library.get('dummy!!!')
+
+    def test_has(self):
+        """Test has method"""
+        @self.library.register('dummy')
+        def service():
+            pass
+
+        self.assertTrue(self.library.has('dummy'))
+        self.assertFalse(self.library.has('dummy!!!'))

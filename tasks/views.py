@@ -1,7 +1,7 @@
 import json
 from django.views.generic import View
-from django.conf import settings
 from braces.views import JSONResponseMixin
+from services.base import library
 from .jobs import create_task
 
 
@@ -11,7 +11,7 @@ class CreateTaskView(JSONResponseMixin, View):
     def post(self, request, *args, **kwargs):
         """Create task from data"""
         data = json.loads(request.body)
-        if data.get('service') in settings.ENABLED_SERVICES:
+        if library.has(data.get('service')):
             create_task(data)
             ok = True
         else:

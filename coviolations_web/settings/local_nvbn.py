@@ -27,16 +27,10 @@ RQ_QUEUES = {
     }
 }
 
-ENABLED_VIOLATIONS = (
-    'dummy',
-)
 VIOLATIONS = (
     'violations.dummy',
 )
 
-ENABLED_SERVICES = (
-    'dummy',
-)
 SERVICES = (
     'services.dummy',
 )

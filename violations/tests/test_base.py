@@ -17,16 +17,16 @@ class ViolationsLibraryCase(TestCase):
 
         self.assertEqual(self.library.get('dummy'), violation)
 
-    def test_not_register_not_enabled(self):
-        """Test not register not enabled"""
-        @self.library.register('dummy!!!')
-        def violation():
-            pass
-
-        with self.assertRaises(ViolationDoesNotExists):
-            self.library.get('dummy!!!')
-
     def test_not_found(self):
         """Test violation not found"""
         with self.assertRaises(ViolationDoesNotExists):
             self.library.get('dummy!!!')
+
+    def test_has(self):
+        """Test has method"""
+        @self.library.register('dummy')
+        def violation():
+            pass
+
+        self.assertTrue(self.library.has('dummy'))
+        self.assertFalse(self.library.has('dummy!!!'))
