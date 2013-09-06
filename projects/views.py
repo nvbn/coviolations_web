@@ -13,3 +13,4 @@ class ProjectView(DetailView):
     template_name = 'projects/project.html'
     context_object_name = 'project'
     model = Project
+    slug_field = 'name'

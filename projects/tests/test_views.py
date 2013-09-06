@@ -26,7 +26,7 @@ class ProjectViewCase(TestCase):
 
     def setUp(self):
         project = factories.ProjectFactory.create()
-        self.url = reverse('projects_project', args=(project.id,))
+        self.url = reverse('projects_project', args=(project.name,))
 
     def test_ok(self):
         """Test status=200"""
