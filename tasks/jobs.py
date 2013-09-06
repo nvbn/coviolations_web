@@ -1,5 +1,9 @@
 from django_rq import job
+from violations.exceptions import ViolationDoesNotExists
 import services.base
+import violations.base
+from .models import Tasks
+from . import const
 
 
 @job
@@ -9,9 +13,19 @@ def create_task(data):
     prepare_violations(task)
 
 
+def _prepare_violation(violation):
+    """Prepare single violation"""
+    try:
+        violation_creator = violations.base.library.get(violation['name'])
+        return violation_creator(violation)
+    except ViolationDoesNotExists:
+        violation['status'] = const.STATUS_FAILED
+        return violation
+
+
 @job
-def prepare_violations(task):
+def prepare_violations(task_id):
     """Prepare violations"""
-    for violation in task.violations.all():
-        violation.prepare()
-        violation.save()
+    task = Tasks.find_one(task_id)
+    task['violations'] = map(_prepare_violation, task['violations'])
+    Tasks.save(task)

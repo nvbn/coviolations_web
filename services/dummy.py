@@ -1,8 +1,9 @@
-from tasks.models import Task
+from tasks.models import Tasks
 from .base import library
 
 
 @library.register('dummy')
 def dummy_service(data):
     """Create task from data dict"""
-    return Task.objects.create_task(data)
+    task_id = Tasks.insert(data)
+    return task_id

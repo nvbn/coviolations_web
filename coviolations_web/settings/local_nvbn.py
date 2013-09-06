@@ -35,6 +35,9 @@ SERVICES = (
     'services.dummy',
 )
 
+MONGO_CLIENT_ARGUMENTS = []
+MONGO_DB = 'coviolations'
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,

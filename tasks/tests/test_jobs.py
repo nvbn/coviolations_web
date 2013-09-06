@@ -1,15 +1,17 @@
 from mock import MagicMock
 from django.test import TestCase
 from django_rq import get_worker
+from tools.mongo import MongoFlushMixin
 from projects.tests.factories import ProjectFactory
 from .. import jobs, models, const
-from . import factories
 
 
-class CreateTaskJobCase(TestCase):
+class CreateTaskJobCase(MongoFlushMixin, TestCase):
     """Create task job case"""
+    mongo_flush = ['tasks']
 
     def setUp(self):
+        super(CreateTaskJobCase, self).setUp()
         self._mock_prepare_violations()
         self._create_task()
 
@@ -30,50 +32,60 @@ class CreateTaskJobCase(TestCase):
             'branch': 'develop',
             'commit': 'asdfg',
             'violations': [
-                {'name': 'dummy', 'data': '1'},
+                {'name': 'dummy', 'raw': '1'},
             ]
         })
         get_worker().work(burst=True)
 
     def test_create(self):
         """Test create"""
-        self.assertEqual(models.Task.objects.count(), 1)
+        self.assertEqual(models.Tasks.count(), 1)
 
     def test_propagating(self):
         """Test propagating to prepare violations"""
-        task = models.Task.objects.get()
-        jobs.prepare_violations.assert_called_once_with(task)
+        task = models.Tasks.find_one()
+        jobs.prepare_violations.assert_called_once_with(task['_id'])
 
 
-class PrepareViolationsJobCase(TestCase):
+class PrepareViolationsJobCase(MongoFlushMixin, TestCase):
     """Prepare violations job case"""
+    mongo_flush = ['tasks']
 
     def test_prepare(self):
         """Test prepare"""
-        task = factories.TaskFactory.create()
-        factories.ViolationFactory.create_batch(
-            10, task=task, violation='dummy',
-        )
-        jobs.prepare_violations(task)
+        tasks = [{
+            'violations': [
+                {'name': 'dummy', 'raw': 'test{}'.format(n)},
+            ],
+        } for n in range(10)]
+
+        for task in tasks:
+            task_id = models.Tasks.save(task)
+            jobs.prepare_violations(task_id)
         get_worker().work(burst=True)
-        self.assertEqual(models.Violation.objects.filter(
-            status=const.STATUS_SUCCESS,
-        ).count(), 10)
+        self.assertEqual(10, sum(
+            [len(task['violations']) for task in models.Tasks.find()]
+        ))
 
     def test_not_fail_all(self):
         """Not fail all if fail one"""
-        task = factories.TaskFactory.create()
-        factories.ViolationFactory.create_batch(
-            7, task=task, violation='dummy',
-        )
-        factories.ViolationFactory.create_batch(
-            3, task=task, violation='dummy!!!',
-        )
-        jobs.prepare_violations(task)
+        task = {
+            'violations': [
+                {'name': 'dummy', 'raw': 'rew'},
+                {'name': 'dummy!!!', 'raw': 'rwww'},
+                {'name': 'dummy', 'raw': 'row'},
+            ]
+        }
+        task_id = models.Tasks.insert(task)
+        jobs.prepare_violations(task_id)
         get_worker().work(burst=True)
-        self.assertEqual(models.Violation.objects.filter(
-            status=const.STATUS_SUCCESS,
-        ).count(), 7)
-        self.assertEqual(models.Violation.objects.filter(
-            status=const.STATUS_FAILED,
-        ).count(), 3)
+
+        task = models.Tasks.find_one(task_id)
+        self.assertEqual(len([
+            violation for violation in task['violations']
+            if violation['status'] is const.STATUS_SUCCESS
+        ]), 2)
+        self.assertEqual(len([
+            violation for violation in task['violations']
+            if violation['status'] is const.STATUS_FAILED
+        ]), 1)

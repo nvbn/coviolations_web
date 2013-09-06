@@ -12,3 +12,4 @@ oauth2
 django-braces
 django-tastypie
 mimeparse
+pymongo

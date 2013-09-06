@@ -1,13 +1,16 @@
 from django.test import TestCase
 from projects.tests.factories import ProjectFactory
-from tasks.models import Task
+from tasks.models import Tasks
+from tools.mongo import MongoFlushMixin
 from ..dummy import dummy_service
 
 
-class DummyServiceCase(TestCase):
+class DummyServiceCase(MongoFlushMixin, TestCase):
     """Dummy service case"""
+    mongo_flush = ['tasks']
 
     def setUp(self):
+        super(DummyServiceCase, self).setUp()
         ProjectFactory(name='test')
         dummy_service({
             'project': 'test',
@@ -21,4 +24,4 @@ class DummyServiceCase(TestCase):
 
     def test_create_task(self):
         """Test create task"""
-        self.assertEqual(Task.objects.count(), 1)
+        self.assertEqual(Tasks.count(), 1)
