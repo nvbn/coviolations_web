@@ -11,6 +11,11 @@ else:
     db = client[settings.MONGO_DB]
 
 
+class Document(dict):
+    """For outputing in tastypie"""
+    __getattr__ = dict.get
+
+
 class MongoFlushMixin(object):
     """Mongo flush mixin"""
     mongo_flush = []
