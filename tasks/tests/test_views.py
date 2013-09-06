@@ -1,7 +1,7 @@
 import json
 from django.test import TestCase
 from django.core.urlresolvers import reverse
-from projects.tests.factories import BranchFactory
+from projects.tests.factories import ProjectFactory
 from .. import models
 
 
@@ -10,7 +10,7 @@ class CreateTaskViewCase(TestCase):
 
     def setUp(self):
         self.url = reverse('tasks_create')
-        BranchFactory(project__name='test', name='develop')
+        ProjectFactory(name='test')
 
     def test_create_on_post(self):
         """Test create on post"""

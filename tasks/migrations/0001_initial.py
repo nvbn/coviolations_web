@@ -11,7 +11,9 @@ class Migration(SchemaMigration):
         # Adding model 'Task'
         db.create_table(u'tasks_task', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('commit', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['projects.Commit'], null=True, blank=True)),
+            ('commit', self.gf('django.db.models.fields.CharField')(max_length=300, null=True, blank=True)),
+            ('branch', self.gf('django.db.models.fields.CharField')(max_length=300, null=True, blank=True)),
+            ('project', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['projects.Project'], null=True, blank=True)),
             ('status', self.gf('django.db.models.fields.PositiveSmallIntegerField')(default=0)),
         ))
         db.send_create_signal(u'tasks', ['Task'])
@@ -73,20 +75,8 @@ class Migration(SchemaMigration):
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
-        u'projects.branch': {
-            'Meta': {'object_name': 'Branch'},
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '300'}),
-            'project': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'branches'", 'to': u"orm['projects.Project']"})
-        },
-        u'projects.commit': {
-            'Meta': {'object_name': 'Commit'},
-            'branch': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'commits'", 'to': u"orm['projects.Branch']"}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '300'})
-        },
         u'projects.project': {
-            'Meta': {'object_name': 'Project'},
+            'Meta': {'ordering': "('-id',)", 'object_name': 'Project'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'is_enabled': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '300'}),
@@ -95,8 +85,10 @@ class Migration(SchemaMigration):
         },
         u'tasks.task': {
             'Meta': {'object_name': 'Task'},
-            'commit': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['projects.Commit']", 'null': 'True', 'blank': 'True'}),
+            'branch': ('django.db.models.fields.CharField', [], {'max_length': '300', 'null': 'True', 'blank': 'True'}),
+            'commit': ('django.db.models.fields.CharField', [], {'max_length': '300', 'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'project': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['projects.Project']", 'null': 'True', 'blank': 'True'}),
             'status': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '0'})
         },
         u'tasks.violation': {

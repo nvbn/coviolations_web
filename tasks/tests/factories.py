@@ -1,14 +1,11 @@
 import factory
 from django.conf import settings
-from projects.tests.factories import CommitFactory
 from .. import models
 
 
 class TaskFactory(factory.DjangoModelFactory):
     """Task factory"""
     FACTORY_FOR = models.Task
-
-    commit = factory.SubFactory(CommitFactory)
 
 
 class ViolationFactory(factory.DjangoModelFactory):

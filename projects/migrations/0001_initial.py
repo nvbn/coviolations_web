@@ -18,32 +18,10 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal(u'projects', ['Project'])
 
-        # Adding model 'Branch'
-        db.create_table(u'projects_branch', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=300)),
-            ('project', self.gf('django.db.models.fields.related.ForeignKey')(related_name='branches', to=orm['projects.Project'])),
-        ))
-        db.send_create_signal(u'projects', ['Branch'])
-
-        # Adding model 'Commit'
-        db.create_table(u'projects_commit', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=300)),
-            ('branch', self.gf('django.db.models.fields.related.ForeignKey')(related_name='commits', to=orm['projects.Branch'])),
-        ))
-        db.send_create_signal(u'projects', ['Commit'])
-
 
     def backwards(self, orm):
         # Deleting model 'Project'
         db.delete_table(u'projects_project')
-
-        # Deleting model 'Branch'
-        db.delete_table(u'projects_branch')
-
-        # Deleting model 'Commit'
-        db.delete_table(u'projects_commit')
 
 
     models = {
@@ -83,20 +61,8 @@ class Migration(SchemaMigration):
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
-        u'projects.branch': {
-            'Meta': {'object_name': 'Branch'},
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '300'}),
-            'project': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'branches'", 'to': u"orm['projects.Project']"})
-        },
-        u'projects.commit': {
-            'Meta': {'object_name': 'Commit'},
-            'branch': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'commits'", 'to': u"orm['projects.Branch']"}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '300'})
-        },
         u'projects.project': {
-            'Meta': {'object_name': 'Project'},
+            'Meta': {'ordering': "('-id',)", 'object_name': 'Project'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'is_enabled': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '300'}),

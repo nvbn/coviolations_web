@@ -1,7 +1,6 @@
 from testfixtures import LogCapture
 from django.test import TestCase
-from projects.models import Commit
-from projects.tests.factories import BranchFactory
+from projects.tests.factories import ProjectFactory
 from tasks.models import Violation, Task
 from .. import const
 from . import factories
@@ -48,7 +47,7 @@ class TaskManagerCase(TestCase):
     """Task manager  case"""
 
     def _create_task(self):
-        BranchFactory(project__name='test', name='develop')
+        ProjectFactory(name='test')
         Task.objects.create_task({
             'project': 'test',
             'branch': 'develop',
@@ -58,11 +57,6 @@ class TaskManagerCase(TestCase):
                 {'name': 'dummy', 'data': '2'},
             ]
         })
-
-    def test_create_commit(self):
-        """Test create commit"""
-        self._create_task()
-        self.assertEqual(Commit.objects.get().name, 'asdfg')
 
     def test_create_task(self):
         """Test create task"""

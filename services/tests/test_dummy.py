@@ -1,5 +1,5 @@
 from django.test import TestCase
-from projects.tests.factories import BranchFactory
+from projects.tests.factories import ProjectFactory
 from tasks.models import Task
 from ..dummy import dummy_service
 
@@ -8,7 +8,7 @@ class DummyServiceCase(TestCase):
     """Dummy service case"""
 
     def setUp(self):
-        BranchFactory(project__name='test', name='develop')
+        ProjectFactory(name='test')
         dummy_service({
             'project': 'test',
             'branch': 'develop',

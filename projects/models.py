@@ -41,29 +41,5 @@ class Project(models.Model):
         verbose_name_plural = _('Projects')
         ordering = ('-id',)
 
-
-class Branch(models.Model):
-    """Github project branch"""
-    name = models.CharField(max_length=300, verbose_name=_('name'))
-    project = models.ForeignKey(
-        Project, related_name='branches', verbose_name=_('project'),
-    )
-
-    class Meta:
-        verbose_name = _('Branch')
-        verbose_name_plural = _('Branches')
-
     def __unicode__(self):
-        return '{}: {}'.format(self.project, self.name)
-
-
-class Commit(models.Model):
-    """Github project commit"""
-    name = models.CharField(max_length=300, verbose_name=_('name'))
-    branch = models.ForeignKey(
-        Branch, related_name='commits', verbose_name=_('branch'),
-    )
-
-    class Meta:
-        verbose_name = _('Commit')
-        verbose_name_plural = _('Commits')
+        return self.name

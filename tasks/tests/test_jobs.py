@@ -1,7 +1,7 @@
 from mock import MagicMock
 from django.test import TestCase
 from django_rq import get_worker
-from projects.tests.factories import BranchFactory
+from projects.tests.factories import ProjectFactory
 from .. import jobs, models, const
 from . import factories
 
@@ -23,7 +23,7 @@ class CreateTaskJobCase(TestCase):
 
     def _create_task(self):
         """Create task"""
-        BranchFactory(project__name='test', name='develop')
+        ProjectFactory(name='test')
         jobs.create_task({
             'service': 'dummy',
             'project': 'test',

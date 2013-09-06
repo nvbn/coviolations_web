@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-from projects.models import Commit, Branch
+from projects.models import Project
 from violations.base import library
 from violations.exceptions import ViolationDoesNotExists
 from . import const
@@ -12,16 +12,13 @@ class TaskManager(models.Manager):
 
     def create_task(self, data):
         """Create task from data dict"""
-        branch = Branch.objects.get(
-            name=data['branch'],
-            project__name=data['project'],
-        )
-        commit = Commit.objects.create(
-            name=data['commit'],
-            branch=branch,
+        project = Project.objects.get(
+            name=data['project'],
         )
         task = Task.objects.create(
-            commit=commit,
+            project=project,
+            commit=data['commit'],
+            branch=data['branch'],
         )
         for violation in data['violations']:
             Violation.objects.create(
@@ -34,8 +31,14 @@ class TaskManager(models.Manager):
 
 class Task(models.Model):
     """Task"""
-    commit = models.ForeignKey(
-        Commit, blank=True, null=True, verbose_name=_('commit'),
+    commit = models.CharField(
+        blank=True, null=True, max_length=300, verbose_name=_('commit'),
+    )
+    branch = models.CharField(
+        blank=True, null=True, max_length=300, verbose_name=_('branch'),
+    )
+    project = models.ForeignKey(
+        Project, blank=True, null=True, verbose_name=_('project'),
     )
     status = models.PositiveSmallIntegerField(
         choices=const.STATUSES, default=const.STATUS_NEW,

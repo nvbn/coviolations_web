@@ -13,19 +13,3 @@ class ProjectFactory(factory.DjangoModelFactory):
     @factory.sequence
     def owner(n):
         return User.objects.create_user('user{}'.format(n))
-
-
-class BranchFactory(factory.DjangoModelFactory):
-    """Branch factory"""
-    FACTORY_FOR = models.Branch
-
-    name = factory.Sequence(lambda n: 'branch {}'.format(n))
-    project = factory.SubFactory(ProjectFactory)
-
-
-class CommitFactory(factory.DjangoModelFactory):
-    """Commit factory"""
-    FACTORY_FOR = models.Commit
-
-    name = factory.Sequence(lambda n: 'commit {}'.format(n))
-    branch = factory.SubFactory(BranchFactory)
