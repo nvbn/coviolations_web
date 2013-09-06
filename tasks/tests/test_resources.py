@@ -7,7 +7,7 @@ from tools.mongo import MongoFlushMixin
 from .. import models
 
 
-class CreateTaskViewCase(MongoFlushMixin, ResourceTestCase):
+class TaskResourceCase(MongoFlushMixin, ResourceTestCase):
     """Create task view case"""
     mongo_flush = ['tasks']
 

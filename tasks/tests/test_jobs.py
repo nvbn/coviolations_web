@@ -26,7 +26,7 @@ class CreateTaskJobCase(MongoFlushMixin, TestCase):
     def _create_task(self):
         """Create task"""
         ProjectFactory(name='test')
-        jobs.create_task({
+        data = {
             'service': {
                 'name': 'dummy',
             },
@@ -36,7 +36,8 @@ class CreateTaskJobCase(MongoFlushMixin, TestCase):
             'violations': [
                 {'name': 'dummy', 'raw': '1'},
             ]
-        })
+        }
+        jobs.create_task(models.Tasks.save(data))
         get_worker().work(burst=True)
 
     def test_create(self):

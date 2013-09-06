@@ -7,8 +7,9 @@ from . import const
 
 
 @job
-def create_task(data):
+def create_task(task_id):
     """Create task job"""
+    data = Tasks.find_one(task_id)
     task = services.base.library.get(data['service']['name'])(data)
     prepare_violations(task)
 
