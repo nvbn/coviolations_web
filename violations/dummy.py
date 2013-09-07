@@ -1,3 +1,4 @@
+from django.template.loader import render_to_string
 from tasks.const import STATUS_SUCCESS
 from .base import library
 
@@ -6,6 +7,9 @@ from .base import library
 def dummy_violation(data):
     """Return data without parsing"""
     data['status'] = STATUS_SUCCESS
-    data['preview'] = '<pre>{}</pre>'.format(data['raw'])
-    data['prepared'] = '<pre>{}</pre>'.format(data['raw'])
+    prepared = render_to_string('violations/dummy.html', {
+        'raw': data['raw'],
+    })
+    data['preview'] = prepared
+    data['prepared'] = prepared
     return data
