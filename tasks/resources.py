@@ -17,6 +17,7 @@ class TaskResource(Resource):
     violations = fields.ListField(attribute='violations', null=True)
     created = fields.DateTimeField(attribute='created', null=True)
     status = fields.IntegerField(attribute='status', null=True)
+    id = fields.CharField(attribute='_id', null=True)
 
     class Meta:
         list_allowed_methods = ['get', 'post']

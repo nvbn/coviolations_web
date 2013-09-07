@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <h1>Detail: {{ project }}:{{ commit.branch }}#{{ commit.hash }}</h1>
+    <div class='col-lg-12 row'>
+        <p>
+            {{ commit.summary }}
+        </p>
+        {% for violation in violations %}
+            <div class='col-lg-6'>
+                <h2>{{ violation.name }}  <a href='#' class='btn btn-default'>Show raw</a></h2>
+                {{ violation.prepared|safe }}
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
