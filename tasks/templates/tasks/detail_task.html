@@ -9,7 +9,14 @@
         </p>
         {% for violation in violations %}
             <div class='col-lg-6'>
-                <h2>{{ violation.name }}  <a href='#' class='btn btn-default'>Show raw</a></h2>
+                <h2>
+                    {{ violation.name }}
+                    <a
+                        href='{% url 'tasks_raw' pk forloop.counter0 %}'
+                        class='btn btn-default'
+                        target="_blank"
+                    >Show raw</a>
+                </h2>
                 {{ violation.prepared|safe }}
             </div>
         {% endfor %}
