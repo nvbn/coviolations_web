@@ -30,6 +30,7 @@ RQ_QUEUES = {
 VIOLATIONS = (
     'violations.dummy',
     'violations.pep8',
+    'violations.sloccount',
 )
 
 SERVICES = (

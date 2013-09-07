@@ -1,0 +1,5 @@
+<p><strong>Total:</strong> {{ total }}</p>
+<p><strong>By languages:</strong></p>
+{% for name, value in langs.items %}
+    <p>{{ name }}: {{ value }}</p>
+{% endfor %}

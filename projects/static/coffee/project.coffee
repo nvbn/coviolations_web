@@ -39,6 +39,7 @@ $ ->
                 html: true
                 trigger: 'hover'
                 content: @popover @model.attributes
+                title: @model.get('commit').summary
 
 
     class app.views.TaskLineListView extends Backbone.View
