@@ -8,6 +8,7 @@
     ></script>
     {% include 'projects/project/task_line.html' %}
     {% include 'projects/project/task_line_popover.html' %}
+    {% include 'projects/project/violation_plot.html' %}
 {% endblock %}
 
 {% block content %}
@@ -18,7 +19,9 @@
         </a>
     </h1>
 
-    <div class='row col-lg-12 '>
+    <div class='row col-lg-12 js-charts-holder'></div>
+
+    <div class='row col-lg-12'>
         <table class="table table-hover js-task-line-list">
         </table>
     </div>

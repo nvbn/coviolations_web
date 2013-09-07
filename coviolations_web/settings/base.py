@@ -119,6 +119,7 @@ BOWER_INSTALLED_APPS = (
     'underscore',
     'backbone',
     'backbone-tastypie',
+    'nnnick-chartjs',
 )
 
 TEST_RUNNER = 'discover_runner.DiscoverRunner'

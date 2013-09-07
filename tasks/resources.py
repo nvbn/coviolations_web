@@ -15,7 +15,6 @@ class TaskResource(Resource):
     project = fields.CharField(attribute='project', null=True)
     commit = fields.DictField(attribute='commit', null=True)
     violations = fields.ListField(attribute='violations', null=True)
-    plot = fields.DictField(attribute='plot', null=True)
     created = fields.DateTimeField(attribute='created', null=True)
     status = fields.IntegerField(attribute='status', null=True)
 
@@ -50,6 +49,7 @@ class TaskResource(Resource):
             find_kwargs['fields']['violations.name'] = True
             find_kwargs['fields']['violations.status'] = True
             find_kwargs['fields']['violations.preview'] = True
+            find_kwargs['fields']['violations.plot'] = True
         else:
             find_kwargs['fields']['violations'] = False
 
