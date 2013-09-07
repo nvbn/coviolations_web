@@ -1,5 +1,7 @@
+from pymongo import DESCENDING
 from django.http import Http404
 from tastypie.resources import Resource
+from tastypie.bundle import Bundle
 from tastypie import fields
 from services.base import library
 from tools.mongo import Document
@@ -15,6 +17,7 @@ class TaskResource(Resource):
     violations = fields.ListField(attribute='violations', null=True)
     plot = fields.DictField(attribute='plot', null=True)
     created = fields.DateTimeField(attribute='created', null=True)
+    status = fields.IntegerField(attribute='status', null=True)
 
     class Meta:
         list_allowed_methods = ['get', 'post']
@@ -35,6 +38,7 @@ class TaskResource(Resource):
         find_kwargs = {
             'fields': {},
             'spec': {},
+            'sort': [('created', DESCENDING)],
         }
 
         if bundle.request.GET.get('with_full_violations'):
@@ -52,4 +56,8 @@ class TaskResource(Resource):
 
     def detail_uri_kwargs(self, bundle_or_obj):
         """Get kwargs for detailed uri"""
-        return {}
+        if isinstance(bundle_or_obj, Bundle):
+            pk = bundle_or_obj.obj._id
+        else:
+            pk = bundle_or_obj._id
+        return {'pk': pk}
