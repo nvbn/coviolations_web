@@ -36,7 +36,10 @@ class TaskResource(Resource):
     def obj_get_list(self, bundle, **kwargs):
         """Get object list"""
         find_kwargs = {
-            'fields': {},
+            'fields': {name: True for name in (
+                'service', 'project', 'commit', 'plot',
+                'created', 'status',
+            )},
             'spec': {},
             'sort': [('created', DESCENDING)],
         }
@@ -46,6 +49,7 @@ class TaskResource(Resource):
         elif bundle.request.GET.get('with_violations'):
             find_kwargs['fields']['violations.name'] = True
             find_kwargs['fields']['violations.status'] = True
+            find_kwargs['fields']['violations.preview'] = True
         else:
             find_kwargs['fields']['violations'] = False
 

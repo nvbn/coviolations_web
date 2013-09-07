@@ -23,6 +23,7 @@ $ ->
     class app.views.TaskLineView extends Backbone.View
         ### Task line view ###
         template: _.template($('#project-task-line-tmpl').html())
+        popover: _.template($('#project-task-line-popover-tmpl').html())
         tagName: 'tr'
 
         render: ->
@@ -33,6 +34,11 @@ $ ->
 
             if @model.get('status') == STATUS_FAILED
                 @$el.addClass 'danger'
+
+            @$el.find('.js-commit-name').popover
+                html: true
+                trigger: 'hover'
+                content: @popover @model.attributes
 
 
     class app.views.TaskLineListView extends Backbone.View
@@ -52,6 +58,7 @@ $ ->
         data:
             limit: 0
             project: window.project
+            with_violations: true
         success: (collection) ->
             view = new app.views.TaskLineListView
                 el: $('.js-task-line-list')

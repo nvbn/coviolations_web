@@ -1,6 +1,8 @@
 <script id="project-task-line-tmpl" type="text/template">
     <td>
-        <%= commit.branch %>#<%= commit.hash %>
+        <a href='#' class='js-commit-name'>
+            <%= commit.branch %>#<%= commit.hash %>
+        </a>
     </td>
     <td>
         <span class="pull-right"><%= created %></span>

@@ -1,0 +1,10 @@
+<script id="project-task-line-popover-tmpl" type="text/template">
+    <div class="list-group">
+        <% _.each(violations, function(violation){ %>
+            <div class="list-group-item">
+                <h4 class="list-group-item-heading"><%= violation.name %></h4>
+                <p class="list-group-item-text"><%= violation.preview %></p>
+            </div>
+        <% }) %>
+    </div>
+</script>
