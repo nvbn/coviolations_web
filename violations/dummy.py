@@ -6,4 +6,6 @@ from .base import library
 def dummy_violation(data):
     """Return data without parsing"""
     data['status'] = STATUS_SUCCESS
+    data['preview'] = data['raw']
+    data['prepared'] = data['raw']
     return data

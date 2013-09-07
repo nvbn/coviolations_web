@@ -62,17 +62,13 @@ class PostTaskResourceCase(BaseTaskResourceCase):
 class GetTaskResourceCase(BaseTaskResourceCase):
     """Get tasks resource case"""
 
-    def setUp(self):
-        super(GetTaskResourceCase, self).setUp()
-        self._create_tasks()
-
-    def _create_tasks(self):
+    def _create_tasks(self, project='test', count=20):
         """Create tasks"""
         models.Tasks.insert([{
             'service': {
                 'name': 'dummy',
             },
-            'project': 'test',
+            'project': project,
             'commit': {
                 'branch': 'develop',
                 'commit': 'asdfg',
@@ -84,10 +80,11 @@ class GetTaskResourceCase(BaseTaskResourceCase):
                 'status': 1,
                 'prepared': '123{}'.format(n),
             }]
-        } for n in range(20)])
+        } for n in range(count)])
 
     def test_get_all(self):
         """Test get all"""
+        self._create_tasks()
         response = self.api_client.get(self.url)
         data = self.deserialize(response)
         self.assertEqual(data['meta']['total_count'], 20)
@@ -95,6 +92,7 @@ class GetTaskResourceCase(BaseTaskResourceCase):
 
     def test_get_all_with_violations(self):
         """Test get all with violations"""
+        self._create_tasks()
         response = self.api_client.get('{}?with_violations=1'.format(self.url))
         data = self.deserialize(response)
         self.assert_(data['objects'][0]['violations'][0]['name'])
@@ -102,9 +100,18 @@ class GetTaskResourceCase(BaseTaskResourceCase):
 
     def test_get_with_full_violations(self):
         """Test get with full violations"""
+        self._create_tasks()
         response = self.api_client.get(
             '{}?with_full_violations=1'.format(self.url),
         )
         data = self.deserialize(response)
         self.assert_(data['objects'][0]['violations'][0]['raw'])
         self.assert_(data['objects'][0]['violations'][0]['prepared'])
+
+    def test_filter_by_project(self):
+        """Test filter by project"""
+        self._create_tasks('test', 5)
+        self._create_tasks('nope', 10)
+        response = self.api_client.get('{}?project=test'.format(self.url))
+        data = self.deserialize(response)
+        self.assertEqual(data['meta']['total_count'], 5)

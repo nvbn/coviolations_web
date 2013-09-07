@@ -34,6 +34,7 @@ class TaskResource(Resource):
         """Get object list"""
         find_kwargs = {
             'fields': {},
+            'spec': {},
         }
 
         if bundle.request.GET.get('with_full_violations'):
@@ -43,6 +44,9 @@ class TaskResource(Resource):
             find_kwargs['fields']['violations.status'] = True
         else:
             find_kwargs['fields']['violations'] = False
+
+        if bundle.request.GET.get('project'):
+            find_kwargs['spec']['project'] = bundle.request.GET['project']
 
         return map(Document, Tasks.find(**find_kwargs))
 
