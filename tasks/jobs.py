@@ -1,3 +1,4 @@
+from datetime import datetime
 from django_rq import job
 from violations.exceptions import ViolationDoesNotExists
 import services.base
@@ -10,6 +11,7 @@ from . import const
 def create_task(task_id):
     """Create task job"""
     data = Tasks.find_one(task_id)
+    data['created'] = datetime.now()
     task = services.base.library.get(data['service']['name'])(data)
     prepare_violations(task)
 

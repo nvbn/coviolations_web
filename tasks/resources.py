@@ -13,6 +13,8 @@ class TaskResource(Resource):
     project = fields.CharField(attribute='project', null=True)
     commit = fields.DictField(attribute='commit', null=True)
     violations = fields.ListField(attribute='violations', null=True)
+    plot = fields.DictField(attribute='plot', null=True)
+    created = fields.DateTimeField(attribute='created', null=True)
 
     class Meta:
         list_allowed_methods = ['get', 'post']
