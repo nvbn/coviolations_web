@@ -31,4 +31,8 @@ def prepare_violations(task_id):
     """Prepare violations"""
     task = Tasks.find_one(task_id)
     task['violations'] = map(_prepare_violation, task['violations'])
+    task['status'] = const.STATUS_SUCCESS if all([
+        violation.get('status') != const.STATUS_FAILED
+        for violation in task['violations']
+    ]) else const.STATUS_FAILED
     Tasks.save(task)
