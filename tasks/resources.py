@@ -51,8 +51,6 @@ class TaskResource(Resource):
             find_kwargs['fields']['violations.status'] = True
             find_kwargs['fields']['violations.preview'] = True
             find_kwargs['fields']['violations.plot'] = True
-        else:
-            find_kwargs['fields']['violations'] = False
 
         if bundle.request.GET.get('project'):
             find_kwargs['spec']['project'] = bundle.request.GET['project']
@@ -62,7 +60,10 @@ class TaskResource(Resource):
     def detail_uri_kwargs(self, bundle_or_obj):
         """Get kwargs for detailed uri"""
         if isinstance(bundle_or_obj, Bundle):
-            pk = bundle_or_obj.obj._id
+            if '_id' in bundle_or_obj.data:
+                pk = bundle_or_obj.data['_id']
+            elif bundle_or_obj.obj:
+                pk = bundle_or_obj.obj._id
         else:
-            pk = bundle_or_obj._id
+            pk = bundle_or_obj.id
         return {'pk': pk}
