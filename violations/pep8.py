@@ -7,7 +7,7 @@ from .base import library
 def pep8_violation(data):
     """PEP8 violation parser"""
     count = len(data['raw'].split('\n'))
-    data['status'] = STATUS_SUCCESS if count == 0 else STATUS_FAILED
+    data['status'] = STATUS_SUCCESS if count <= 1 else STATUS_FAILED
     data['preview'] = render_to_string('violations/pep8/preview.html', {
         'count': count,
     })
