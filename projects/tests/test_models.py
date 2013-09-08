@@ -21,8 +21,12 @@ class ProjectManagerCase(MockGithubMixin, TestCase):
 
     def test_get(self):
         """Test get without creating new"""
-        factories.ProjectFactory.create_batch(10, owner=self.user)
+        for n in range(10):
+            factories.ProjectFactory(
+                owner=self.user, url='http://test{}.com'.format(n),
+                name='project {}'.format(n)
+            )
         models.ProjectManager._get_remote_projects.return_value =\
-            map(self._create_repo, range(1, 11))
+            map(self._create_repo, range(10))
         projects = models.Project.objects.get_or_create_for_user(self.user)
         self.assertEqual(projects.count(), 10)
