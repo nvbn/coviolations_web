@@ -12,7 +12,7 @@ install:
   - pip install -U -r requirements/ci.txt
   - cp coviolations_web/settings/local_ci.py coviolations_web/settings/local.py
 script:
-  - coverage run manage.py test violations projects tasks services app 2>test_out
+  - coverage run manage.py test violations projects tasks services app push 2>test_out
 after_script:
   - coverage report
   - coveralls
