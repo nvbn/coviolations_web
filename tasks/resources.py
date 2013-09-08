@@ -28,7 +28,9 @@ class TaskResource(Resource):
 
     def obj_create(self, bundle, **kwargs):
         """Create object"""
-        project = get_object_or_404(Project, name=bundle.data['project'])
+        project = get_object_or_404(
+            Project, name=bundle.data['project'], is_enabled=True,
+        )
 
         if library.has(bundle.data['service']['name']):
             bundle.data['owner_id'] = project.owner.id
