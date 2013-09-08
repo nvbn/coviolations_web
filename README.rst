@@ -1,6 +1,8 @@
 coviolations.io web
 ===================
 
+`See docs on read the docs <https://coviolationsio.readthedocs.org/en/latest/>`_
+
 Installation
 ------------
 
