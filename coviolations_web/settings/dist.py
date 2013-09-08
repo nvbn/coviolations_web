@@ -45,6 +45,7 @@ MONGO_CLIENT_ARGUMENTS = []
 MONGO_DB = 'coviolations'
 
 REDIS_PUSH = 'covio_push'
+PUSH_BIND = 'http://localhost:9999/sub'
 
 LOGGING = {
     'version': 1,

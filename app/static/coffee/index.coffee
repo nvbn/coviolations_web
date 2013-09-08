@@ -18,17 +18,21 @@ $ ->
             else
                 $('.js-enabled-projects td').html 'No projects found'
 
-    taskCollection = new app.models.TaskCollection()
-    taskCollection.fetch
-        data:
-            limit: 30
-            with_violations: true
-            self: true
-        success: (collection) ->
-            taskView = new app.views.TaskLineListView
-                el: $('.js-last-tasks')
-                collection: collection
-                showProjectName: true
-            taskView.render()
+    renderTasks = =>
+        taskCollection = new app.models.TaskCollection()
+        taskCollection.fetch
+            data:
+                limit: 10
+                with_violations: true
+                self: true
+            success: (collection) ->
+                taskView = new app.views.TaskLineListView
+                    el: $('.js-last-tasks')
+                    collection: collection
+                    showProjectName: true
+                taskView.render()
+    renderTasks()
+    window.push.on 'task', =>
+        renderTasks()
 
     prettyPrint()

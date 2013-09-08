@@ -50,13 +50,29 @@
     ></script>
     <script
         type='text/javascript'
+        src="{% static 'google-code-prettify/src/prettify.js' %}"
+    ></script>
+    <script
+        type='text/javascript'
+        src="{% static 'sockjs-client/sockjs.min.js' %}"
+    ></script>
+    <script
+        type='text/javascript'
         src="{% static 'coffee/models.js' %}"
     ></script>
     <script
         type='text/javascript'
         src="{% static 'coffee/views.js' %}"
     ></script>
+    <script
+        type='text/javascript'
+        src="{% static 'coffee/push.js' %}"
+    ></script>
     {% block extrahead %}{% endblock %}
+    <script type="text/javascript">
+        var userId = {{ user.id|escapejs }};
+        var pushBind = '{{ push_bind|escapejs }}';
+    </script>
 </head>
 <body>
     {% for message in messages %}
