@@ -24,6 +24,10 @@ class ProjectManager(models.Manager):
             )
         return self.filter(owner=user)
 
+    def get_enabled_for_user(self, user):
+        """Get enabled projects available for user"""
+        return self.filter(owner=user, is_enabled=True)
+
 
 class Project(models.Model):
     """Github project"""

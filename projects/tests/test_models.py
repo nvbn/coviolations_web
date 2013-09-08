@@ -30,3 +30,15 @@ class ProjectManagerCase(MockGithubMixin, TestCase):
             map(self._create_repo, range(10))
         projects = models.Project.objects.get_or_create_for_user(self.user)
         self.assertEqual(projects.count(), 10)
+
+    def test_get_enabled_for_user(self):
+        """"Test get enabled for user"""
+        enabled = factories.ProjectFactory.create_batch(
+            10, owner=self.user, is_enabled=True,
+        )
+        factories.ProjectFactory.create_batch(
+            30, owner=self.user, is_enabled=False,
+        )
+        self.assertItemsEqual(
+            enabled, models.Project.objects.get_enabled_for_user(self.user),
+        )
