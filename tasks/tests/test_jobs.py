@@ -58,8 +58,13 @@ class PrepareViolationsJobCase(MongoFlushMixin, TestCase):
         """Test prepare"""
         tasks = [{
             'violations': [
-                {'name': 'dummy', 'raw': 'test{}'.format(n)},
+                {
+                    'name': 'dummy',
+                    'raw': 'test{}'.format(n),
+                },
             ],
+            'owner_id': 1,
+            'project': 'test',
         } for n in range(10)]
 
         for task in tasks:
@@ -77,7 +82,9 @@ class PrepareViolationsJobCase(MongoFlushMixin, TestCase):
                 {'name': 'dummy', 'raw': 'rew'},
                 {'name': 'dummy!!!', 'raw': 'rwww'},
                 {'name': 'dummy', 'raw': 'row'},
-            ]
+            ],
+            'owner_id': 1,
+            'project': 'test',
         }
         task_id = models.Tasks.insert(task)
         jobs.prepare_violations(task_id)

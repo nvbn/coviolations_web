@@ -42,7 +42,6 @@ class UserProjectsAuthorization(Authorization):
     def update_detail(self, object_list, bundle):
         sender.send(
             type='project', owner=bundle.request.user.id,
-            project=bundle.data['id'],
         )
         return self.read_detail(object_list, bundle)
 
