@@ -52,11 +52,21 @@
                         Manage projects
                     </a>
                     <a
+                        class='btn btn-default navbar-btn'
+                        href='https://coviolationsio.readthedocs.org/en/latest/'>
+                        See docs
+                    </a>
+                    <a
                         class='btn btn-default navbar-btn pull-right'
                         href='{% url 'logout' %}'>
                         Sign out
                     </a>
                 {% else %}
+                    <a
+                        class='btn btn-default navbar-btn'
+                        href='https://coviolationsio.readthedocs.org/en/latest/'>
+                        See docs
+                    </a>
                     <a
                         class='btn btn-default navbar-btn pull-right'
                         href='{% url 'socialauth_begin' 'github' %}'
