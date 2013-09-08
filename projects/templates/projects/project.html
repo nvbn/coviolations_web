@@ -21,7 +21,43 @@
             <i class="icon-github"></i>
         </a>
     </h1>
+    <div class="col-lg-12">
+        <a
+            href='#'
+            class='get-badge js-get-badge'
+            data-toggle="collapse" data-target="#js-get-badge-in"
+        >
+            <i class="icon-collapse"></i> Get badge:
+            <img src='{% url 'projects_badge' project.name %}' />
+        </a>
 
+        <div id='js-get-badge-in' class='collapse row col-lg-12 well badge-help'>
+            <div class='col-lg-4'>
+                <strong>MARKDOWN</strong>
+<pre class="prettyprint languague-markdown">
+[![Violations](http://coviolations.io{% url 'projects_badge' project.name %})]
+(http://coviolations.io{% url 'projects_project' project.name %})
+</pre>
+            </div>
+
+            <div class='col-lg-4'>
+                <strong>HTML</strong>
+<pre class="prettyprint languague-html">
+&lt;a href='http://coviolations.io{% url 'projects_project' project.name %}'&gt;
+    &lt;img src='http://coviolations.io{% url 'projects_badge' project.name %}' alt='Violations' /&gt;
+&lt;/a&gt;
+</pre>
+            </div>
+
+            <div class='col-lg-4'>
+                <strong>RST</strong>
+<pre class="prettyprint languague-rst">
+.. image:: http://coviolations.io{% url 'projects_badge' project.name %}
+    :target: http://coviolations.io{% url 'projects_project' project.name %}
+</pre>
+            </div>
+        </div>
+    </div>
     <div class='row col-lg-12 js-charts-holder'></div>
 
     <div class='row col-lg-12'>

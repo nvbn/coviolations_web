@@ -113,3 +113,5 @@ $ ->
     window.push.on 'task', (task) =>
         if task.project == window.project
             renderPage()
+
+    prettyPrint()
