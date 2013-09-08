@@ -27,9 +27,10 @@ class TaskResource(Resource):
 
     def obj_create(self, bundle, **kwargs):
         """Create object"""
-        get_object_or_404(Project, name=bundle.data['project'])
+        project = get_object_or_404(Project, name=bundle.data['project'])
 
         if library.has(bundle.data['service']['name']):
+            bundle.data['owner_id'] = project.owner.id
             task_id = Tasks.insert(bundle.data)
             create_task.delay(task_id)
             bundle.data['_id'] = task_id
@@ -58,6 +59,11 @@ class TaskResource(Resource):
 
         if bundle.request.GET.get('project'):
             find_kwargs['spec']['project'] = bundle.request.GET['project']
+
+        if bundle.request.GET.get('self'):
+            find_kwargs['spec']['owner_id'] = bundle.request.user.id
+
+        print find_kwargs
 
         return map(Document, Tasks.find(**find_kwargs))
 

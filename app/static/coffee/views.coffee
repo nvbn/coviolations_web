@@ -47,6 +47,7 @@ $ ->
 
         render: ->
             if @collection.meta.total_count
+                @$el.empty()
                 @collection.each (task) =>
                     view = new app.views.TaskLineView
                         model: task
