@@ -11,7 +11,9 @@ def sloccount_violation(data):
     line = ''
     total = 0
     while len(lines):
-        if line.find("Totals grouped by language (dominant language first):") == 0:
+        if line.find(
+            "Totals grouped by language (dominant language first):"
+        ) == 0:
             line = lines.pop(0)
 
             while len(line) != 0:
@@ -20,7 +22,10 @@ def sloccount_violation(data):
                 line = lines.pop(0)
 
         if line.find('Total Physical Source Lines of Code') == 0:
-            total = line.split('=')[1].strip().replace('.', '').replace(',', '')
+            total = line.split('=')[1]\
+                .strip()\
+                .replace('.', '')\
+                .replace(',', '')
 
         if len(lines):
             line = lines.pop(0)
