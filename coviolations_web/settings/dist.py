@@ -31,6 +31,7 @@ VIOLATIONS = (
     'violations.dummy',
     'violations.pep8',
     'violations.sloccount',
+    'violations.py_unittest',
 )
 
 SERVICES = (
