@@ -1,3 +1,4 @@
+from datetime import datetime
 from pymongo import DESCENDING
 from django.shortcuts import get_object_or_404
 from django.http import Http404
@@ -34,6 +35,9 @@ class TaskResource(Resource):
             task_id = Tasks.insert(bundle.data)
             create_task.delay(task_id)
             bundle.data['_id'] = task_id
+
+            project.last_use = datetime.now()
+            project.save()
         else:
             raise Http404()
         return bundle
