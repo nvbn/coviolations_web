@@ -84,14 +84,14 @@ $ ->
                     colorer = new PlotColorer
 
                     datasets = _.map _.values(data.violations[name].plots), (plot) =>
-                        preparedPlot = _.flatten [_.map(_.range(10), -> 0), [plot.reverse()]]
+                        preparedPlot = _.flatten [_.map(_.range(30), -> 0), [plot.reverse()]]
 
                         _.extend
-                            data: _.last preparedPlot, 10
+                            data: _.last preparedPlot, 30
                         , colorer.getColor()
 
                     view = new app.views.TrendChartView
-                        labels: _.range(10)
+                        labels: _.map _.range(30), -> ''
                         datasets: datasets
                         name: name
                     view.render()
