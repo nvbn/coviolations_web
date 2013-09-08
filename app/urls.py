@@ -3,12 +3,7 @@ from .views import IndexView
 
 
 urlpatterns = patterns(
-    '',
-    url(
-        r'^logout/$', 'django.contrib.auth.views.logout',
-        name='logout', kwargs={
-            'template_name': 'logout.html'
-        },
-    ),
+    'app.views',
+    url(r'^logout/$', 'logout_with_redirect', name='logout'),
     url(r'^$', IndexView.as_view(), name='home'),
 )

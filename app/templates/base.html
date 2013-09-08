@@ -59,6 +59,9 @@
     {% block extrahead %}{% endblock %}
 </head>
 <body>
+    {% for message in messages %}
+        <span class="label label-success top-message">{{ message }}</span>
+    {% endfor %}
     <div class='container'>
         <nav class="navbar navbar-default" role="navigation">
             <div class="navbar-header">
