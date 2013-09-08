@@ -28,6 +28,7 @@ $ ->
             taskView = new app.views.TaskLineListView
                 el: $('.js-last-tasks')
                 collection: collection
+                showProjectName: true
             taskView.render()
 
     prettyPrint()

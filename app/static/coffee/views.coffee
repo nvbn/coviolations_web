@@ -26,7 +26,11 @@ $ ->
         tagName: 'tr'
 
         render: ->
-            @$el.html @template @model.attributes
+            context = _.extend
+                showProjectName: @options.showProjectName
+            , @model.attributes
+
+            @$el.html @template context
 
             if @model.get('status') == STATUS_SUCCESS
                 @$el.addClass 'success'
@@ -51,6 +55,7 @@ $ ->
                 @collection.each (task) =>
                     view = new app.views.TaskLineView
                         model: task
+                        showProjectName: @options.showProjectName
                     view.render()
                     @$el.append(view.$el)
             else

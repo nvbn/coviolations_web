@@ -42,6 +42,7 @@ $ ->
             view = new app.views.TaskLineListView
                 el: $('.js-task-line-list')
                 collection: collection
+                showProjectName: false
             view.render()
 
             data = new PlotData

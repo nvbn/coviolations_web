@@ -1,6 +1,9 @@
 <script id="project-task-line-tmpl" type="text/template">
     <td>
         <a href='/tasks/<%= id %>/' class='js-commit-name'>
+            <% if (showProjectName) { %>
+                <%= project %>:
+            <% } %>
             <%= commit.branch %>#<%= commit.hash.slice(0, 6) %>
         </a>
     </td>
