@@ -37,13 +37,17 @@ class Project(models.Model):
     is_enabled = models.BooleanField(
         default=False, verbose_name=_('is enabled'),
     )
+    last_use = models.DateTimeField(
+        auto_now_add=True, verbose_name=_('last use'),
+    )
 
     objects = ProjectManager()
 
     class Meta:
         verbose_name = _('Project')
         verbose_name_plural = _('Projects')
-        ordering = ('-id',)
+        ordering = ('-last_use', 'name')
+        get_latest_by = ('-last_use',)
 
     def __unicode__(self):
         return self.name
