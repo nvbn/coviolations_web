@@ -120,6 +120,7 @@ BOWER_INSTALLED_APPS = (
     'backbone',
     'backbone-tastypie',
     'nnnick-chartjs',
+    'google-code-prettify',
 )
 
 TEST_RUNNER = 'discover_runner.DiscoverRunner'

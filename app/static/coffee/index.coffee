@@ -29,3 +29,5 @@ $ ->
                 el: $('.js-last-tasks')
                 collection: collection
             taskView.render()
+
+    prettyPrint()
