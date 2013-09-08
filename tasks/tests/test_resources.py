@@ -16,7 +16,7 @@ class BaseTaskResourceCase(MongoFlushMixin, ResourceTestCase):
         ResourceTestCase.setUp(self)
 
         self.url = '/api/v1/tasks/'
-        ProjectFactory(name='test')
+        ProjectFactory(name='test', is_enabled=True)
 
 
 class PostTaskResourceCase(BaseTaskResourceCase):
