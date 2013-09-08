@@ -8,6 +8,9 @@ STATUS_FAILED = 2
 
 
 $ ->
+    NProgress.start()
+    NProgress.inc()
+
     app = window.coviolations
 
     class PlotData
@@ -66,6 +69,10 @@ $ ->
                     el: $('.js-task-line-list')
                     collection: collection
                     showProjectName: false
+
+                view.on 'renderFinished', =>
+                    NProgress.inc()
+
                 view.render()
 
                 data = new PlotData
@@ -77,6 +84,8 @@ $ ->
                                 data.push violation.name, pair[0], pair[1], task.get('resource_uri')
 
                 data.normalise()
+
+                NProgress.inc()
 
                 $('.js-charts-holder').empty()
 
@@ -96,6 +105,9 @@ $ ->
                         name: name
                     view.render()
                     view.$el.appendTo $('.js-charts-holder')
+                    NProgress.inc()
+
+                NProgress.done()
 
     renderPage()
     window.push.on 'task', (task) =>
