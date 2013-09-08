@@ -2,6 +2,9 @@
 {% load static %}
 
 {% block extrahead %}
+    <script type="text/javascript">
+        var project = '{{ project.name|escapejs }}';
+    </script>
     <script
         type="text/javascript"
         src='{% static 'coffee/project.js' %}'
