@@ -1,9 +1,11 @@
 from pymongo import DESCENDING
+from django.shortcuts import get_object_or_404
 from django.http import Http404
 from tastypie.resources import Resource
 from tastypie.bundle import Bundle
 from tastypie import fields
 from services.base import library
+from projects.models import Project
 from tools.mongo import Document
 from .jobs import create_task
 from .models import Tasks
@@ -25,6 +27,8 @@ class TaskResource(Resource):
 
     def obj_create(self, bundle, **kwargs):
         """Create object"""
+        get_object_or_404(Project, name=bundle.data['project'])
+
         if library.has(bundle.data['service']['name']):
             task_id = Tasks.insert(bundle.data)
             create_task.delay(task_id)
