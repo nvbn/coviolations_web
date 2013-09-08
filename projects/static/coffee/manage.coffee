@@ -9,6 +9,7 @@ $ ->
     collection.fetch
         data:
             limit: 0
+            fetch: true
         success: (collection) ->
             view = new app.views.ManageProjectsView
                 el: $('.js-manage-projects')
