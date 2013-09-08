@@ -1,6 +1,6 @@
 import json
 from mock import MagicMock
-from tornado.testing import AsyncTestCase, gen_test
+from tornado.testing import AsyncTestCase
 from ..management.commands import runpush
 
 
