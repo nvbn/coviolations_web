@@ -13,7 +13,7 @@ def create_task(task_id):
     data = Tasks.find_one(task_id)
     data['created'] = datetime.now()
     task = services.base.library.get(data['service']['name'])(data)
-    prepare_violations(task)
+    prepare_violations.delay(task)
 
 
 def _prepare_violation(violation):

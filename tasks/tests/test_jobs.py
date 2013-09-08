@@ -47,7 +47,7 @@ class CreateTaskJobCase(MongoFlushMixin, TestCase):
     def test_propagating(self):
         """Test propagating to prepare violations"""
         task = models.Tasks.find_one()
-        jobs.prepare_violations.assert_called_once_with(task['_id'])
+        jobs.prepare_violations.delay.assert_called_once_with(task['_id'])
 
 
 class PrepareViolationsJobCase(MongoFlushMixin, TestCase):

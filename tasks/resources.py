@@ -27,7 +27,7 @@ class TaskResource(Resource):
         """Create object"""
         if library.has(bundle.data['service']['name']):
             task_id = Tasks.insert(bundle.data)
-            create_task(task_id)
+            create_task.delay(task_id)
             bundle.data['_id'] = task_id
         else:
             raise Http404()
