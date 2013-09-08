@@ -1,0 +1,2 @@
+[run]
+include = violations*,projects*,tasks*,services*,app*
