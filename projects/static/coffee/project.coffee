@@ -54,42 +54,50 @@ $ ->
 
             color
 
-    collection = new app.models.TaskCollection()
-    collection.fetch
-        data:
-            limit: 0
-            project: window.project
-            with_violations: true
-        success: (collection) ->
-            view = new app.views.TaskLineListView
-                el: $('.js-task-line-list')
-                collection: collection
-                showProjectName: false
-            view.render()
-
-            data = new PlotData
-
-            collection.each (task) =>
-                _.each task.get('violations', []), (violation) ->
-                    if violation.plot
-                        _.each _.pairs(violation.plot), (pair) =>
-                            data.push violation.name, pair[0], pair[1], task.get('resource_uri')
-
-            data.normalise()
-
-            _.each _.keys(data.violations), (name) =>
-                colorer = new PlotColorer
-
-                datasets = _.map _.values(data.violations[name].plots), (plot) =>
-                    preparedPlot = _.flatten [_.map(_.range(10), -> 0), [plot.reverse()]]
-
-                    _.extend
-                        data: _.last preparedPlot, 10
-                    , colorer.getColor()
-
-                view = new app.views.TrendChartView
-                    labels: _.range(10)
-                    datasets: datasets
-                    name: name
+    renderPage = =>
+        collection = new app.models.TaskCollection()
+        collection.fetch
+            data:
+                limit: 0
+                project: window.project
+                with_violations: true
+            success: (collection) ->
+                view = new app.views.TaskLineListView
+                    el: $('.js-task-line-list')
+                    collection: collection
+                    showProjectName: false
                 view.render()
-                view.$el.appendTo $('.js-charts-holder')
+
+                data = new PlotData
+
+                collection.each (task) =>
+                    _.each task.get('violations', []), (violation) ->
+                        if violation.plot
+                            _.each _.pairs(violation.plot), (pair) =>
+                                data.push violation.name, pair[0], pair[1], task.get('resource_uri')
+
+                data.normalise()
+
+                $('.js-charts-holder').empty()
+
+                _.each _.keys(data.violations), (name) =>
+                    colorer = new PlotColorer
+
+                    datasets = _.map _.values(data.violations[name].plots), (plot) =>
+                        preparedPlot = _.flatten [_.map(_.range(10), -> 0), [plot.reverse()]]
+
+                        _.extend
+                            data: _.last preparedPlot, 10
+                        , colorer.getColor()
+
+                    view = new app.views.TrendChartView
+                        labels: _.range(10)
+                        datasets: datasets
+                        name: name
+                    view.render()
+                    view.$el.appendTo $('.js-charts-holder')
+
+    renderPage()
+    window.push.on 'task', (task) =>
+        if task.project == window.project
+            renderPage()

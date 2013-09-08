@@ -38,4 +38,7 @@ def prepare_violations(task_id):
     ]) else const.STATUS_FAILED
     Tasks.save(task)
 
-    sender.send(type='task', owner=task['owner_id'], task=str(task_id))
+    sender.send(
+        type='task', owner=task['owner_id'],
+        task=str(task_id), project=task['project'],
+    )
