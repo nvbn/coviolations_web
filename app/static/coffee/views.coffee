@@ -46,11 +46,14 @@ $ ->
         tagName: 'table'
 
         render: ->
-            @collection.each (task) =>
-                view = new app.views.TaskLineView
-                    model: task
-                view.render()
-                @$el.append(view.$el)
+            if @collection.meta.total_count
+                @collection.each (task) =>
+                    view = new app.views.TaskLineView
+                        model: task
+                    view.render()
+                    @$el.append(view.$el)
+            else
+                @$el.find('td').html 'No tasks found'
 
 
     class app.views.TrendChartView extends LazyTemplatedView

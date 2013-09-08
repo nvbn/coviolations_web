@@ -1,8 +1,35 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}
     index
 {% endblock %}
 
+{% block extrahead %}
+    {% if user.is_authenticated %}
+        <script
+            type="text/javascript"
+            src='{% static 'coffee/index.js' %}'
+        ></script>
+        {% include 'projects/manage/project_line.html' %}
+        {% include 'projects/project/task_line.html' %}
+        {% include 'projects/project/task_line_popover.html' %}
+    {% endif %}
+{% endblock %}
+
 {% block content %}
+    {% if user.is_authenticated %}
+        <div class='col-lg-6'>
+            <h2>Enabled projects</h2>
+            <table class="table table-hover col-lg-6 js-enabled-projects">
+                <tr><td>Loading...</td></tr>
+            </table>
+        </div>
+        <div class='col-lg-6'>
+            <h2>Last tasks</h2>
+            <table class="table table-hover col-lg-6 js-last-tasks">
+                <tr><td>Loading...</td></tr>
+            </table>
+        </div>
+    {% endif %}
 {% endblock %}
