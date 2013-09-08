@@ -13,3 +13,6 @@ django-braces
 django-tastypie
 mimeparse
 pymongo
+tornado
+sockjs-tornado
+tornado-redis

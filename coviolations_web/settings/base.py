@@ -119,6 +119,7 @@ INSTALLED_APPS = (
     'tasks',
     'violations',
     'services',
+    'push',
 )
 
 BOWER_COMPONENTS_ROOT = os.path.join(PROJECT_ROOT, 'components')
@@ -132,6 +133,7 @@ BOWER_INSTALLED_APPS = (
     'backbone-tastypie',
     'nnnick-chartjs',
     'google-code-prettify',
+    'sockjs-client',
 )
 
 TEST_RUNNER = 'discover_runner.DiscoverRunner'

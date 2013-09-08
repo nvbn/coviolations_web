@@ -44,6 +44,8 @@ GITHUB_API_SECRET = ''
 MONGO_CLIENT_ARGUMENTS = []
 MONGO_DB = 'coviolations'
 
+REDIS_PUSH = 'covio_push'
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
