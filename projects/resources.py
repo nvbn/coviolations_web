@@ -22,7 +22,10 @@ class UserProjectsAuthorization(Authorization):
 
     def read_list(self, object_list, bundle):
         """Return only user resources"""
-        return Project.objects.get_or_create_for_user(bundle.request.user)
+        if bundle.request.GET.get('fetch'):
+            return Project.objects.get_or_create_for_user(bundle.request.user)
+        else:
+            return Project.objects.get_enabled_for_user(bundle.request.user)
 
     def read_detail(self, object_list, bundle):
         if bundle.obj.owner != bundle.request.user:

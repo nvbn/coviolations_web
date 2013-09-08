@@ -24,7 +24,7 @@ class UserProjectsResourceCase(MockGithubMixin, ResourceTestCase):
         """Test read list"""
         models.ProjectManager._get_remote_projects.return_value =\
             map(self._create_repo, range(10))
-        response = self.api_client.get(self.url)
+        response = self.api_client.get('{}?fetch=true'.format(self.url))
         self.assertHttpOK(response)
         self.assertEqual(self.deserialize(response)['meta']['total_count'], 10)
 
@@ -80,3 +80,15 @@ class UserProjectsResourceCase(MockGithubMixin, ResourceTestCase):
         self.assertEqual(
             models.Project.objects.get().url, 'http://test.test',
         )
+
+    def test_get_enabled(self):
+        """Test get enabled"""
+        factories.ProjectFactory.create_batch(
+            10, owner=self.user, is_enabled=True,
+        )
+        factories.ProjectFactory.create_batch(
+            30, owner=self.user, is_enabled=False,
+        )
+        response = self.api_client.get('{}'.format(self.url))
+        self.assertHttpOK(response)
+        self.assertEqual(self.deserialize(response)['meta']['total_count'], 10)
