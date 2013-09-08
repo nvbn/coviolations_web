@@ -6,6 +6,7 @@ STATUS_NEW = 0
 STATUS_SUCCESS = 1
 STATUS_FAILED = 2
 
+
 $ ->
     app = window.coviolations
 
@@ -32,6 +33,27 @@ $ ->
                             parseInt(plot[1], 10) or 0
 
 
+    class PlotColorer
+        constructor: ->
+            @colors = [
+                    fillColor : "rgba(151,187,205,0.5)"
+                    strokeColor : "rgba(151,187,205,1)"
+                    pointColor : "rgba(151,187,205,1)"
+                    pointStrokeColor : "#fff"
+                ,
+                    fillColor : "rgba(220,220,220,0.5)"
+                    strokeColor : "rgba(220,220,220,1)"
+                    pointColor : "rgba(220,220,220,1)"
+                    pointStrokeColor : "#fff"
+            ]
+
+        getColor: ->
+            color = _.first @colors
+            @colors = _.rest @colors
+            @colors.push color
+
+            color
+
     collection = new app.models.TaskCollection()
     collection.fetch
         data:
@@ -56,16 +78,14 @@ $ ->
             data.normalise()
 
             _.each _.keys(data.violations), (name) =>
-                datasets = _.map _.values(data.violations[name].plots), (plot) ->
+                colorer = new PlotColorer
+
+                datasets = _.map _.values(data.violations[name].plots), (plot) =>
                     preparedPlot = _.flatten [_.map(_.range(10), -> 0), [plot.reverse()]]
 
-                    console.log preparedPlot
-
-                    data: _.last preparedPlot, 10
-                    fillColor : "rgba(151,187,205,0.5)"
-                    strokeColor : "rgba(151,187,205,1)"
-                    pointColor : "rgba(151,187,205,1)"
-                    pointStrokeColor : "#fff"
+                    _.extend
+                        data: _.last preparedPlot, 10
+                    , colorer.getColor()
 
                 view = new app.views.TrendChartView
                     labels: _.range(10)
