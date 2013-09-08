@@ -12,7 +12,7 @@ $ ->
     renderFinished = =>
         NProgress.inc()
         waitRendering -= 1
-        if waitRendering == 0
+        if waitRendering <= 0
             NProgress.done()
 
     renderProjects = =>
