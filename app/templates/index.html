@@ -55,7 +55,7 @@ before_install:
   - pip install pep8
   - sudo apt-get update -qq
   - sudo apt-get install -qq sloccount
-after_success:
+after_script:
   - pip install coviolations_app
   - covio</pre>
                 </li>
@@ -66,6 +66,7 @@ after_success:
             <ul class='how-to'>
                 <li><code>pep8</code></li>
                 <li><code>sloccount</code></li>
+                <li><code>py_unittest</code></li>
             </ul>
         </div>
     </div>
