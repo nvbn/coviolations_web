@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block content %}
-    <h1>Detail: {{ project }}:{{ commit.branch }}#{{ commit.hash }}</h1>
+    <h1>{{ project }}:{{ commit.branch }}#{{ commit.hash|slice:'6' }}</h1>
     <div class='col-lg-12 row'>
         <p>
             {{ commit.summary }}
