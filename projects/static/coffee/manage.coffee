@@ -3,6 +3,9 @@ window.coviolations ?=
     models: {}
 
 $ ->
+    NProgress.start()
+    NProgress.inc()
+
     app = window.coviolations
 
     collection = new app.models.UserProjectCollection
@@ -14,4 +17,7 @@ $ ->
             view = new app.views.ManageProjectsView
                 el: $('.js-manage-projects')
                 collection: collection
+            view.on 'renderFinished', =>
+                NProgress.done()
+
             view.render()
