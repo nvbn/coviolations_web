@@ -3,18 +3,30 @@ window.coviolations ?=
     models: {}
 
 $ ->
+    NProgress.start()
+    NProgress.inc()
+
     app = window.coviolations
+    waitRendering = 2
+
+    renderFinished = =>
+        NProgress.inc()
+        waitRendering -= 1
+        if waitRendering == 0
+            NProgress.done()
 
     renderProjects = =>
         projectCollection = new app.models.UserProjectCollection
         projectCollection.fetch
             data:
                 limit: 0
-            success: (collection) ->
+            success: (collection) =>
                 if collection.meta.total_count
                     projectView = new app.views.ManageProjectsView
                         el: $('.js-enabled-projects')
                         collection: collection
+                    projectView.on 'renderFinished', $.proxy renderFinished, @
+
                     projectView.render()
                 else
                     $('.js-enabled-projects td').html 'No projects found'
@@ -35,6 +47,7 @@ $ ->
                     el: $('.js-last-tasks')
                     collection: collection
                     showProjectName: true
+                taskView.on 'renderFinished', $.proxy renderFinished, @
                 taskView.render()
     renderTasks()
     window.push.on 'task', =>

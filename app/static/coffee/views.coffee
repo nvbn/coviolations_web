@@ -43,6 +43,7 @@ $ ->
                 trigger: 'hover'
                 content: @popover @model.attributes
                 title: @model.get('commit').summary
+            @trigger 'renderFinished'
 
 
     class app.views.TaskLineListView extends Backbone.View
@@ -51,15 +52,25 @@ $ ->
 
         render: ->
             if @collection.meta.total_count
+                @waitRendering = @collection.length
+
                 @$el.empty()
                 @collection.each (task) =>
                     view = new app.views.TaskLineView
                         model: task
                         showProjectName: @options.showProjectName
+
+                    view.on 'renderFinished', =>
+                        @waitRendering -= 1
+
+                        if @waitRendering == 0
+                            @trigger 'renderFinished'
+
                     view.render()
                     @$el.append(view.$el)
             else
                 @$el.find('td').html 'No tasks found'
+                @trigger 'renderFinished'
 
 
     class app.views.TrendChartView extends LazyTemplatedView
@@ -94,6 +105,7 @@ $ ->
 
         render: ->
             @$el.html @template @model.attributes
+            @trigger 'renderFinished'
 
         enable: (e) ->
             e.preventDefault()
@@ -112,10 +124,16 @@ $ ->
 
         render: ->
             @$el.empty()
+            @waitRendering = @collection.length
             @collection.each $.proxy @renderLine, @
 
         renderLine: (model) ->
             lineView = new app.views.ProjectLineView
                 model: model
+            lineView.on 'renderFinished', =>
+                @waitRendering -= 1
+                if @waitRendering == 0
+                    @trigger 'renderFinished'
+
             lineView.render()
             @$el.append lineView.$el

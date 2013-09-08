@@ -135,6 +135,7 @@ BOWER_INSTALLED_APPS = (
     'nnnick-chartjs',
     'google-code-prettify',
     'sockjs-client',
+    'nprogress',
 )
 
 TEST_RUNNER = 'discover_runner.DiscoverRunner'
