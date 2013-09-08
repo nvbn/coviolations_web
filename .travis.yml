@@ -4,6 +4,9 @@ python:
 services:
   - mongodb
   - redis-server
+before_install:
+  - sudo apt-get update -qq
+  - sudo apt-get install -qq sloccount
 install:
   - npm install -g bower
   - pip install -U -r requirements/ci.txt

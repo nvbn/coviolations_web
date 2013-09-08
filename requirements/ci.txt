@@ -2,3 +2,4 @@
 coverage
 python-coveralls
 coviolations_app
+pep8
