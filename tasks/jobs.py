@@ -3,6 +3,7 @@ from django_rq import job
 from violations.exceptions import ViolationDoesNotExists
 import services.base
 import violations.base
+from push.base import sender
 from .models import Tasks
 from . import const
 
@@ -36,3 +37,5 @@ def prepare_violations(task_id):
         for violation in task['violations']
     ]) else const.STATUS_FAILED
     Tasks.save(task)
+
+    sender.send('task', owner=task.owner_id, task=str(task._id))

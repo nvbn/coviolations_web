@@ -2,6 +2,7 @@ from tastypie.resources import ModelResource
 from tastypie import fields
 from tastypie.authentication import Authentication
 from tastypie.authorization import Authorization
+from push.base import sender
 from .models import Project
 
 
@@ -39,6 +40,10 @@ class UserProjectsAuthorization(Authorization):
         return False
 
     def update_detail(self, object_list, bundle):
+        sender.send(
+            'project', owner=bundle.request.id,
+            project=bundle.data['id'],
+        )
         return self.read_detail(object_list, bundle)
 
 
