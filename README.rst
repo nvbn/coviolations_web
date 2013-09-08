@@ -1,6 +1,13 @@
 coviolations.io web
 ===================
 
+.. image:: https://travis-ci.org/nvbn/coviolations_webr.png
+   :alt: Build Status
+   :target: https://travis-ci.org/nvbn/coviolations_webr
+.. image:: https://coveralls.io/repos/nvbn/coviolations_webr/badge.png?branch=master
+   :alt: Coverage Status
+   :target: https://coveralls.io/repos/nvbn/coviolations_webr
+
 `See docs on read the docs <https://coviolationsio.readthedocs.org/en/latest/>`_
 
 Installation
