@@ -1,7 +1,9 @@
+from django.core.urlresolvers import reverse
 from github import Github
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
+from tools.short import make_https
 
 
 class ProjectManager(models.Manager):
@@ -40,6 +42,10 @@ class Project(models.Model):
     last_use = models.DateTimeField(
         auto_now_add=True, verbose_name=_('last use'),
     )
+    badge_url = models.CharField(
+        blank=True, null=True,
+        max_length=300, verbose_name=_('badge url'),
+    )
 
     objects = ProjectManager()
 
@@ -51,3 +57,12 @@ class Project(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    def get_badge_url(self):
+        """Get or create https badge url"""
+        if not self.badge_url:
+            self.badge_url = make_https(
+                reverse('projects_badge', args=(self.name,)),
+            )
+            self.save()
+        return self.badge_url

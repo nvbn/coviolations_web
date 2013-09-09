@@ -16,3 +16,4 @@ pymongo
 tornado
 sockjs-tornado
 tornado-redis
+requests
