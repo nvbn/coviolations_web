@@ -78,8 +78,8 @@ $ ->
 
     chartView = new app.views.StatisticView
         el: $('#js-statistic')
-        successCount: 30
-        failedCount: 70
+        successCount:window.successPercent
+        failedCount: window.failedPercent
     chartView.render()
 
     prettyPrint()

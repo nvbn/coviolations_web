@@ -6,6 +6,10 @@
 {% endblock %}
 
 {% block extrahead %}
+    <script type="text/javascript">
+        var failedPercent = {{ failed }};
+        var successPercent = {{ success }};
+    </script>
     <script
         type="text/javascript"
         src='{% static 'coffee/index.js' %}'
