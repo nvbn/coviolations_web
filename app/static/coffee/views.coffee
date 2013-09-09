@@ -22,7 +22,6 @@ $ ->
         ### Task line view ###
         templates:
             template: '#project-task-line-tmpl'
-            popover: '#project-task-line-popover-tmpl'
         tagName: 'tr'
 
         render: ->
@@ -39,11 +38,6 @@ $ ->
             if @model.get('status') == STATUS_FAILED
                 @$el.addClass 'danger'
 
-            @$el.find('.js-commit-name').popover
-                html: true
-                trigger: 'hover'
-                content: @popover @model.attributes
-                title: @model.get('commit').summary
             @trigger 'renderFinished'
 
 
