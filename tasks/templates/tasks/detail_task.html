@@ -1,6 +1,10 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block title %}
+    {{ project }} {{ commit.branch }}#{{ commit.hash|slice:'6' }}
+{% endblock %}
+
 {% block content %}
     <h1>
         <a href='{% url 'projects_project' project %}'>{{ project }}</a>:

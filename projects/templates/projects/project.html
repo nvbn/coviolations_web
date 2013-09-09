@@ -14,6 +14,10 @@
     {% include 'projects/project/violation_plot.html' %}
 {% endblock %}
 
+{% block title %}
+    {{ project }}
+{% endblock %}
+
 {% block content %}
     <h1>
         <a href='https://github.com/{{ project.name }}'>
