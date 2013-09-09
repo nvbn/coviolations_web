@@ -88,6 +88,9 @@ $ ->
             @chart = new Chart(context).Line
                 labels: @options.labels
                 datasets: @options.datasets
+            ,
+                pointDot: false
+                datasetFill: false
 
 
     class app.views.ProjectLineView extends LazyTemplatedView
