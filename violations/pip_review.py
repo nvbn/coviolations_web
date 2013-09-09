@@ -11,9 +11,9 @@ def pip_review_violation(data):
     data['preview'] = render_to_string('violations/pip_review/preview.html', {
         'count': count,
     })
-    data['prepared'] = render_to_string('violations/pip_review/prepared.html', {
-        'raw': data['raw'],
-    })
+    data['prepared'] = render_to_string(
+        'violations/pip_review/prepared.html', {'raw': data['raw']},
+    )
     data['plot'] = {
         'outdated': count,
     }
