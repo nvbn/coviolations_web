@@ -33,7 +33,10 @@ $ ->
                         _.map @violations[name].ids, (id) =>
                             plot = _.find @violations[name].plots[plotName], (plot) =>
                                 plot[0] == id
-                            parseInt(plot[1], 10) or 0
+                            if plot and plot[1]
+                                parseInt(plot[1], 10)
+                            else
+                                0
 
 
     class PlotColorer
