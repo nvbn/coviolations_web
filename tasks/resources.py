@@ -69,8 +69,6 @@ class TaskResource(Resource):
         if bundle.request.GET.get('self'):
             find_kwargs['spec']['owner_id'] = bundle.request.user.id
 
-        print find_kwargs
-
         return map(Document, Tasks.find(**find_kwargs))
 
     def detail_uri_kwargs(self, bundle_or_obj):
