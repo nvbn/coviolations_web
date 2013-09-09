@@ -96,29 +96,29 @@
                     <a
                         class='btn btn-default navbar-btn'
                         href='{% url 'projects_manage' %}'>
-                        Manage projects
+                        <i class="icon-wrench"></i> Manage projects
                     </a>
                     <a
                         class='btn btn-default navbar-btn'
                         href='https://coviolationsio.readthedocs.org/en/latest/'>
-                        See docs
+                        <i class="icon-info-sign"></i> Documentation
                     </a>
                     <a
                         class='btn btn-default navbar-btn pull-right'
                         href='{% url 'logout' %}'>
-                        Sign out
+                        <i class="icon-signout"></i> Sign out
                     </a>
                 {% else %}
                     <a
                         class='btn btn-default navbar-btn'
                         href='https://coviolationsio.readthedocs.org/en/latest/'>
-                        See docs
+                        <i class="icon-info-sign"></i> Documentation
                     </a>
                     <a
                         class='btn btn-default navbar-btn pull-right'
                         href='{% url 'socialauth_begin' 'github' %}'
                     >
-                        Sign in with github
+                        <i class="icon-signin"></i> Sign in with github
                     </a>
                 {% endif %}
             </div>
