@@ -88,6 +88,7 @@ $ ->
             ,
                 pointDot: false
                 datasetFill: false
+                animation: false
 
 
     class app.views.ProjectLineView extends LazyTemplatedView
@@ -161,4 +162,5 @@ $ ->
                 ,
                     value: @options.failedCount
                     color: @failedColor
-            ]
+            ],
+                animation: false
