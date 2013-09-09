@@ -32,7 +32,7 @@ class SubscriptionsConnection(SockJSConnection):
         """On redis message"""
         if msg.kind == 'message':
             data = json.loads(msg.body)
-            if data['owner'] == self.owner or self.owner == 0:
+            if data['owner'] == self.owner or data['type'] == 'task':
                 self.send(json.dumps(data))
 
 
