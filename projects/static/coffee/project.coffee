@@ -71,7 +71,7 @@ $ ->
                 view = new app.views.TaskLineListView
                     el: $('.js-task-line-list')
                     collection: collection
-                    showProjectName: false
+                    showCommitSummary: true
 
                 view.on 'renderFinished', =>
                     NProgress.inc()

@@ -28,6 +28,7 @@ $ ->
         render: ->
             context = _.extend
                 showProjectName: @options.showProjectName
+                showCommitSummary: @options.showCommitSummary
             , @model.attributes
 
             @$el.html @template context
@@ -59,6 +60,7 @@ $ ->
                     view = new app.views.TaskLineView
                         model: task
                         showProjectName: @options.showProjectName
+                        showCommitSummary: @options.showCommitSummary
 
                     view.on 'renderFinished', =>
                         @waitRendering -= 1
