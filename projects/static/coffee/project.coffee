@@ -100,23 +100,24 @@ $ ->
                     datasets = _.map _.pairs(data.violations[name].plots), (plotPair) =>
                         plotName = plotPair[0]
                         plot = plotPair[1]
-
                         preparedPlot = _.flatten [_.map(_.range(30), -> 0), [plot.reverse()]]
+                        preparedPlot = _.last preparedPlot, 30
 
                         color = colorer.getColor()
                         colorNames.push([plotName, color])
 
                         _.extend
-                            data: _.last preparedPlot, 30
+                            data: preparedPlot
                         , color
 
-                    view = new app.views.TrendChartView
-                        labels: _.map _.range(30), -> ''
-                        datasets: datasets
-                        name: name
-                        colorNames: colorNames
-                    view.render()
-                    view.$el.appendTo $('.js-charts-holder')
+                    if datasets.length
+                        view = new app.views.TrendChartView
+                            labels: _.map _.range(30), -> ''
+                            datasets: datasets
+                            name: name
+                            colorNames: colorNames
+                        view.render()
+                        view.$el.appendTo $('.js-charts-holder')
                     NProgress.inc()
 
                 NProgress.done()
