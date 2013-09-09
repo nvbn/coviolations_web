@@ -33,6 +33,9 @@ def py_unittest_violation(data):
     error_match = re.match(r'.*errors=(\d*).*', status)
     if error_match:
         plot['errors'] = int(error_match.groups()[0])
+    total_match = re.match(r'Ran (\d*) tests .*', summary)
+    if total_match:
+        plot['test_count'] = int(total_match.groups()[0])
 
     data['plot'] = plot
     return data
