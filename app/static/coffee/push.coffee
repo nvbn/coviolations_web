@@ -22,4 +22,5 @@ $ ->
             @trigger msg.type, msg
 
 
+    window.userId ?= 0
     window.push = new PushConnection window.pushBind, window.userId

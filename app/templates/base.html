@@ -78,7 +78,7 @@
     ></script>
     {% block extrahead %}{% endblock %}
     <script type="text/javascript">
-        var userId = {{ user.id|escapejs }};
+        var userId = {{ user.id|default_if_none:'undefined'|escapejs }};
         var pushBind = '{{ push_bind|escapejs }}';
     </script>
 </head>
