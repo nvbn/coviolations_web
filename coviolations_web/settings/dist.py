@@ -33,6 +33,7 @@ VIOLATIONS = (
     'violations.sloccount',
     'violations.py_unittest',
     'violations.pip_review',
+    'violations.testem',
 )
 
 SERVICES = (
