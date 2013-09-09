@@ -98,13 +98,13 @@ $ ->
                     colorNames = []
 
                     datasets = _.map _.pairs(data.violations[name].plots), (plotPair) =>
-                        name = plotPair[0]
+                        plotName = plotPair[0]
                         plot = plotPair[1]
 
                         preparedPlot = _.flatten [_.map(_.range(30), -> 0), [plot.reverse()]]
 
                         color = colorer.getColor()
-                        colorNames.push([name, color])
+                        colorNames.push([plotName, color])
 
                         _.extend
                             data: _.last preparedPlot, 30
