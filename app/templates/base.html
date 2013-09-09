@@ -86,7 +86,7 @@
     {% for message in messages %}
         <span class="label label-success top-message">{{ message }}</span>
     {% endfor %}
-    <div class='container'>
+    <div class='container' id='main-container'>
         <nav class="navbar navbar-default" role="navigation">
             <div class="navbar-header">
                 <a class="navbar-brand" href="{% url 'home' %}">
@@ -128,5 +128,14 @@
         {% block content %}
         {% endblock %}
     </div>
+
+    <footer>
+        <div class="container">
+            <div class='col-lg-12 navbar navbar-default'>
+                <p class="text-muted credit">Coviolations is opensource: <a href='https://github.com/nvbn/coviolations_web'>server</a> and <a href='https://github.com/nvbn/coviolations_app'>app</a>.
+                <p class="text-muted credit">If you have questions: <a href='mailto:nvbn.rm@gmail.com'>nvbn.rm@gmail.com</a></p>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>
