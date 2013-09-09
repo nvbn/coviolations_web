@@ -95,17 +95,26 @@ $ ->
                 _.each _.keys(data.violations), (name) =>
                     colorer = new PlotColorer
 
-                    datasets = _.map _.values(data.violations[name].plots), (plot) =>
+                    colorNames = []
+
+                    datasets = _.map _.pairs(data.violations[name].plots), (plotPair) =>
+                        name = plotPair[0]
+                        plot = plotPair[1]
+
                         preparedPlot = _.flatten [_.map(_.range(30), -> 0), [plot.reverse()]]
+
+                        color = colorer.getColor()
+                        colorNames.push([name, color])
 
                         _.extend
                             data: _.last preparedPlot, 30
-                        , colorer.getColor()
+                        , color
 
                     view = new app.views.TrendChartView
                         labels: _.map _.range(30), -> ''
                         datasets: datasets
                         name: name
+                        colorNames: colorNames
                     view.render()
                     view.$el.appendTo $('.js-charts-holder')
                     NProgress.inc()

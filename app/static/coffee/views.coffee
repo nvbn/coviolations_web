@@ -84,6 +84,7 @@ $ ->
         render: ->
             @$el.html @template
                 name: @options.name
+                colorNames: @options.colorNames
             context = @$el.find('canvas')[0].getContext '2d'
             @chart = new Chart(context).Line
                 labels: @options.labels
