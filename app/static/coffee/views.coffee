@@ -137,3 +137,28 @@ $ ->
 
             lineView.render()
             @$el.append lineView.$el
+
+
+    class app.views.StatisticView extends LazyTemplatedView
+        ### Statistic view ###
+        tagName: 'canvas'
+        templates:
+            template: '#index-statistic-tmpl'
+        successColor: "#5cb85c"
+        failedColor: "#d9534f"
+
+        render: ->
+            @$el.html @template
+                successColor: @successColor
+                failedColor: @failedColor
+                success: @options.successCount
+                failed: @options.failedCount
+
+            context = @$el.find('canvas')[0].getContext '2d'
+            @chart = new Chart(context).Pie [
+                    value: @options.successCount
+                    color: @successColor
+                ,
+                    value: @options.failedCount
+                    color: @failedColor
+            ]

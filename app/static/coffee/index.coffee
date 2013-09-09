@@ -76,4 +76,10 @@ $ ->
     window.push.on 'task', =>
         renderFeed()
 
+    chartView = new app.views.StatisticView
+        el: $('#js-statistic')
+        successCount: 30
+        failedCount: 70
+    chartView.render()
+
     prettyPrint()

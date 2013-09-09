@@ -1,0 +1,20 @@
+<script id="index-statistic-tmpl" type="text/template">
+    <h2>Tasks statistic</h2>
+    <div class='col-lg-6 row'>
+        <canvas width='350' height='350'></canvas>
+    </div>
+    <span class='plot-color-line'>
+        <span
+            class='plot-color-row'
+            style='background-color: <%= successColor %>'
+        ></span>
+        success <%= success %>%
+    </span>
+    <span class='plot-color-line'>
+        <span
+            class='plot-color-row'
+            style='background-color: <%= failedColor %>'
+        ></span>
+        failed <%= failed %>%
+    </span>
+</script>
