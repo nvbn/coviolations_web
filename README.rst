@@ -7,7 +7,7 @@ coviolations.io web
 .. image:: https://coveralls.io/repos/nvbn/coviolations_web/badge.png?branch=master
    :alt: Coverage Status
    :target: https://coveralls.io/repos/nvbn/coviolations_web
-.. image:: http://coviolations.io/projects/nvbn/coviolations_web/badge/
+.. image:: https://goo.gl/72whDy
    :target: http://coviolations.io/projects/nvbn/coviolations_web/
 
 `See docs on read the docs <https://coviolationsio.readthedocs.org/en/latest/>`_
