@@ -9,8 +9,8 @@ before_install:
   - sudo apt-get install -qq sloccount
 install:
   - npm install -g bower
-  - pip install -U -r requirements/ci.txt
-  - cp coviolations_web/settings/local_ci.py coviolations_web/settings/local.py
+  - pip install fabric
+  - fab install:ci
 script:
   - coverage run manage.py test violations projects tasks services app push 2>test_out
 after_script:
