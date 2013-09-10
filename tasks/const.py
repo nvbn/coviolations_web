@@ -10,5 +10,3 @@ STATUSES = (
     (STATUS_SUCCESS, _('success')),
     (STATUS_FAILED, _('failed')),
 )
-
-LOGGER = 'coviolations_tasks'
