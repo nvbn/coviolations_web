@@ -15,32 +15,53 @@ coviolations.io web
 Installation
 ------------
 
-Install dependencies:
+You need `pip`, `npm`, `bower`, `redis` and `mongodb` installed for this instruction.
 
-- for developing:
-
-.. code-block:: bash
-
-    pip install -r requirements/develop.txt
-
-- for production use:
+Install fabric:
 
 .. code-block:: bash
 
-    pip install -r requirements/production.txt
+    pip install fabric
 
 Copy `coviolations_web/settings/dist.py` to `coviolations_web/settings/local.py` and fill config values.
 
-Create db with:
+And setup for developing with:
 
 .. code-block:: bash
 
-    ./manage.py syncdb
-    ./manage.py migrate
+    fab install
 
-Download assets with:
+Or for production:
 
 .. code-block:: bash
 
-    npm install -g bower
-    ./manage.py bower_install
+    fab install:production
+
+You can update project with:
+
+.. code-block:: bash
+
+    fab update # or fab update:production
+
+Running
+-------
+
+Run http server:
+
+.. code-block:: bash
+
+    ./manage.py runserver
+
+Run sockjs server:
+
+.. code-block:: bash
+
+    ./manage.py runpush
+
+And run rq worker:
+
+.. code-block:: bash
+
+    ./manage.py rqworker
+
+And `open <http://localhost:8000>`_ in browser.

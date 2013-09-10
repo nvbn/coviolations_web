@@ -17,3 +17,4 @@ tornado
 sockjs-tornado
 tornado-redis
 requests
+fabric

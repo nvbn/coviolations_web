@@ -48,3 +48,4 @@ static/*
 media/*
 !media/.gitkeep
 
+fabfile/private.py

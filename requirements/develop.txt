@@ -2,4 +2,3 @@
 mock
 factory_boy
 testfixtures
-fabric
