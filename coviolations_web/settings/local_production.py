@@ -1,5 +1,7 @@
 from .base import INSTALLED_APPS
 
+DEBUG = False
+TEMPLATE_DEBUG = DEBUG
 
 DATABASES = {
     'default': {
