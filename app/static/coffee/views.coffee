@@ -220,15 +220,18 @@ $ ->
                 waitRendering -= 1
                 if waitRendering <= 0
                     NProgress.done()
+            @on 'renderReloaded', NProgress.done
 
         initReloads: ->
             ### Subscribe to push for views rerendering ###
             @options.push.on 'project', =>
                 @renderProjects()
+                @trigger 'renderReloaded'
 
             @options.push.on 'task', =>
                 @renderTasks()
                 @renderFeed()
+                @trigger 'renderReloaded'
 
         renderProjects: ->
             ### Render projects for authenticated ###
@@ -379,17 +382,16 @@ $ ->
             NProgress.start()
             NProgress.inc()
 
-            @on 'renderPartFinished', ->
-                NProgress.inc()
-
-            @on 'renderFinished', ->
-                NProgress.done()
+            @on 'renderPartFinished', NProgress.inc
+            @on 'renderFinished', NProgress.done
+            @on 'renderReload', NProgress.done
 
         initReloads: ->
             ### Init view reloads on push ###
             @options.push.on 'task', (task) =>
                 if task.project == @options.project
                     @renderTaskLines()
+                    @trigger 'renderReload'
 
         renderTaskLines: ->
             ### Render task line view ###
