@@ -309,6 +309,7 @@ $ ->
                 @options.projectCollection.fetch
                     data:
                         limit: 0
+                    reset: true
                     success: $.proxy @_renderManageProjectsView, @
             else
                 @_renderProjectsFinished()
@@ -337,6 +338,7 @@ $ ->
                         limit: 20
                         with_violations: true
                         self: true
+                    reset: true
                     success: $.proxy @_renderTaskLineView, @
             else
                 @_renderTasksFinished
@@ -433,14 +435,14 @@ $ ->
             @initReloads()
             @renderToken()
 
-            @fetchCollection (collection) =>
-                    @renderTaskLines()
+            @fetchCollection =>
+                @renderTaskLines()
 
-                    @plotData = @getPlotData()
-                    @trigger 'renderPartFinished', 'plotData'
+                @plotData = @getPlotData()
+                @trigger 'renderPartFinished', 'plotData'
 
-                    @renderCharts()
-                    prettyPrint()
+                @renderCharts()
+                prettyPrint()
 
         initProgressBar: ->
             ### Init progress bar and subscribe to updates ###
