@@ -1,5 +1,7 @@
-from django.shortcuts import redirect
 from pymongo import DESCENDING
+from django.shortcuts import redirect
+from django.contrib.messages import add_message, INFO
+from django.utils.translation import ugettext_lazy as _
 from django.templatetags.static import static
 from django.views.generic import (
     TemplateView,
@@ -77,6 +79,7 @@ class RegenerateTokenView(LoginRequiredMixin, FormView):
         ), exc_info=True, extra={
             'request': self.request,
         })
+        add_message(self.request, INFO, _('Token changed success'))
         return self._redirect_back()
 
     def form_invalid(self, form):
