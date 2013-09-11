@@ -278,7 +278,7 @@ $ ->
             NProgress.start()
             NProgress.inc()
 
-            waitRendering = 3
+            waitRendering = if @options.userId then 3 else 1
             @on 'renderPartFinished', =>
                 NProgress.inc()
                 waitRendering -= 1
