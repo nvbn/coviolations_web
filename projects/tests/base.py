@@ -23,6 +23,7 @@ class MockGithubMixin(object):
         repo = MagicMock(
             url='http://test{}.com'.format(n),
             organization=None,
+            private=False,
         )
         repo.full_name = 'project {}'.format(n)
         return repo

@@ -33,10 +33,46 @@ class ProjectViewCase(TestCase):
     def setUp(self):
         project = factories.ProjectFactory.create()
         self.url = reverse('projects_project', args=(project.name,))
+        self.user = User.objects.create_user('test', 'test@test.test', 'test')
 
     def test_ok(self):
         """Test status=200"""
         response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_404_for_private_and_not_authenticated(self):
+        """Test 404 for private and not authenticated"""
+        project = factories.ProjectFactory(is_private=True)
+        response = self.client.get(
+            reverse('projects_project', args=(project.name,)),
+        )
+        self.assertEqual(response.status_code, 404)
+
+    def test_404_for_private_and_not_owner(self):
+        """Test 404 for private and not owner"""
+        self.client.login(
+            username='test',
+            password='test',
+        )
+        project = factories.ProjectFactory(is_private=True)
+        response = self.client.get(
+            reverse('projects_project', args=(project.name,)),
+        )
+        self.assertEqual(response.status_code, 404)
+
+    def test_ok_for_private_and_owner(self):
+        """Test 200 for private and owner"""
+        self.client.login(
+            username='test',
+            password='test',
+        )
+        project = factories.ProjectFactory(
+            is_private=True,
+            owner=self.user,
+        )
+        response = self.client.get(
+            reverse('projects_project', args=(project.name,)),
+        )
         self.assertEqual(response.status_code, 200)
 
 

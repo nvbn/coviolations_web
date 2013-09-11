@@ -1,3 +1,4 @@
+from django.http import Http404
 from pymongo import DESCENDING
 from django.shortcuts import redirect
 from django.contrib.messages import add_message, INFO
@@ -28,6 +29,16 @@ class ProjectView(DetailView):
     context_object_name = 'project'
     model = Project
     slug_field = 'name'
+
+    def get_object(self, queryset=None):
+        """Get object"""
+        obj = super(ProjectView, self).get_object(queryset)
+        if obj.is_private and (
+            not self.request.user.is_authenticated()
+            or obj.owner != self.request.user
+        ):
+            raise Http404()
+        return obj
 
 
 class ProjectBadge(RedirectView):

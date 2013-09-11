@@ -24,6 +24,9 @@
         <a href='https://github.com/{{ project.name }}'>
             <i class="icon-github"></i>
         </a>
+        {% if project.is_private %}
+            <i class="icon-lock"></i>
+        {% endif %}
         {{ project }}
     </h1>
     <div class="col-lg-12">
