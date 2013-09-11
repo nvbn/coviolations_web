@@ -17,6 +17,7 @@ VIOLATIONS = (
 
 SERVICES = (
     'services.travis_ci',
+    'services.token',
 )
 
 PUSH_BIND = 'http://coviolations.io/sub'

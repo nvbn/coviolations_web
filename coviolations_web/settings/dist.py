@@ -39,6 +39,7 @@ VIOLATIONS = (
 SERVICES = (
     'services.dummy',
     'services.travis_ci',
+    'services.token',
 )
 
 GITHUB_APP_ID = ''

@@ -39,6 +39,7 @@ VIOLATIONS = (
 SERVICES = (
     'services.dummy',
     'services.travis_ci',
+    'services.token',
 )
 
 MONGO_CLIENT_ARGUMENTS = []
