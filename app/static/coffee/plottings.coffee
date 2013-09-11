@@ -14,6 +14,7 @@ $ ->
             @violations = {}
 
         push: (violationName, plotName, plotValue, id) ->
+            ### Push new violation ###
             @violations[violationName] ?=
                 ids: []
                 plots: {}
@@ -23,6 +24,7 @@ $ ->
             @violations[violationName].ids.push id
 
         normalise: ->
+            ### Prepare plot data ###
             _.each _.keys(@violations), (name) =>
                 _.each _.keys(@violations[name].plots), (plotName) =>
                     @violations[name].plots[plotName] =
@@ -39,6 +41,7 @@ $ ->
         ### Plot colors selector ###
 
         constructor: ->
+            ### Set default colors ###
             @colors = [
                     strokeColor : "#5cb85c"
                 ,
@@ -52,6 +55,7 @@ $ ->
             ]
 
         getColor: ->
+            ### Get color ###
             color = _.first @colors
             @colors = _.rest @colors
             @colors.push color

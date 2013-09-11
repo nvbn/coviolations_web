@@ -12,10 +12,11 @@ $ ->
     app = window.coviolations
 
     class LazyTemplatedView extends Backbone.View
-        ### lazy templated view ###
+        ### Lazy templated view ###
         templates: {}
 
         initialize: ->
+            ### Init all templates ###
             _.each _.keys(@templates), (name) =>
                 @[name] = _.template($(@templates[name]).html())
 
@@ -27,6 +28,7 @@ $ ->
         tagName: 'tr'
 
         render: ->
+            ### Render task line and set status class ###
             context = _.extend
                 showProjectName: @options.showProjectName
                 showCommitSummary: @options.showCommitSummary
@@ -48,27 +50,30 @@ $ ->
         tagName: 'table'
 
         render: ->
+            ### Render task line list ###
             if @collection.meta.total_count
                 @waitRendering = @collection.length
-
                 @$el.empty()
-                @collection.each (task) =>
-                    view = new app.views.TaskLineView
-                        model: task
-                        showProjectName: @options.showProjectName
-                        showCommitSummary: @options.showCommitSummary
-
-                    view.on 'renderFinished', =>
-                        @waitRendering -= 1
-
-                        if @waitRendering == 0
-                            @trigger 'renderFinished'
-
-                    view.render()
-                    @$el.append(view.$el)
+                @collection.each $.proxy @_renderTaskLine, @
             else
                 @$el.find('td').html 'No tasks found'
                 @trigger 'renderFinished'
+
+        _renderTaskLine: (task) ->
+            ### Render single task line ###
+            view = new app.views.TaskLineView
+                model: task
+                showProjectName: @options.showProjectName
+                showCommitSummary: @options.showCommitSummary
+
+            view.on 'renderFinished', =>
+                @waitRendering -= 1
+
+                if @waitRendering == 0
+                    @trigger 'renderFinished'
+
+            view.render()
+            @$el.append(view.$el)
 
 
     class app.views.TrendChartView extends LazyTemplatedView
@@ -80,6 +85,7 @@ $ ->
             'class': 'col-lg-4'
 
         render: ->
+            ### Render trand chart on canvas ###
             @$el.html @template
                 name: @options.name
                 colorNames: @options.colorNames
@@ -103,19 +109,23 @@ $ ->
         tagName: 'tr'
 
         initialize: ->
+            ### Bind change event ###
             super
             @model.on 'change', $.proxy @render, @
 
         render: ->
+            ### Render project line ###
             @$el.html @template @model.attributes
             @trigger 'renderFinished'
 
         enable: (e) ->
+            ### Enable project ###
             e.preventDefault()
             @model.set 'is_enabled', true
             @model.save()
 
         disable: (e) ->
+            ### Disable project ###
             e.preventDefault()
             @model.set 'is_enabled', false
             @model.save()
@@ -126,11 +136,13 @@ $ ->
         tagName: 'table'
 
         render: ->
+            ### Render manage project table ###
             @$el.empty()
             @waitRendering = @collection.length
             @collection.each $.proxy @renderLine, @
 
         renderLine: (model) ->
+            ### Render single project line ###
             lineView = new app.views.ProjectLineView
                 model: model
             lineView.on 'renderFinished', =>
@@ -151,6 +163,7 @@ $ ->
         failedColor: "#d9534f"
 
         render: ->
+            ### Render statistic chart on canvas ###
             @$el.html @template
                 successColor: @successColor
                 failedColor: @failedColor
@@ -185,6 +198,7 @@ $ ->
         tagName: 'div'
 
         render: ->
+            ### Render index page ###
             @initProgressBar()
 
             @renderProjects()
@@ -196,6 +210,7 @@ $ ->
             prettyPrint()
 
         initProgressBar: ->
+            ### Init progress bar and subscribe on updates ###
             NProgress.start()
             NProgress.inc()
 
@@ -207,6 +222,7 @@ $ ->
                     NProgress.done()
 
         initReloads: ->
+            ### Subscribe to push for views rerendering ###
             @options.push.on 'project', =>
                 @renderProjects()
 
@@ -215,6 +231,7 @@ $ ->
                 @renderFeed()
 
         renderProjects: ->
+            ### Render projects for authenticated ###
             if @options.userId
                 @options.projectCollection.fetch
                     data:
@@ -224,6 +241,7 @@ $ ->
                 @_renderProjectsFinished()
 
         _renderManageProjectsView: (collection) ->
+            ### Render manage projects view ###
             if collection.meta.total_count
                 projectView = new app.views.ManageProjectsView
                     el: @$el.find('.js-enabled-projects')
@@ -235,9 +253,11 @@ $ ->
                 @$el.find('.js-enabled-projects td').html 'No projects found'
 
         _renderProjectsFinished: ->
+            ### Send projects view rendered ###
             @trigger 'renderPartFinished', 'projects'
 
         renderTasks: ->
+            ### Render tasks for authenticated ###
             if @options.userId
                 @options.taskCollection.fetch
                     data:
@@ -245,11 +265,11 @@ $ ->
                         with_violations: true
                         self: true
                     success: $.proxy @_renderTaskLineView, @
-
             else
                 @_renderTasksFinished
 
         _renderTaskLineView: (collection) ->
+            ### Render task line view ###
             taskView = new app.views.TaskLineListView
                 el: @$el.find('.js-last-tasks')
                 collection: collection
@@ -258,9 +278,11 @@ $ ->
             taskView.render()
 
         _renderTasksFinished: ->
+            ### Send tasks view rendered ###
             @trigger 'renderPartFinished', 'tasks'
 
         renderFeed: ->
+            ### Render tasks feed ###
             @options.taskCollection.fetch
                 data:
                     limit: 10
@@ -268,6 +290,7 @@ $ ->
                 success: $.proxy @renderFeedView, @
 
         renderFeedView: (collection) ->
+            ### Render task line list ###
             taskView = new app.views.TaskLineListView
                 el: @$el.find('.js-tasks-feed')
                 collection: collection
@@ -277,6 +300,7 @@ $ ->
             taskView.render()
 
         renderChart: ->
+            ### Render statistic chart ###
             chartView = new app.views.StatisticView
                 el: @$el.find('#js-statistic')
                 successCount: @options.successPercent
@@ -289,10 +313,12 @@ $ ->
         tagName: 'div'
 
         render: ->
+            ### Render manage projcts page ###
             @initProgressBar()
             @renderManageProjects()
 
         renderManageProjects: ->
+            ### Render manage projects table ###
             @options.collection.fetch
                 data:
                     limit: 0
@@ -300,6 +326,7 @@ $ ->
                 success: $.proxy @_renderManageProjectsView, @
 
         _renderManageProjectsView: (collection) ->
+            ### Render manage projects view ###
             view = new app.views.ManageProjectsView
                 el: @$el.find('.js-manage-projects')
                 collection: collection
@@ -309,10 +336,11 @@ $ ->
             view.render()
 
         initProgressBar: ->
+            ### Init progress bar and subscribe to updates ###
             NProgress.start()
             NProgress.inc()
 
-            @on 'renderFinished', =>
+            @on 'renderFinished', ->
                 NProgress.done()
 
 
@@ -327,6 +355,7 @@ $ ->
         tagName: 'div'
 
         render: ->
+            ### Render project page view ###
             @initProgressBar()
             @initReloads()
 
@@ -346,6 +375,7 @@ $ ->
                     prettyPrint()
 
         initProgressBar: ->
+            ### Init progress bar and subscribe to updates ###
             NProgress.start()
             NProgress.inc()
 
@@ -356,11 +386,13 @@ $ ->
                 NProgress.done()
 
         initReloads: ->
+            ### Init view reloads on push ###
             @options.push.on 'task', (task) =>
                 if task.project == @options.project
                     @renderTaskLines()
 
         renderTaskLines: ->
+            ### Render task line view ###
             view = new app.views.TaskLineListView
                 el: @$el.find('.js-task-line-list')
                 collection: @options.collection
@@ -372,6 +404,7 @@ $ ->
             view.render()
 
         getPlotData: ->
+            ### Prepare data for plotting ###
             data = new app.plotting.PlotData
             @options.collection.each (task) =>
                 violations = _.filter task.get('violations', []), (violation) ->
@@ -390,6 +423,7 @@ $ ->
             data
 
         renderCharts: ->
+            ### Render trend charts ###
             @$el.find('.js-charts-holder').empty()
 
             _.each _.keys(@plotData.violations), (name) =>
@@ -418,6 +452,7 @@ $ ->
             @trigger 'renderFinished'
 
         _renderTrendChartView: (datasets, colorNames) ->
+            ### Render single trend chart ###
             view = new app.views.TrendChartView
                 labels: _.map _.range(30), -> ''
                 datasets: datasets

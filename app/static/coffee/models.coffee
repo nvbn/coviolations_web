@@ -17,6 +17,7 @@ $ ->
         url: '/api/v1/userprojects/'
         model: app.models.UserProject
 
+
     class app.models.Task extends Backbone.Model
         ### Task model ###
         urlRoot: '/api/v1/tasks/'
