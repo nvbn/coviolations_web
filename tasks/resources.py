@@ -10,6 +10,7 @@ from projects.models import Project
 from tools.mongo import Document
 from .jobs import create_task
 from .models import Tasks
+from .utils import logger
 
 
 class TaskResource(Resource):
@@ -36,6 +37,13 @@ class TaskResource(Resource):
             bundle.data['owner_id'] = project.owner.id
             task_id = Tasks.insert(bundle.data)
             create_task.delay(task_id)
+
+            logger.info(
+                'Task received: {}'.format(task_id),
+                request=bundle.request,
+                task=bundle.data,
+            )
+
             bundle.data['_id'] = task_id
 
             project.last_use = datetime.now()
