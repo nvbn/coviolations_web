@@ -33,10 +33,7 @@ class ProjectView(DetailView):
     def get_object(self, queryset=None):
         """Get object"""
         obj = super(ProjectView, self).get_object(queryset)
-        if obj.is_private and (
-            not self.request.user.is_authenticated()
-            or obj.owner != self.request.user
-        ):
+        if not obj.can_access(self.request.user):
             raise Http404()
         return obj
 

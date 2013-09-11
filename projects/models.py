@@ -74,3 +74,11 @@ class Project(models.Model):
             )
             self.save()
         return self.badge_url
+
+    def can_access(self, user):
+        """Can access"""
+        # TODO: add organizations support
+        if self.is_private:
+            return self.owner == user
+        else:
+            return True
