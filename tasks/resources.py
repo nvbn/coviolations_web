@@ -41,9 +41,10 @@ class TaskResource(Resource):
             create_task.delay(task_id)
 
             logger.info(
-                'Task received: {}'.format(task_id),
-                request=bundle.request,
-                task=bundle.data,
+                'Task received: {}'.format(task_id), exc_info=True, extra={
+                    'request': bundle.request,
+                    'task': bundle.data,
+                },
             )
 
             bundle.data['_id'] = task_id
@@ -53,8 +54,10 @@ class TaskResource(Resource):
         else:
             logger.info(
                 'Service not found: {}'.format(service),
-                request=bundle.request,
-                task=bundle.data,
+                exc_info=True, extra={
+                    'request': bundle.request,
+                    'task': bundle.data,
+                },
             )
             raise Http404()
         return bundle

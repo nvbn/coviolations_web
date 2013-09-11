@@ -19,7 +19,11 @@ def create_task(task_id):
     if task:
         prepare_violations.delay(task)
     else:
-        logger.warning('Task failed: {}'.format(task_id), task=task)
+        logger.warning(
+            'Task failed: {}'.format(task_id), exc_info=True, extra={
+                'task': task
+            },
+        )
 
 
 def _prepare_violation(violation):
@@ -29,14 +33,18 @@ def _prepare_violation(violation):
         return violation_creator(violation)
     except ViolationDoesNotExists as e:
         logger.warning(
-            "Violation doesn't exists: {}".format(e), violation=violation,
+            "Violation doesn't exists: {}".format(e), exc_info=True, extra={
+                'violation': violation,
+            },
         )
 
         violation['status'] = const.STATUS_FAILED
         return violation
     except Exception as e:
         logger.exception(
-            'Violation failed: {}'.format(e), violation=violation,
+            'Violation failed: {}'.format(e), exc_info=True, extra={
+                'violation': violation,
+            },
         )
         return violation
 
