@@ -10,7 +10,7 @@ class TaskViewMixin(object):
 
     def get_project(self, task):
         """Get project"""
-        project = Project.objects.get(task['project'])
+        project = Project.objects.get(name=task['project'])
         if not project.can_access(self.request.user):
             raise Http404()
         return project
