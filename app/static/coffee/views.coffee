@@ -280,3 +280,35 @@ $ ->
                 successCount: @options.successPercent
                 failedCount: @options.failedPercent
             chartView.render()
+
+
+    class app.views.ManageProjectsPageView extends Backbone.View
+        ### Manage projects page view ###
+        tagName: 'div'
+
+        render: ->
+            @initProgressBar()
+            @renderManageProjects()
+
+        renderManageProjects: ->
+            @options.collection.fetch
+                data:
+                    limit: 0
+                    fetch: true
+                success: $.proxy @_renderManageProjectsView, @
+
+        _renderManageProjectsView: (collection) ->
+            view = new app.views.ManageProjectsView
+                el: @$el.find('.js-manage-projects')
+                collection: collection
+            view.on 'renderFinished', =>
+                @trigger 'renderFinished'
+
+            view.render()
+
+        initProgressBar: ->
+            NProgress.start()
+            NProgress.inc()
+
+            @on 'renderFinished', =>
+                NProgress.done()

@@ -3,21 +3,8 @@ window.coviolations ?=
     models: {}
 
 $ ->
-    NProgress.start()
-    NProgress.inc()
+    pageView = new coviolations.views.ManageProjectsPageView
+        el: $('#main-container')
+        collection: new coviolations.models.UserProjectCollection
 
-    app = window.coviolations
-
-    collection = new app.models.UserProjectCollection
-    collection.fetch
-        data:
-            limit: 0
-            fetch: true
-        success: (collection) ->
-            view = new app.views.ManageProjectsView
-                el: $('.js-manage-projects')
-                collection: collection
-            view.on 'renderFinished', =>
-                NProgress.done()
-
-            view.render()
+    pageView.render()
