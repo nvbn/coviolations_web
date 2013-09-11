@@ -82,3 +82,8 @@ class Project(models.Model):
             return self.owner == user
         else:
             return True
+
+    def get_allowed_users(self):
+        """Get allowed users"""
+        # TODO: add organizations support
+        return [self.owner]

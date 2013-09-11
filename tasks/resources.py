@@ -37,6 +37,12 @@ class TaskResource(Resource):
 
         if library.has(service):
             bundle.data['owner_id'] = project.owner.id
+            bundle.data['is_private'] = project.is_private
+            if project.is_private:
+                bundle.data['allowed_users'] = [
+                    user.id for user in project.get_allowed_users()
+                ]
+
             task_id = Tasks.insert(bundle.data)
             create_task.delay(task_id)
 
