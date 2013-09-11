@@ -1,6 +1,8 @@
 window.coviolations ?=
     views: {}
     models: {}
+    plotting: {}
+    push: {}
 
 $ ->
     app = window.coviolations

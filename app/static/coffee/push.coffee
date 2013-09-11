@@ -1,5 +1,13 @@
+window.coviolations ?=
+    views: {}
+    models: {}
+    plotting: {}
+    push: {}
+
 $ ->
-    class PushConnection
+    app = window.coviolations
+
+    class app.push.PushConnection
         ### Push connection ###
 
         constructor: (bind, @userId) ->
@@ -23,4 +31,4 @@ $ ->
 
 
     window.userId ?= 0
-    window.push = new PushConnection window.pushBind, window.userId
+    app.push.push = new app.push.PushConnection window.pushBind, window.userId

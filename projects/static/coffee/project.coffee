@@ -1,6 +1,8 @@
 window.coviolations ?=
     views: {}
     models: {}
+    plotting: {}
+    push: {}
 
 STATUS_NEW = 0
 STATUS_SUCCESS = 1
@@ -123,7 +125,7 @@ $ ->
                 NProgress.done()
 
     renderPage()
-    window.push.on 'task', (task) =>
+    app.push.push.on 'task', (task) =>
         if task.project == window.project
             renderPage()
 

@@ -1,6 +1,8 @@
 window.coviolations ?=
     views: {}
     models: {}
+    plotting: {}
+    push: {}
 
 $ ->
     pageView = new coviolations.views.IndexPageView
@@ -9,7 +11,7 @@ $ ->
         failedPercent: window.failedPercent
         taskCollection: new coviolations.models.TaskCollection()
         projectCollection: new coviolations.models.UserProjectCollection
-        push: window.push
+        push: coviolations.push.push
         el: $('#main-container')
 
     pageView.render()

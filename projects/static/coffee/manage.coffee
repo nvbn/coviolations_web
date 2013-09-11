@@ -1,6 +1,8 @@
 window.coviolations ?=
     views: {}
     models: {}
+    plotting: {}
+    push: {}
 
 $ ->
     pageView = new coviolations.views.ManageProjectsPageView

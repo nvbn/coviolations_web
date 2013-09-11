@@ -1,6 +1,8 @@
 window.coviolations ?=
     views: {}
     models: {}
+    plotting: {}
+    push: {}
 
 STATUS_NEW = 0
 STATUS_SUCCESS = 1
