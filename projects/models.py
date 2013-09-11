@@ -3,6 +3,7 @@ from github import Github
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
+from django_extensions.db.fields import UUIDField
 from tools.short import make_https
 
 
@@ -46,6 +47,7 @@ class Project(models.Model):
         blank=True, null=True,
         max_length=300, verbose_name=_('badge url'),
     )
+    token = UUIDField(auto=True, verbose_name=_('token'))
 
     objects = ProjectManager()
 
