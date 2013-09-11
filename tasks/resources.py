@@ -33,7 +33,9 @@ class TaskResource(Resource):
             Project, name=bundle.data['project'], is_enabled=True,
         )
 
-        if library.has(bundle.data['service']['name']):
+        service = bundle.data.get('service', {}).get('name', 'dummy')
+
+        if library.has(service):
             bundle.data['owner_id'] = project.owner.id
             task_id = Tasks.insert(bundle.data)
             create_task.delay(task_id)
@@ -49,6 +51,11 @@ class TaskResource(Resource):
             project.last_use = datetime.now()
             project.save()
         else:
+            logger.info(
+                'Service not found: {}'.format(service),
+                request=bundle.request,
+                task=bundle.data,
+            )
             raise Http404()
         return bundle
 
