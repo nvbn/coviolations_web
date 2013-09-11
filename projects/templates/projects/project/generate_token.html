@@ -1,0 +1,10 @@
+<script id="project-generate-token-tmpl" type="text/template">
+    {% csrf_token %}
+    Token:
+    <code>{{ project.token }}</code>
+    <button
+        class="btn btn-danger btn-xs"
+    >
+        <i class="icon-repeat"></i>
+    </button>
+</script>

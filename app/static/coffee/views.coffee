@@ -181,6 +181,57 @@ $ ->
                 animation: false
 
 
+    class app.views.GenerateTokenAlertView extends LazyTemplatedView
+        ### Generate token alert view ###
+        tagName: 'div'
+        attributes:
+            'class': 'alert alert-danger fade in generate-token-alert'
+        templates:
+            template: '#project-generate-token-alert-tmpl'
+        events:
+            'click .js-no': 'sayNo'
+            'click .js-yes': 'sayYes'
+
+        render: ->
+            ### Render alert ###
+            @$el.html @template()
+
+        sayNo: ->
+            ### Say no ###
+            @$el.remove()
+
+        sayYes: ->
+            ### Say yes ###
+            @$el.remove()
+            @trigger 'yes'
+
+
+    class app.views.GenerateTokenView extends LazyTemplatedView
+        ### Generate token view ###
+        tagName: 'form'
+        templates:
+            template: '#project-generate-token-tmpl'
+        events:
+            'click button': 'showAlert'
+
+        render: ->
+            ### Render regenrate page ###
+            @$el.html @template()
+            @$el.find('button').tooltip
+                title: 'Regenerate token'
+
+        showAlert: (e) ->
+            ### Show alert ###
+            e.preventDefault()
+            alertView = new app.views.GenerateTokenAlertView
+            alertView.render()
+            alertView.on 'yes', $.proxy @regenerate, @
+            @$el.append(alertView.$el)
+
+        regenerate: ->
+            @$el.submit()
+
+
     class app.views.IndexPageView extends Backbone.View
         ### Index page view
 
@@ -361,6 +412,7 @@ $ ->
             ### Render project page view ###
             @initProgressBar()
             @initReloads()
+            @renderToken()
 
             @options.collection.fetch
                 data:
@@ -392,6 +444,14 @@ $ ->
                 if task.project == @options.project
                     @renderTaskLines()
                     @trigger 'renderReload'
+
+        renderToken: ->
+            ### Render generate token view ###
+            if @$el.find('.js-generate-token').length
+                view = new app.views.GenerateTokenView
+                    model: @
+                    el: $('.js-generate-token')
+                view.render()
 
         renderTaskLines: ->
             ### Render task line view ###

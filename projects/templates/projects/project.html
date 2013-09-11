@@ -11,6 +11,8 @@
     ></script>
     {% include 'projects/project/task_line.html' %}
     {% include 'projects/project/violation_plot.html' %}
+    {% include 'projects/project/generate_token.html' %}
+    {% include 'projects/project/generate_token_alert.html' %}
 {% endblock %}
 
 {% block title %}
@@ -33,6 +35,10 @@
             <i class="icon-collapse"></i> Get badge:
             <img src='{{ project.get_badge_url }}' />
         </a>
+
+        {% if user.is_authenticated and project.owner_id == user.id %}
+            <form method='post' class='pull-right js-generate-token'></form>
+        {% endif %}
 
         <div id='js-get-badge-in' class='collapse row col-lg-12 well badge-help'>
             <div class='col-lg-4'>
