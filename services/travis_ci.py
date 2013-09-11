@@ -1,6 +1,7 @@
 import requests
 from tasks.models import Tasks
 from .base import library
+from .utils import logger
 
 
 @library.register('travis_ci')
@@ -29,6 +30,7 @@ def travis_ci_service(data):
         data['service'].update(job)
 
         return Tasks.save(data)
-    except Exception:
+    except Exception as e:
         # remove task on error
         Tasks.remove(data['_id'])
+        logger.exception('Travis-ci service fail: {}'.format(e), task=data)

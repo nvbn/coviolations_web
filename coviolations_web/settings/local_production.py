@@ -66,6 +66,11 @@ LOGGING = {
             'level': 'DEBUG',
             'handlers': ['console', 'sentry'],
             'propagate': False,
+        },
+        'coviolations_services': {
+            'level': 'DEBUG',
+            'handlers': ['console', 'sentry'],
+            'propagate': False,
         }
     },
 }
