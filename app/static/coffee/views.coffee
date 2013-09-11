@@ -138,8 +138,11 @@ $ ->
         render: ->
             ### Render manage project table ###
             @$el.empty()
-            @waitRendering = @collection.length
-            @collection.each $.proxy @renderLine, @
+            if @collection.length == 0
+                @trigger 'renderFinished'
+            else
+                @waitRendering = @collection.length
+                @collection.each $.proxy @renderLine, @
 
         renderLine: (model) ->
             ### Render single project line ###
@@ -325,6 +328,7 @@ $ ->
                 projectView.render()
             else
                 @$el.find('.js-enabled-projects td').html 'No projects found'
+                @_renderProjectsFinished()
 
         _renderProjectsFinished: ->
             ### Send projects view rendered ###
