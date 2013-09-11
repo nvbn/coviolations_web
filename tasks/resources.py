@@ -79,6 +79,15 @@ class TaskResource(Resource):
             'sort': [('created', DESCENDING)],
         }
 
+        if bundle.request.user.is_authenticated():
+            find_kwargs['spec']['$or'] = [{
+                'is_private': {'$ne': True},
+            }, {
+                'allowed_users': bundle.request.user.id,
+            }]
+        else:
+            find_kwargs['spec']['is_private'] = {'$ne': True}
+
         if bundle.request.GET.get('with_full_violations'):
             find_kwargs['fields']['violations'] = True
         elif bundle.request.GET.get('with_violations'):
