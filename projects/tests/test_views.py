@@ -1,10 +1,12 @@
 from datetime import datetime
+from testfixtures import LogCapture
 from django.test import TestCase
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from tools.mongo import MongoFlushMixin
 from tasks.models import Tasks
 from tasks import const
+from ..models import Project
 from . import factories
 
 
@@ -92,3 +94,38 @@ class ProjectBadgeViewCase(MongoFlushMixin, TestCase):
             'project': project.name,
         })
         self._get_and_assert(project.name, 'fail')
+
+
+class RegenerateTokenViewCase(TestCase):
+    """Regenerate token view case"""
+
+    def setUp(self):
+        self._create_user()
+        self.project = factories.ProjectFactory(owner=self.user)
+        self.url = reverse('projects_regenerate')
+
+    def _create_user(self):
+        """Create user and authorise"""
+        self.user = User.objects.create_user('test', 'test@test.test', 'test')
+        self.client.login(
+            username='test',
+            password='test',
+        )
+
+    def test_not_valid(self):
+        """Test not valid data"""
+        with LogCapture() as log_capture:
+            response = self.client.post(self.url, {})
+            self.assertIn('WARNING', list(log_capture.actual())[0])
+        self.assertEqual(response.status_code, 302)
+
+    def test_valid(self):
+        """Test valid"""
+        response = self.client.post(self.url, {
+            'project': self.project.id,
+        })
+        self.assertEqual(response.status_code, 302)
+
+        self.assertNotEqual(
+            self.project.token, Project.objects.get(id=self.project.id).token,
+        )

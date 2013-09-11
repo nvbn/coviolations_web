@@ -1,6 +1,3 @@
-import json
-from django.test import TestCase
-from django.core.urlresolvers import reverse
 from tastypie.test import ResourceTestCase
 from projects.tests.factories import ProjectFactory
 from tools.mongo import MongoFlushMixin
