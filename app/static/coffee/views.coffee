@@ -314,3 +314,116 @@ $ ->
 
             @on 'renderFinished', =>
                 NProgress.done()
+
+
+    class app.views.ProjectPageView extends Backbone.View
+        ### Project page view
+
+        Required options:
+            project
+            collection
+            push
+        ###
+        tagName: 'div'
+
+        render: ->
+            @initProgressBar()
+            @initReloads()
+
+            @options.collection.fetch
+                data:
+                    limit: 0
+                    project: @options.project
+                    with_violations: true
+                success: (collection) =>
+                    @options.collection = collection
+                    @renderTaskLines()
+
+                    @plotData = @getPlotData()
+                    @trigger 'renderPartFinished', 'plotData'
+
+                    @renderCharts()
+                    prettyPrint()
+
+        initProgressBar: ->
+            NProgress.start()
+            NProgress.inc()
+
+            @on 'renderPartFinished', ->
+                NProgress.inc()
+
+            @on 'renderFinished', ->
+                NProgress.done()
+
+        initReloads: ->
+            @options.push.on 'task', (task) =>
+                if task.project == @options.project
+                    @renderTaskLines()
+
+        renderTaskLines: ->
+            view = new app.views.TaskLineListView
+                el: @$el.find('.js-task-line-list')
+                collection: @options.collection
+                showCommitSummary: true
+
+            view.on 'renderFinished', =>
+                @trigger 'renderPartFinished', 'taskLine'
+
+            view.render()
+
+        getPlotData: ->
+            data = new app.plotting.PlotData
+            @options.collection.each (task) =>
+                violations = _.filter task.get('violations', []), (violation) ->
+                    _.isObject violation.plot
+
+                _.each violations, (violation) =>
+                    _.each _.pairs(violation.plot), (pair) =>
+                        data.push(
+                            violation.name,
+                            pair[0],
+                            pair[1],
+                            task.get('resource_uri')
+                        )
+            data.normalise()
+
+            data
+
+        renderCharts: ->
+            @$el.find('.js-charts-holder').empty()
+
+            _.each _.keys(@plotData.violations), (name) =>
+                colorer = new app.plotting.PlotColorer
+
+                colorNames = []
+
+                datasets = _.chain(@plotData.violations[name].plots)
+                    .pairs()
+                    .map (plotPair) =>
+                        plotName = plotPair[0]
+                        plot = plotPair[1]
+                        preparedPlot = _.flatten [_.map(_.range(30), -> 0), [plot.reverse()]]
+                        preparedPlot = _.last preparedPlot, 30
+
+                        color = colorer.getColor()
+                        colorNames.push([plotName, color])
+
+                        _.extend
+                            data: preparedPlot
+                        , color
+                    .value()
+
+                if datasets.length
+                    @_renderTrendChartView datasets, colorNames
+            @trigger 'renderFinished'
+
+        _renderTrendChartView: (datasets, colorNames) ->
+            view = new app.views.TrendChartView
+                labels: _.map _.range(30), -> ''
+                datasets: datasets
+                name: name
+                colorNames: colorNames
+            view.render()
+            view.$el.appendTo @$el.find('.js-charts-holder')
+
+            @trigger 'renderPartFinished', 'trandChart'

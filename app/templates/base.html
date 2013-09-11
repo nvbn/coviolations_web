@@ -76,6 +76,10 @@
         type='text/javascript'
         src="{% static 'coffee/push.js' %}"
     ></script>
+    <script
+        type='text/javascript'
+        src="{% static 'coffee/plottings.js' %}"
+    ></script>
     {% block extrahead %}{% endblock %}
     <script type="text/javascript">
         var userId = {{ user.id|default_if_none:'undefined'|escapejs }};
