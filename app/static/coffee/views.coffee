@@ -433,13 +433,7 @@ $ ->
             @initReloads()
             @renderToken()
 
-            @options.collection.fetch
-                data:
-                    limit: 0
-                    project: @options.project
-                    with_violations: true
-                success: (collection) =>
-                    @options.collection = collection
+            @fetchCollection (collection) =>
                     @renderTaskLines()
 
                     @plotData = @getPlotData()
@@ -461,8 +455,21 @@ $ ->
             ### Init view reloads on push ###
             @options.push.on 'task', (task) =>
                 if task.project == @options.project
-                    @renderTaskLines()
-                    @trigger 'renderReload'
+                    @fetchCollection =>
+                        @renderTaskLines()
+                        @trigger 'renderReload'
+
+        fetchCollection: (callback) ->
+            ### Fetch collection ###
+            @options.collection.fetch
+                data:
+                    limit: 0
+                    project: @options.project
+                    with_violations: true
+                reset: true
+                success: (collection) =>
+                    @options.collection = collection
+                    callback.call @, collection
 
         renderToken: ->
             ### Render generate token view ###
