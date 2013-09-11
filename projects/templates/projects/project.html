@@ -37,7 +37,10 @@
         </a>
 
         {% if user.is_authenticated and project.owner_id == user.id %}
-            <form method='post' class='pull-right js-generate-token'></form>
+            <form
+                action='{% url 'projects_regenerate' %}'
+                method='post' class='pull-right js-generate-token'
+            ></form>
         {% endif %}
 
         <div id='js-get-badge-in' class='collapse row col-lg-12 well badge-help'>
