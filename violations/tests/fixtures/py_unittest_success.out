@@ -1,0 +1,24 @@
+/home/nvbn/.virtualenvs/coviolations/local/lib/python2.7/site-packages/django/db/models/fields/__init__.py:827: RuntimeWarning: DateTimeField received a naive datetime (2013-09-08 00:00:00) while time zone support is active.
+  RuntimeWarning)
+
+WARNING:py.warnings:/home/nvbn/.virtualenvs/coviolations/local/lib/python2.7/site-packages/django/db/models/fields/__init__.py:827: RuntimeWarning: DateTimeField received a naive datetime (2013-09-08 00:00:00) while time zone support is active.
+  RuntimeWarning)
+
+................................WARNING:coviolations_tasks:Violation doesn't exists: dummy!!!
+Traceback (most recent call last):
+  File "/home/nvbn/work/coviolations/coviolations_web/tasks/jobs.py", line 32, in _prepare_violation
+    violation_creator = violations.base.library.get(violation['name'])
+  File "/home/nvbn/work/coviolations/coviolations_web/tools/library.py", line 25, in get
+    raise self.exception(name)
+ViolationDoesNotExists: dummy!!!
+......../home/nvbn/.virtualenvs/coviolations/local/lib/python2.7/site-packages/django/db/models/fields/__init__.py:827: RuntimeWarning: DateTimeField received a naive datetime (2013-09-11 00:10:16.644905) while time zone support is active.
+  RuntimeWarning)
+
+WARNING:py.warnings:/home/nvbn/.virtualenvs/coviolations/local/lib/python2.7/site-packages/django/db/models/fields/__init__.py:827: RuntimeWarning: DateTimeField received a naive datetime (2013-09-11 00:10:16.644905) while time zone support is active.
+  RuntimeWarning)
+
+..........
+----------------------------------------------------------------------
+Ran 50 tests in 2.678s
+
+OK

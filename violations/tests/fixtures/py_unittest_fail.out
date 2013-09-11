@@ -1,0 +1,51 @@
+/home/nvbn/.virtualenvs/coviolations/local/lib/python2.7/site-packages/django/db/models/fields/__init__.py:827: RuntimeWarning: DateTimeField received a naive datetime (2013-09-08 00:00:00) while time zone support is active.
+  RuntimeWarning)
+
+WARNING:py.warnings:/home/nvbn/.virtualenvs/coviolations/local/lib/python2.7/site-packages/django/db/models/fields/__init__.py:827: RuntimeWarning: DateTimeField received a naive datetime (2013-09-08 00:00:00) while time zone support is active.
+  RuntimeWarning)
+
+E.....FF........................WARNING:coviolations_tasks:Violation doesn't exists: dummy!!!
+Traceback (most recent call last):
+  File "/home/nvbn/work/coviolations/coviolations_web/tasks/jobs.py", line 32, in _prepare_violation
+    violation_creator = violations.base.library.get(violation['name'])
+  File "/home/nvbn/work/coviolations/coviolations_web/tools/library.py", line 25, in get
+    raise self.exception(name)
+ViolationDoesNotExists: dummy!!!
+......../home/nvbn/.virtualenvs/coviolations/local/lib/python2.7/site-packages/django/db/models/fields/__init__.py:827: RuntimeWarning: DateTimeField received a naive datetime (2013-09-11 00:08:16.868487) while time zone support is active.
+  RuntimeWarning)
+
+WARNING:py.warnings:/home/nvbn/.virtualenvs/coviolations/local/lib/python2.7/site-packages/django/db/models/fields/__init__.py:827: RuntimeWarning: DateTimeField received a naive datetime (2013-09-11 00:08:16.868487) while time zone support is active.
+  RuntimeWarning)
+
+..........
+======================================================================
+ERROR: test_fail_on_real (violations.tests.test_pep8.PEP8ViolationCase)
+Test fail on real data
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nvbn/work/coviolations/coviolations_web/violations/tests/test_pep8.py", line 19, in test_fail_on_real
+    raise
+TypeError: exceptions must be old-style classes or derived from BaseException, not NoneType
+
+======================================================================
+FAIL: test_fail_on_real (violations.tests.test_pip_review.PipReviewViolationCase)
+Test fail on real data
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nvbn/work/coviolations/coviolations_web/violations/tests/test_pip_review.py", line 20, in test_fail_on_real
+    self.assert_(False)
+AssertionError: False is not true
+
+======================================================================
+FAIL: test_success (violations.tests.test_pip_review.PipReviewViolationCase)
+Test success result
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nvbn/work/coviolations/coviolations_web/violations/tests/test_pip_review.py", line 12, in test_success
+    self.assert_(False)
+AssertionError: False is not true
+
+----------------------------------------------------------------------
+Ran 50 tests in 2.746s
+
+FAILED (failures=2, errors=1)
