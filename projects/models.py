@@ -47,7 +47,7 @@ class Project(models.Model):
         blank=True, null=True,
         max_length=300, verbose_name=_('badge url'),
     )
-    token = UUIDField(auto=True, verbose_name=_('token'))
+    token = UUIDField(null=True, auto=True, verbose_name=_('token'))
 
     objects = ProjectManager()
 

@@ -1,5 +1,6 @@
 <script id="project-generate-token-tmpl" type="text/template">
     {% csrf_token %}
+    <input name="project" type="hidden" value='{{ project.id }}' />
     Token:
     <code>{{ project.token }}</code>
     <button
