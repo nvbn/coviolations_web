@@ -51,9 +51,10 @@ class UserProjectsResource(ModelResource):
     id = fields.CharField(attribute='id', readonly=True)
     name = fields.CharField(attribute='name', readonly=True)
     url = fields.CharField(attribute='url', readonly=True)
+    is_private = fields.BooleanField(attribute='is_private', readonly=True)
 
     class Meta:
         queryset = Project.objects.all()
         authentication = Authentication()
         authorization = UserProjectsAuthorization()
-        fields = ('name', 'is_enabled', 'id')
+        fields = ('name', 'is_enabled', 'id', 'is_private')

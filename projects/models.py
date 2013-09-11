@@ -15,17 +15,20 @@ class ProjectManager(models.Manager):
         token = user.social_auth.get().extra_data['access_token']
         github = Github(token)
         github_user = github.get_user()
-        return github_user.get_repos('public')
+        return github_user.get_repos('owner')
 
     def get_or_create_for_user(self, user):
         """Get or create for user"""
+        projects = []
         for repo in self._get_remote_projects(user):
-            Project.objects.get_or_create(
+            projects.append(Project.objects.get_or_create(
                 owner=user,
                 name=repo.full_name,
                 url=repo.url,
-            )
-        return self.filter(owner=user)
+                is_private=repo.private,
+            )[0].id)
+        self.filter(owner=user).exclude(id__in=projects).delete()
+        return self.filter(owner=user).order_by('-last_use')
 
     def get_enabled_for_user(self, user):
         """Get enabled projects available for user"""
@@ -48,6 +51,9 @@ class Project(models.Model):
         max_length=300, verbose_name=_('badge url'),
     )
     token = UUIDField(null=True, auto=True, verbose_name=_('token'))
+    is_private = models.BooleanField(
+        default=False, verbose_name=_('is private'),
+    )
 
     objects = ProjectManager()
 

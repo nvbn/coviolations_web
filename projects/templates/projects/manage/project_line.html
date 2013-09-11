@@ -1,5 +1,8 @@
 <script id="manage-project-line-tmpl" type="text/template">
     <td>
+        <% if (is_private){ %>
+            <i class="icon-lock"></i>
+        <% } %>
         <a href='/projects/<%= name %>/'><%= name %></a>
     </td>
     <td>
