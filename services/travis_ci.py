@@ -33,8 +33,4 @@ def travis_ci_service(data):
     except Exception as e:
         # remove task on error
         Tasks.remove(data['_id'])
-        logger.exception(
-            'Travis-ci service fail: {}'.format(e), extra={
-                'task': data,
-            },
-        )
+        logger.exception('Travis-ci service fail: {}'.format(e))

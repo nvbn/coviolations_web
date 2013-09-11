@@ -41,11 +41,7 @@ def _prepare_violation(violation):
         violation['status'] = const.STATUS_FAILED
         return violation
     except Exception as e:
-        logger.exception(
-            'Violation failed: {}'.format(e), extra={
-                'violation': violation,
-            },
-        )
+        logger.exception('Violation failed: {}'.format(e))
         return violation
 
 
