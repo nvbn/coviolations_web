@@ -27,8 +27,6 @@ def travis_ci_service(data):
 
         assert data['project'] == repo['slug']
 
-        data['service'].update(job)
-
         return Tasks.save(data)
     except Exception as e:
         # remove task on error
