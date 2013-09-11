@@ -25,6 +25,7 @@ def travis_ci_service(data):
             ),
         ).json()
 
+        # TODO: add pull request support
         assert data['project'] == repo['slug']
 
         return Tasks.save(data)
