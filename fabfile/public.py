@@ -34,8 +34,9 @@ def install_requirements(mode='develop'):
 def install(mode='develop'):
     """Install project"""
     install_requirements(mode)
-    install_assets()
-    compile_assets()
+    if mode != 'ci':
+        install_assets()
+        compile_assets()
     update_db()
     if mode == 'production':
         local('./manage.py collectstatic --noinput')
