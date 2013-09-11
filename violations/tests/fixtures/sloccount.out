@@ -1,0 +1,78 @@
+Have a non-directory at the top, so creating directory top_dir
+Adding /home/nvbn/work/coviolations/coviolations_web/./README.rst to top_dir
+Creating filelist for app
+Creating filelist for components
+Creating filelist for coviolations_web
+Adding /home/nvbn/work/coviolations/coviolations_web/./db to top_dir
+Creating filelist for fabfile
+Adding /home/nvbn/work/coviolations/coviolations_web/./hs_err_pid14275.log to top_dir
+Adding /home/nvbn/work/coviolations/coviolations_web/./manage.py to top_dir
+Creating filelist for media
+Adding /home/nvbn/work/coviolations/coviolations_web/./nohup.out to top_dir
+Creating filelist for projects
+Creating filelist for push
+Adding /home/nvbn/work/coviolations/coviolations_web/./r to top_dir
+Creating filelist for requirements
+Creating filelist for services
+Creating filelist for static
+Adding /home/nvbn/work/coviolations/coviolations_web/./t.html to top_dir
+Creating filelist for tasks
+Adding /home/nvbn/work/coviolations/coviolations_web/./test_out to top_dir
+Adding /home/nvbn/work/coviolations/coviolations_web/./testem.log to top_dir
+Adding /home/nvbn/work/coviolations/coviolations_web/./testem_out to top_dir
+Creating filelist for tools
+Creating filelist for violations
+Categorizing files.
+Finding a working MD5 command....
+Found a working MD5 command.
+WARNING! File /home/nvbn/work/coviolations/coviolations_web/components/bower_components/sockjs-client/node_modules/coffee-script/bin/coffee has unknown start: #!/usr/bin/env node
+WARNING! File /home/nvbn/work/coviolations/coviolations_web/components/bower_components/sockjs-client/node_modules/coffee-script/bin/cake has unknown start: #!/usr/bin/env node
+WARNING! File /home/nvbn/work/coviolations/coviolations_web/components/bower_components/sockjs-client/node_modules/uglify-js/tmp/test.js has unknown start: #! /usr/bin/env node
+WARNING! File /home/nvbn/work/coviolations/coviolations_web/components/bower_components/sockjs-client/node_modules/uglify-js/tmp/embed-tokens.js has unknown start: #! /usr/bin/env node
+WARNING! File /home/nvbn/work/coviolations/coviolations_web/components/bower_components/sockjs-client/node_modules/uglify-js/test/beautify.js has unknown start: #! /usr/bin/env node
+WARNING! File /home/nvbn/work/coviolations/coviolations_web/components/bower_components/sockjs-client/node_modules/uglify-js/test/testparser.js has unknown start: #! /usr/bin/env node
+WARNING! File /home/nvbn/work/coviolations/coviolations_web/components/bower_components/sockjs-client/node_modules/uglify-js/bin/uglifyjs has unknown start: #!/usr/bin/env node
+WARNING! File /home/nvbn/work/coviolations/coviolations_web/components/bower_components/sockjs-client/bin/render.coffee has unknown start: #!/usr/bin/env coffee
+Computing results.
+
+
+SLOC	Directory	SLOC-by-Language (Sorted)
+830     projects        python=830
+477     tasks           python=477
+376     coviolations_web python=376
+372     components      ruby=199,sh=81,perl=62,python=30
+245     violations      python=245
+88      push            python=88
+85      services        python=85
+50      app             python=50
+49      fabfile         python=49
+49      tools           python=49
+8       top_dir         python=8
+0       media           (none)
+0       requirements    (none)
+0       static          (none)
+
+
+Totals grouped by language (dominant language first):
+python:        2287 (86.99%)
+ruby:           199 (7.57%)
+sh:              81 (3.08%)
+perl:            62 (2.36%)
+
+
+
+
+Total Physical Source Lines of Code (SLOC)                = 2,629
+Development Effort Estimate, Person-Years (Person-Months) = 0.55 (6.62)
+ (Basic COCOMO model, Person-Months = 2.4 * (KSLOC**1.05))
+Schedule Estimate, Years (Months)                         = 0.43 (5.13)
+ (Basic COCOMO model, Months = 2.5 * (person-months**0.38))
+Estimated Average Number of Developers (Effort/Schedule)  = 1.29
+Total Estimated Cost to Develop                           = $ 74,546
+ (average salary = $56,286/year, overhead = 2.40).
+SLOCCount, Copyright (C) 2001-2004 David A. Wheeler
+SLOCCount is Open Source Software/Free Software, licensed under the GNU GPL.
+SLOCCount comes with ABSOLUTELY NO WARRANTY, and you are welcome to
+redistribute it under certain conditions as specified by the GNU GPL license;
+see the documentation for details.
+Please credit this data as "generated using David A. Wheeler's 'SLOCCount'."

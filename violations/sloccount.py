@@ -22,10 +22,12 @@ def sloccount_violation(data):
                 line = lines.pop(0)
 
         if line.find('Total Physical Source Lines of Code') == 0:
-            total = line.split('=')[1]\
-                .strip()\
-                .replace('.', '')\
-                .replace(',', '')
+            total = int(
+                line.split('=')[1]
+                .strip()
+                .replace('.', '')
+                .replace(',', ''),
+            )
 
         if len(lines):
             line = lines.pop(0)
