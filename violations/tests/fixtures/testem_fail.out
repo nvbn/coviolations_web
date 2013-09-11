@@ -1,0 +1,56 @@
+ok 1 Firefox 23.0 - Commentary bases case Test module exists
+ok 2 Firefox 23.0 - Commentary bases case Test lazy view exists
+ok 3 Firefox 23.0 - Comment node collection case Test has next page
+ok 4 Firefox 23.0 - Comment node collection case Test hasnt next page
+ok 5 Firefox 23.0 - Comment node collection case Test get tree
+ok 6 Firefox 23.0 - Comment node collection case Test create child
+ok 7 Firefox 23.0 - Comment node view case Test show new reply form
+ok 8 Firefox 23.0 - Comment node view case Test not duplicate reply form
+ok 9 Firefox 23.0 - Comment tree view case Test render create comment view
+ok 10 Firefox 23.0 - Comment tree view case Test render comments
+ok 11 Firefox 23.0 - Comment tree view case Test get single comment view
+ok 12 Firefox 23.0 - Comment tree view case Test not get duplicated single comment view
+ok 13 Firefox 23.0 - Comment tree view case Test render paginator
+ok 14 Firefox 23.0 - Comment tree paginator view case Tesh show more
+ok 15 Chrome 29.0 - Commentary bases case Test module exists
+ok 16 Chrome 29.0 - Commentary bases case Test lazy view exists
+ok 17 Chrome 29.0 - Comment node collection case Test has next page
+ok 18 Chrome 29.0 - Comment node collection case Test hasnt next page
+ok 19 Chrome 29.0 - Comment node collection case Test get tree
+ok 20 Chrome 29.0 - Comment node collection case Test create child
+ok 21 Chrome 29.0 - Comment node view case Test show new reply form
+ok 22 Chrome 29.0 - Comment node view case Test not duplicate reply form
+ok 23 Chrome 29.0 - Comment tree view case Test render create comment view
+ok 24 Chrome 29.0 - Comment tree view case Test render comments
+ok 25 Chrome 29.0 - Comment tree view case Test get single comment view
+ok 26 Chrome 29.0 - Comment tree view case Test not get duplicated single comment view
+ok 27 Chrome 29.0 - Comment tree view case Test render paginator
+ok 28 Chrome 29.0 - Comment tree paginator view case Tesh show more
+ok 29 PhantomJS 1.6 - Commentary bases case Test module exists
+ok 30 PhantomJS 1.6 - Commentary bases case Test lazy view exists
+ok 31 PhantomJS 1.6 - Comment node collection case Test has next page
+ok 32 PhantomJS 1.6 - Comment node collection case Test hasnt next page
+ok 33 PhantomJS 1.6 - Comment node collection case Test get tree
+ok 34 PhantomJS 1.6 - Comment node collection case Test create child
+not ok 35 PhantomJS 1.6 - Comment node view case Test show new reply form
+    ---
+        message: "'[object EventConstructor]' is not a constructor (evaluating 'new Event('click')')"
+        stack: "TypeError: '[object EventConstructor]' is not a constructor (evaluating 'new Event('click')')
+            at http://localhost:7357/static/js/commentary/tests/test_views.js:33
+            at http://localhost:7357/testem/mocha.js:4047
+            at http://localhost:7357/testem/mocha.js:4404
+            at http://localhost:7357/testem/mocha.js:4463
+            at next (http://localhost:7357/testem/mocha.js:4330)
+            at http://localhost:7357/testem/mocha.js:4339
+            at next (http://localhost:7357/testem/mocha.js:4287)
+            at http://localhost:7357/testem/mocha.js:4302
+            at http://localhost:7357/testem/mocha.js:4049
+            at next (http://localhost:7357/testem/mocha.js:4303)
+            at http://localhost:7357/testem/mocha.js:4307
+            at http://localhost:7357/testem/mocha.js:5259"
+    ...
+
+1..35
+# tests 35
+# pass  34
+# fail  1
