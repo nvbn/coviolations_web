@@ -448,10 +448,10 @@ $ ->
                     .value()
 
                 if datasets.length
-                    @_renderTrendChartView datasets, colorNames
+                    @_renderTrendChartView name, datasets, colorNames
             @trigger 'renderFinished'
 
-        _renderTrendChartView: (datasets, colorNames) ->
+        _renderTrendChartView: (name, datasets, colorNames) ->
             ### Render single trend chart ###
             view = new app.views.TrendChartView
                 labels: _.map _.range(30), -> ''
