@@ -42,7 +42,7 @@ def _prepare_violation(violation):
         return violation
     except Exception as e:
         logger.exception(
-            'Violation failed: {}'.format(e), exc_info=True, extra={
+            'Violation failed: {}'.format(e), extra={
                 'violation': violation,
             },
         )
