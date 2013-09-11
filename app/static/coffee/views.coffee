@@ -164,3 +164,119 @@ $ ->
                     color: @failedColor
             ],
                 animation: false
+
+
+    class app.views.IndexPageView extends Backbone.View
+        ### Index page view
+
+        Required options:
+            userId
+            projectCollection
+            taskCollecion
+            successPercent
+            failedPercent
+            push
+
+        Events:
+            renderPartFinished: partName['projects', 'tasks', 'feed']
+        ###
+        tagName: 'div'
+
+        render: ->
+            @initProgressBar()
+
+            @renderProjects()
+            @renderTasks()
+            @renderFeed()
+            @renderChart()
+
+            @initReloads()
+            prettyPrint()
+
+        initProgressBar: ->
+            NProgress.start()
+            NProgress.inc()
+
+            waitRendering = 3
+            @on 'renderPartFinished', =>
+                NProgress.inc()
+                waitRendering -= 1
+                if waitRendering <= 0
+                    NProgress.done()
+
+        initReloads: ->
+            @options.push.on 'project', =>
+                @renderProjects()
+
+            @options.push.on 'task', =>
+                @renderTasks()
+                @renderFeed()
+
+        renderProjects: ->
+            if @options.userId
+                @options.projectCollection.fetch
+                    data:
+                        limit: 0
+                    success: $.proxy @_renderManageProjectsView, @
+            else
+                @_renderProjectsFinished()
+
+        _renderManageProjectsView: (collection) ->
+            if collection.meta.total_count
+                projectView = new app.views.ManageProjectsView
+                    el: @$el.find('.js-enabled-projects')
+                    collection: collection
+                projectView.on 'renderFinished', $.proxy @_renderProjectsFinished, @
+
+                projectView.render()
+            else
+                @$el.find('.js-enabled-projects td').html 'No projects found'
+
+        _renderProjectsFinished: ->
+            @trigger 'renderPartFinished', 'projects'
+
+        renderTasks: ->
+            if @options.userId
+                @options.taskCollection.fetch
+                    data:
+                        limit: 20
+                        with_violations: true
+                        self: true
+                    success: $.proxy @_renderTaskLineView, @
+
+            else
+                @_renderTasksFinished
+
+        _renderTaskLineView: (collection) ->
+            taskView = new app.views.TaskLineListView
+                el: @$el.find('.js-last-tasks')
+                collection: collection
+                showProjectName: true
+            taskView.on 'renderFinished', $.proxy @_renderTasksFinished, @
+            taskView.render()
+
+        _renderTasksFinished: ->
+            @trigger 'renderPartFinished', 'tasks'
+
+        renderFeed: ->
+            @options.taskCollection.fetch
+                data:
+                    limit: 10
+                    with_violations: true
+                success: $.proxy @renderFeedView, @
+
+        renderFeedView: (collection) ->
+            taskView = new app.views.TaskLineListView
+                el: @$el.find('.js-tasks-feed')
+                collection: collection
+                showProjectName: true
+            taskView.on 'renderFinished', =>
+                @trigger 'renderPartFinished', 'feed'
+            taskView.render()
+
+        renderChart: ->
+            chartView = new app.views.StatisticView
+                el: @$el.find('#js-statistic')
+                successCount: @options.successPercent
+                failedCount: @options.failedPercent
+            chartView.render()
