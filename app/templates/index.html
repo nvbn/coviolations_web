@@ -37,8 +37,43 @@
         </div>
     {% endif %}
     <div class='col-lg-12 row'>
-        <div class='col-lg-6'>
-            <h2>How-to use</h2>
+        <div class='col-lg-6 js-how-to'>
+            <h2>
+                How-to use with
+                <div class="btn-group" data-toggle="buttons">
+                    <label
+                        class="how-to-btn btn btn-default active"
+                        data-show='.js-travis-ci-how-to'
+                    >
+                        <input
+                            checked='checked'
+                            type="radio"
+                            name="how-to-ci"
+                        />
+                        travis-ci
+                    </label>
+                    <label
+                        class="how-to-btn btn btn-default"
+                        data-show='.js-drone-io-how-to'
+                    >
+                        <input
+                            type="radio"
+                            name="how-to-ci"
+                        />
+                        drone.io
+                    </label>
+                    <label
+                        class="how-to-btn btn btn-default"
+                        data-show='.js-jenkins-how-to'
+                    >
+                        <input
+                            type="radio"
+                            name="how-to-ci"
+                        />
+                        jenkins
+                    </label>
+                </div>
+            </h2>
             <ol class='how-to'>
                 <li>
                     Create <code>.covio.yml</code> with violations and project name:
@@ -49,8 +84,9 @@ violations:
                 </li>
                 <li>Enable project in <a href='{% url 'projects_manage' %}'>management page</a>.</li>
                 <li>
-                    Add dependency installation and <code>covio</code> call to <code>.travis.yml</code>:
-                    <pre class="prettyprint languague-yaml">
+                    <div class='js-travis-ci-how-to js-how-to-part'>
+                        Add dependency installation and <code>covio</code> call to <code>.travis.yml</code>:
+                        <pre class="prettyprint languague-yaml">
 before_install:
   - pip install pep8
   - sudo apt-get update -qq
@@ -58,6 +94,25 @@ before_install:
 after_script:
   - pip install coviolations_app
   - covio</pre>
+                    </div>
+                    <div class='js-drone-io-how-to js-how-to-part hidden'>
+                        Add dependency installation and <code>covio</code> call to build script:
+                        <pre class="prettyprint languague-bash">
+pip install pep8
+sudo apt-get update -qq
+sudo apt-get install -qq sloccount
+pip install coviolations_app
+COVIO_TOKEN="token" covio</pre>
+                        Replace <code>token</code> with project token from project page.
+                    </div>
+                    <div class='js-jenkins-how-to js-how-to-part hidden'>
+                        Add <code>covio</code> call to build script:
+                        <pre class="prettyprint languague-bash">
+pip install coviolations_app
+COVIO_TOKEN="token" covio</pre>
+                        Replace <code>token</code> with project token from project page.<br />
+                        With jenkins you need install dependencies manual.
+                    </div>
                 </li>
             </ol>
         </div>

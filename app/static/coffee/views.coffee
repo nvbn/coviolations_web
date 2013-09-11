@@ -232,6 +232,18 @@ $ ->
             @$el.submit()
 
 
+    class app.views.IndexHowToView extends Backbone.View
+        ### Index how-to view ###
+        tagName: 'div'
+        events:
+            'click .how-to-btn ': 'changeHowTo'
+
+        changeHowTo: (e) ->
+            ### Change displayed how to ###
+            @$el.find('.js-how-to-part').addClass 'hidden'
+            @$el.find($(e.currentTarget).data('show')).removeClass 'hidden'
+
+
     class app.views.IndexPageView extends Backbone.View
         ### Index page view
 
@@ -256,6 +268,7 @@ $ ->
             @renderTasks()
             @renderFeed()
             @renderChart()
+            @renderHowTo()
 
             @initReloads()
             prettyPrint()
@@ -283,6 +296,12 @@ $ ->
                 @renderTasks()
                 @renderFeed()
                 @trigger 'renderReloaded'
+
+        renderHowTo: ->
+            ### Render how to view ###
+            view = new app.views.IndexHowToView
+                el: @$el.find('.js-how-to')
+            view.render()
 
         renderProjects: ->
             ### Render projects for authenticated ###
