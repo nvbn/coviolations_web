@@ -1,8 +1,9 @@
 <a href='{{ url }}'>
     <img src='{{ badge }}' />
 </a>
-
+<br />
 {% for violation in task.violations %}
-    <h3>{{ violation.name }}</h3>
+    <strong>{{ violation.name }}:</strong>
+    <br />
     {{ violation.preview|safe }}
 {% endfor %}
