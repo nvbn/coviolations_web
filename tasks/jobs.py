@@ -1,9 +1,15 @@
 from datetime import datetime
+from django.core.urlresolvers import reverse
+from github import Github
+from django.template.loader import render_to_string
+from django.contrib.sites.models import Site
+from django.conf import settings
 from django_rq import job
 from violations.exceptions import ViolationDoesNotExists
 import services.base
 import violations.base
 from push.base import sender
+from projects.models import Project
 from .models import Tasks
 from .utils import logger
 from . import const
@@ -60,3 +66,28 @@ def prepare_violations(task_id):
         type='task', owner=task['owner_id'],
         task=str(task_id), project=task['project'],
     )
+
+    if task.get('pull_request_id') and not task.get('is_private'):
+        comment_pull_request.delayed(task_id)
+
+
+@job
+def comment_pull_request(task_id):
+    """Comment pull request on github"""
+    task = Tasks.find_one(task_id)
+    project = Project.objects.get(name=task['project'])
+    github = Github(
+        settings.GITHUB_COMMENTER_USER, settings.GITHUB_COMMENTER_PASSWORD,
+    )
+    repo = github.get_repo(project.name)
+    pull_request = repo.get_pull(task['pull_request_id'])
+    pull_request.create_issue_comment(render_to_string(
+        'tasks/pull_request_comment.html', {
+            'badge': project.get_badge_url(),
+            'task': task,
+            'url': 'http://{}{}'.format(
+                Site.objects.get_current().domain,
+                reverse('tasks_detail', args=(str(task['_id']),)),
+            ),
+        }
+    ))

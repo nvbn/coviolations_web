@@ -28,6 +28,9 @@ def travis_ci_service(data):
         # TODO: add pull request support
         assert data['project'] == repo['slug']
 
+        if data['service'].get('pull_request_id'):
+            data['pull_request_id'] = data['service']['pull_request_id']
+
         return Tasks.save(data)
     except Exception as e:
         # remove task on error
