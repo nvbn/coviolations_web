@@ -1,6 +1,7 @@
 from datetime import datetime
-from django.core.urlresolvers import reverse
+from html2text import html2text
 from github import Github
+from django.core.urlresolvers import reverse
 from django.template.loader import render_to_string
 from django.contrib.sites.models import Site
 from django.conf import settings
@@ -81,7 +82,7 @@ def comment_pull_request(task_id):
     )
     repo = github.get_repo(project.name)
     pull_request = repo.get_pull(task['pull_request_id'])
-    pull_request.create_issue_comment(render_to_string(
+    html_comment = render_to_string(
         'tasks/pull_request_comment.html', {
             'badge': project.get_badge_url(),
             'task': task,
@@ -90,4 +91,7 @@ def comment_pull_request(task_id):
                 reverse('tasks_detail', args=(str(task['_id']),)),
             ),
         }
-    ))
+    )
+    pull_request.create_issue_comment(
+        html2text(html_comment)
+    )

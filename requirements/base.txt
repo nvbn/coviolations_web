@@ -18,3 +18,4 @@ sockjs-tornado
 tornado-redis
 requests
 fabric
+html2text
