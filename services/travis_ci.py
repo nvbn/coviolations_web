@@ -29,7 +29,11 @@ def travis_ci_service(data):
         assert data['project'] == repo['slug']
 
         if data['service'].get('pull_request_id'):
-            data['pull_request_id'] = data['service']['pull_request_id']
+            pull_request = data['service']['pull_request_id']
+            if pull_request != 'false':
+                data['pull_request_id'] = int(
+                    data['service']['pull_request_id'],
+                )
 
         return Tasks.save(data)
     except Exception as e:
