@@ -68,7 +68,7 @@ def prepare_violations(task_id):
     )
 
     if task.get('pull_request_id') and not task.get('is_private'):
-        comment_pull_request.delayed(task_id)
+        comment_pull_request.delay(task_id)
 
 
 @job
