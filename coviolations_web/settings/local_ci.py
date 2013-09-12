@@ -43,6 +43,9 @@ MONGO_DB = 'coviolations'
 REDIS_PUSH = 'covio_push'
 PUSH_BIND = 'http://localhost:9999/sub'
 
+GITHUB_COMMENTER_USER = ''
+GITHUB_COMMENTER_PASSWORD = ''
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
