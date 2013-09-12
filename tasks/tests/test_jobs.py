@@ -99,3 +99,31 @@ class PrepareViolationsJobCase(MongoFlushMixin, TestCase):
             violation for violation in task['violations']
             if violation['status'] is const.STATUS_FAILED
         ]), 1)
+
+
+class CommentPullRequestJob(MongoFlushMixin, TestCase):
+    """Comment pull request job case"""
+    mongo_flush = ['tasks']
+
+    def setUp(self):
+        super(CommentPullRequestJob, self).setUp()
+        self._orig_github = jobs.Github
+        jobs.Github = MagicMock()
+
+    def tearDown(self):
+        jobs.Github = self._orig_github
+
+    def test_comment(self):
+        """Test comment"""
+        ProjectFactory(name='test')
+        task = {
+            'project': 'test',
+            'pull_request_id': 2,
+            'violations': [
+                {'name': 'dummy', 'preview': 'rew'},
+                {'name': 'dummy!!!', 'raw': 'rwww'},
+                {'name': 'dummy', 'raw': 'row'},
+            ],
+        }
+        jobs.comment_pull_request(models.Tasks.save(task))
+        self.assert_(True)
