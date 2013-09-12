@@ -1,6 +1,6 @@
 [![Violations]({{ badge }})]({{ url }})
 
-{% for name, violation in task.violations.item %}
-    <h3>{{ name }}</h3>
+{% for violation in task.violations %}
+    <h3>{{ violation.name }}</h3>
     {{ violation.preview }}
 {% endfor %}
