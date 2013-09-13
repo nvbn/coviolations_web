@@ -18,10 +18,6 @@ from .exceptions import ServiceNotFound
 
 class BaseTaskResource(Resource):
     """Base task resource"""
-    project = fields.CharField(attribute='project', null=True)
-    commit = fields.DictField(attribute='commit', null=True)
-    violations = fields.ListField(attribute='violations', null=True)
-    id = fields.CharField(attribute='_id', null=True)
 
     def get_resource_uri(
         self, bundle_or_obj=None, url_name='api_dispatch_list',
@@ -58,6 +54,7 @@ class RawTaskResource(BaseTaskResource):
     project = fields.CharField(attribute='project', null=True)
     commit = fields.DictField(attribute='commit', null=True)
     violations = fields.ListField(attribute='violations', null=True)
+    id = fields.CharField(attribute='_id', null=True)
 
     class Meta:
         resource_name = 'tasks/raw'
@@ -124,11 +121,11 @@ class RawTaskResource(BaseTaskResource):
 class TaskResource(Resource):
     """Task resource"""
     service = fields.DictField(attribute='service', null=True)
+    created = fields.DateTimeField(attribute='created', null=True)
+    status = fields.IntegerField(attribute='status', null=True)
     project = fields.CharField(attribute='project', null=True)
     commit = fields.DictField(attribute='commit', null=True)
     violations = fields.ListField(attribute='violations', null=True)
-    created = fields.DateTimeField(attribute='created', null=True)
-    status = fields.IntegerField(attribute='status', null=True)
     id = fields.CharField(attribute='_id', null=True)
 
     class Meta:
