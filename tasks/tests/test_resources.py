@@ -12,12 +12,15 @@ class BaseTaskResourceCase(MongoFlushMixin, ResourceTestCase):
         MongoFlushMixin.setUp(self)
         ResourceTestCase.setUp(self)
 
-        self.url = '/api/v1/tasks/'
         ProjectFactory(name='test', is_enabled=True)
 
 
-class PostTaskResourceCase(BaseTaskResourceCase):
+class RawTaskResourceCase(BaseTaskResourceCase):
     """Create task case"""
+
+    def setUp(self):
+        super(RawTaskResourceCase, self).setUp()
+        self.url = '/api/v1/tasks/raw/'
 
     def test_create_on_post(self):
         """Test create on post"""
@@ -55,9 +58,31 @@ class PostTaskResourceCase(BaseTaskResourceCase):
         })
         self.assertEqual(response.status_code, 404)
 
+    def test_error_on_wrong_project(self):
+        """Test error on wrong project"""
+        response = self.api_client.post(self.url, data={
+            'service': {
+                'name': 'dummy',
+            },
+            'project': 'test!!',
+            'commit': {
+                'branch': 'develop',
+                'commit': 'asdfg',
+                'author': 'nvbn',
+            },
+            'violations': [
+                {'name': 'dummy', 'raw': '1'},
+            ]
+        })
+        self.assertEqual(response.status_code, 404)
 
-class GetTaskResourceCase(BaseTaskResourceCase):
+
+class TaskResourceCase(BaseTaskResourceCase):
     """Get tasks resource case"""
+
+    def setUp(self):
+        super(TaskResourceCase, self).setUp()
+        self.url = '/api/v1/tasks/task/'
 
     def _create_tasks(self, project='test', count=20):
         """Create tasks"""

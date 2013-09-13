@@ -1,7 +1,9 @@
 from datetime import datetime
+from copy import copy
 from pymongo import DESCENDING
 from django.shortcuts import get_object_or_404
 from django.http import Http404
+from django.core.urlresolvers import reverse
 from tastypie.resources import Resource
 from tastypie.bundle import Bundle
 from tastypie import fields
@@ -11,6 +13,112 @@ from tools.mongo import Document
 from .jobs import create_task
 from .models import Tasks
 from .utils import logger
+from .exceptions import ServiceNotFound
+
+
+class BaseTaskResource(Resource):
+    """Base task resource"""
+    project = fields.CharField(attribute='project', null=True)
+    commit = fields.DictField(attribute='commit', null=True)
+    violations = fields.ListField(attribute='violations', null=True)
+    id = fields.CharField(attribute='_id', null=True)
+
+    def get_resource_uri(
+        self, bundle_or_obj=None, url_name='api_dispatch_list',
+    ):
+        """Get resource uri"""
+        url_kwargs = {
+            'resource_name': 'tasks/task',
+            'api_name': 'v1',
+        }
+        if bundle_or_obj:
+            url_name = 'api_dispatch_detail'
+            url_kwargs.update(
+                self.detail_uri_kwargs(bundle_or_obj)
+            )
+        return reverse(url_name, kwargs=url_kwargs)
+
+    def detail_uri_kwargs(self, bundle_or_obj):
+        """Get kwargs for detailed uri"""
+        if isinstance(bundle_or_obj, Bundle):
+            if '_id' in bundle_or_obj.data:
+                pk = bundle_or_obj.data['_id']
+            elif bundle_or_obj.obj:
+                pk = bundle_or_obj.obj._id
+        else:
+            pk = bundle_or_obj.id
+        return {
+            'pk': str(pk),
+        }
+
+
+class RawTaskResource(BaseTaskResource):
+    """Raw task resource, for creating tasks from remote service"""
+    service = fields.DictField(attribute='service', null=True)
+    project = fields.CharField(attribute='project', null=True)
+    commit = fields.DictField(attribute='commit', null=True)
+    violations = fields.ListField(attribute='violations', null=True)
+
+    class Meta:
+        resource_name = 'tasks/raw'
+        list_allowed_methods = ['post']
+        detail_allowed_methods = []
+
+    def obj_create(self, bundle, **kwargs):
+        """Create object"""
+        project = get_object_or_404(
+            Project, name=bundle.data['project'],
+            is_enabled=True,
+        )
+        try:
+            service = self._get_service(bundle.data)
+        except ServiceNotFound:
+            logger.info(
+                'Service not found', exc_info=True, extra={
+                    'request': bundle.request,
+                    'task': bundle.data,
+                },
+            )
+            raise Http404('Service not found')
+        task_id = self._create_task(bundle.data, project, service)
+        bundle.data['_id'] = task_id
+        logger.info(
+            'Task received: {}'.format(task_id), exc_info=True, extra={
+                'request': bundle.request,
+            },
+        )
+        self._update_project(project)
+        return bundle
+
+    def _get_service(self, data):
+        """Get service"""
+        try:
+            service = data['service']['name']
+        except KeyError:
+            raise ServiceNotFound()
+        if not library.has(service):
+            raise ServiceNotFound()
+        return library.get(service)
+
+    def _create_task(self, data, project, service):
+        """Create service"""
+        task_data = copy(data)
+        task_data.update({
+            'owner_id': project.owner.id,
+            'is_private': project.is_private,
+        })
+        if project.is_private:
+            task_data['allowed_users'] = [
+                user.id for user in project.get_allowed_users()
+            ]
+        task_id = Tasks.insert(task_data)
+        create_task.delay(task_id)
+        return task_id
+
+    def _update_project(self, project):
+        """Update project"""
+        project.last_use = datetime.now()
+        project.save()
 
 
 class TaskResource(Resource):
@@ -24,49 +132,10 @@ class TaskResource(Resource):
     id = fields.CharField(attribute='_id', null=True)
 
     class Meta:
-        list_allowed_methods = ['get', 'post']
-        resource_name = 'tasks'
-
-    def obj_create(self, bundle, **kwargs):
-        """Create object"""
-        project = get_object_or_404(
-            Project, name=bundle.data['project'], is_enabled=True,
-        )
-
-        service = bundle.data.get('service', {}).get('name', 'dummy')
-
-        if library.has(service):
-            bundle.data['owner_id'] = project.owner.id
-            bundle.data['is_private'] = project.is_private
-            if project.is_private:
-                bundle.data['allowed_users'] = [
-                    user.id for user in project.get_allowed_users()
-                ]
-
-            task_id = Tasks.insert(bundle.data)
-            create_task.delay(task_id)
-
-            logger.info(
-                'Task received: {}'.format(task_id), exc_info=True, extra={
-                    'request': bundle.request,
-                    'task': bundle.data,
-                },
-            )
-
-            bundle.data['_id'] = task_id
-
-            project.last_use = datetime.now()
-            project.save()
-        else:
-            logger.info(
-                'Service not found: {}'.format(service),
-                exc_info=True, extra={
-                    'request': bundle.request,
-                    'task': bundle.data,
-                },
-            )
-            raise Http404()
-        return bundle
+        list_allowed_methods = ['get']
+        detail_allowed_methods = ['get']
+        resource_name = 'tasks/task'
+        detail_uri_name = 'pk'
 
     def obj_get_list(self, bundle, **kwargs):
         """Get object list"""
@@ -103,14 +172,3 @@ class TaskResource(Resource):
             find_kwargs['spec']['owner_id'] = bundle.request.user.id
 
         return map(Document, Tasks.find(**find_kwargs))
-
-    def detail_uri_kwargs(self, bundle_or_obj):
-        """Get kwargs for detailed uri"""
-        if isinstance(bundle_or_obj, Bundle):
-            if '_id' in bundle_or_obj.data:
-                pk = bundle_or_obj.data['_id']
-            elif bundle_or_obj.obj:
-                pk = bundle_or_obj.obj._id
-        else:
-            pk = bundle_or_obj.id
-        return {'pk': pk}
