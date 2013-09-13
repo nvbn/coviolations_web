@@ -139,7 +139,21 @@ class TaskResource(Resource):
 
     def obj_get_list(self, bundle, **kwargs):
         """Get object list"""
-        find_kwargs = {
+        find_kwargs = reduce(
+            lambda kwargs, builder: builder(kwargs, bundle),
+            [
+                self._add_permission_filters,
+                self._show_hide_violations_fields,
+                self._add_project_filters,
+                self._add_owner_filters,
+            ],
+            self._get_initial_filters(),
+        )
+        return map(Document, Tasks.find(**find_kwargs))
+
+    def _get_initial_filters(self):
+        """Get initial filters"""
+        return {
             'fields': {name: True for name in (
                 'service', 'project', 'commit', 'plot',
                 'created', 'status',
@@ -148,6 +162,8 @@ class TaskResource(Resource):
             'sort': [('created', DESCENDING)],
         }
 
+    def _add_permission_filters(self, find_kwargs, bundle):
+        """Add permission filters"""
         if bundle.request.user.is_authenticated():
             find_kwargs['spec']['$or'] = [{
                 'is_private': {'$ne': True},
@@ -156,7 +172,10 @@ class TaskResource(Resource):
             }]
         else:
             find_kwargs['spec']['is_private'] = {'$ne': True}
+        return find_kwargs
 
+    def _show_hide_violations_fields(self, find_kwargs, bundle):
+        """Show/hide violations fields"""
         if bundle.request.GET.get('with_full_violations'):
             find_kwargs['fields']['violations'] = True
         elif bundle.request.GET.get('with_violations'):
@@ -164,11 +183,16 @@ class TaskResource(Resource):
             find_kwargs['fields']['violations.status'] = True
             find_kwargs['fields']['violations.preview'] = True
             find_kwargs['fields']['violations.plot'] = True
+        return find_kwargs
 
+    def _add_project_filters(self, find_kwargs, bundle):
+        """Add project filters"""
         if bundle.request.GET.get('project'):
             find_kwargs['spec']['project'] = bundle.request.GET['project']
+        return find_kwargs
 
+    def _add_owner_filters(self, find_kwargs, bundle):
+        """Add owner filters"""
         if bundle.request.GET.get('self'):
             find_kwargs['spec']['owner_id'] = bundle.request.user.id
-
-        return map(Document, Tasks.find(**find_kwargs))
+        return find_kwargs
