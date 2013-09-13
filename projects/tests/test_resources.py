@@ -5,7 +5,7 @@ from .base import MockGithubMixin
 from . import factories
 
 
-class UserProjectsResourceCase(MockGithubMixin, ResourceTestCase):
+class ProjectsResourceCase(MockGithubMixin, ResourceTestCase):
     """User projects resources case"""
 
     def setUp(self):
@@ -18,7 +18,7 @@ class UserProjectsResourceCase(MockGithubMixin, ResourceTestCase):
             username='test',
             password='test',
         )
-        self.url = '/api/v1/userprojects/'
+        self.url = '/api/v1/projects/project/'
 
     def test_read_list(self):
         """Test read list"""

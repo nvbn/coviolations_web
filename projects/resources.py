@@ -6,8 +6,8 @@ from push.base import sender
 from .models import Project
 
 
-class UserProjectsAuthorization(Authorization):
-    """User projects authorization"""
+class ProjectsAuthorization(Authorization):
+    """Projects authorization"""
 
     def create_detail(self, object_list, bundle):
         return False
@@ -32,7 +32,7 @@ class UserProjectsAuthorization(Authorization):
         if bundle.obj.owner != bundle.request.user:
             return False
         else:
-            return super(UserProjectsAuthorization, self).read_detail(
+            return super(ProjectsAuthorization, self).read_detail(
                 object_list, bundle,
             )
 
@@ -46,8 +46,8 @@ class UserProjectsAuthorization(Authorization):
         return self.read_detail(object_list, bundle)
 
 
-class UserProjectsResource(ModelResource):
-    """User projects resource"""
+class ProjectsResource(ModelResource):
+    """Projects resource"""
     id = fields.CharField(attribute='id', readonly=True)
     name = fields.CharField(attribute='name', readonly=True)
     url = fields.CharField(attribute='url', readonly=True)
@@ -56,5 +56,6 @@ class UserProjectsResource(ModelResource):
     class Meta:
         queryset = Project.objects.all()
         authentication = Authentication()
-        authorization = UserProjectsAuthorization()
+        authorization = ProjectsAuthorization()
+        resource_name = 'projects/project'
         fields = ('name', 'is_enabled', 'id', 'is_private')
