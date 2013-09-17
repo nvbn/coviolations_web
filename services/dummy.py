@@ -1,6 +1,3 @@
-"""
-Dummy service
-"""
 from tasks.models import Tasks
 from .base import library
 

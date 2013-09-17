@@ -1,6 +1,3 @@
-"""
-Token based service
-"""
 from tasks.models import Tasks
 from projects.models import Project
 from .base import library

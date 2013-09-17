@@ -1,6 +1,3 @@
-"""
-Travis-ci service
-"""
 import requests
 from tasks.models import Tasks
 from .base import library

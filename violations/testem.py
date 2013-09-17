@@ -5,7 +5,12 @@ from .base import library
 
 @library.register('testem')
 def testem_violation(data):
-    """Testem violation"""
+    """Testem violation
+
+    :param data: task data
+    :type data: dict
+    :returns: dict
+    """
     lines = data['raw'].split('\n')
     tests = 0
     pass_ = 0

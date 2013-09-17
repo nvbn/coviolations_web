@@ -5,7 +5,12 @@ from .base import library
 
 @library.register('pep8')
 def pep8_violation(data):
-    """PEP8 violation parser"""
+    """PEP8 violation parser
+
+    :param data: task data
+    :type data: dict
+    :returns: dict
+    """
     count = len(data['raw'].split('\n')) - 1
     data['status'] = STATUS_SUCCESS if count == 0 else STATUS_FAILED
     data['preview'] = render_to_string('violations/pep8/preview.html', {
