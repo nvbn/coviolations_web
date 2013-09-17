@@ -1,5 +1,4 @@
 from django.http import Http404
-from pymongo import DESCENDING
 from django.shortcuts import redirect
 from django.contrib.messages import add_message, INFO
 from django.utils.translation import ugettext_lazy as _
@@ -12,9 +11,9 @@ from django.views.generic import (
 )
 from braces.views import LoginRequiredMixin
 from tasks import const
-from tasks.models import Tasks
+from tasks.exceptions import TaskDoesNotExists
 from .models import Project
-from .forms import RegenerateTokenForm
+from .forms import RegenerateTokenForm, FindTaskForBadgeForm
 from .utils import logger
 
 
@@ -50,21 +49,20 @@ class ProjectBadge(RedirectView):
 
     def _get_badge_type(self, **kwargs):
         """Get badge type"""
-        try:
-            project = Project.objects.get(name=kwargs['slug'])
-            last_task = Tasks.find_one({
-                'project': project.name,
-            }, sort=[('created', DESCENDING)], fields={
-                'status': True,
-            })
-
+        form = FindTaskForBadgeForm(dict(
+            project=kwargs['slug'], **self.request.GET.dict()
+        ))
+        if form.is_valid():
+            try:
+                last_task = form.get_task()
+            except TaskDoesNotExists:
+                return 'unknown'
             return {
                 const.STATUS_NEW: 'unknown',
                 const.STATUS_FAILED: 'fail',
                 const.STATUS_SUCCESS: 'success',
             }[last_task['status']]
-        except (Project.DoesNotExist, TypeError) as e:
-            return 'unknown'
+        return 'unknown'
 
     def _get_badge_url(self, badge_type):
         """Get badge url"""
