@@ -1,4 +1,4 @@
-from fabric.api import local, lcd
+from fabric.api import local, lcd, sudo, put, cd
 
 
 def compile_assets():
@@ -31,6 +31,11 @@ def install_requirements(mode='develop'):
     local('pip install -U -r requirements/{}.txt'.format(mode))
 
 
+def collect_static():
+    """Collect static"""
+    local('./manage.py collectstatic --noinput')
+
+
 def install(mode='develop'):
     """Install project"""
     install_requirements(mode)
@@ -39,7 +44,47 @@ def install(mode='develop'):
         compile_assets()
     update_db()
     if mode == 'production':
-        local('./manage.py collectstatic --noinput')
+        collect_static()
 
 
 update = install
+
+
+def prepare_server(branch='master'):
+    """Prepare server"""
+    sudo('wget http://apt.puppetlabs.com/puppetlabs-release-precise.deb')
+    sudo('dpkg -i puppetlabs-release-precise.deb')
+    sudo('apt-get update -qq')
+    sudo('apt-get install puppet -qq')
+    sudo('mkdir /var/www/coviolations -p')
+    sudo('apt-get install git-core -qq')
+    sudo('chown -R www-data /var/www/coviolations')
+    with cd('/var/www/coviolations'):
+        sudo(
+            'git clone https://github.com/nvbn/coviolations_web.git '
+            '--recursive .', user='www-data',
+        )
+        sudo('git checkout {}'.format(branch), user='www-data')
+        sudo('git submodule init')
+        sudo('git submodule update')
+        put(
+            'puppet/manifests/private.pp', 'puppet/manifests/private.pp',
+            use_sudo=True,
+        )
+        sudo('chown www-data puppet/manifests/private.pp')
+        sudo('puppet apply puppet/manifests/site.pp'
+             ' --modulepath=puppet/modules/')
+
+
+def update_server(branch='master'):
+    """Update server"""
+    with cd('/var/www/coviolations'):
+        sudo('git checkout {}'.format(branch), user='www-data')
+        sudo('git submodule update')
+        put(
+            'puppet/manifests/private.pp', 'puppet/manifests/private.pp',
+            use_sudo=True,
+        )
+        sudo('chown www-data puppet/manifests/private.pp')
+        sudo('puppet apply puppet/manifests/site.pp'
+             ' --modulepath=puppet/modules/')

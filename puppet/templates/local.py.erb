@@ -1,0 +1,18 @@
+from .local_production import *
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': 'coviolations',                      # Or path to database file if using sqlite3.
+        'USER': '<%= @db_user %>',                      # Not used with sqlite3.
+        'PASSWORD': '<%= @db_password %>',                  # Not used with sqlite3.
+        'HOST': 'localhost',                      # Set to empty string for localhost. Not used with sqlite3.
+        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+    }
+}
+
+GITHUB_APP_ID = '<%= @github_app_id %>'
+GITHUB_API_SECRET = '<%= @github_api_secret %>'
+
+GITHUB_COMMENTER_USER = '<%= @github_commenter_user %>'
+GITHUB_COMMENTER_PASSWORD = '<%= @gighub_commenter_password %>'
