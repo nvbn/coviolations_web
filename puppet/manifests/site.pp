@@ -14,6 +14,7 @@ import "python.pp"
 import "supervisor.pp"
 import "nginx.pp"
 import "postgresql.pp"
+import "project.pp"
 
 package {'redis-server':
   ensure => installed,
