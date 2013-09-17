@@ -13,5 +13,8 @@ import "ruby.pp"
 import "python.pp"
 import "supervisor.pp"
 import "nginx.pp"
-import "packages.pp"
 import "postgresql.pp"
+
+package {'redis-server':
+  ensure => installed,
+}

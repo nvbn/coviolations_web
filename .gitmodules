@@ -13,3 +13,6 @@
 [submodule "puppet/modules/supervisor"]
 	path = puppet/modules/supervisor
 	url = git@github.com:plathrop/puppet-module-supervisor.git
+[submodule "puppet/modules/postgresql"]
+	path = puppet/modules/postgresql
+	url = git@github.com:akumria/puppet-postgresql.git

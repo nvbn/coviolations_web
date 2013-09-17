@@ -5,3 +5,10 @@ package {'postgresql':
 package {'postgresql-server-dev-all':
   ensure => installed,
 }
+
+class {'postgresql::server': }
+
+postgresql::db { 'coviolations':
+  owner => $db_owner,
+  password => $db_password,
+}
