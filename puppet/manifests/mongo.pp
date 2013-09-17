@@ -24,4 +24,9 @@ class covio_mongo {
       Package['mongodb-clients']
     ]
   }
+
+  service {'mongodb':
+    ensure => running,
+    enable => true,
+  }
 }

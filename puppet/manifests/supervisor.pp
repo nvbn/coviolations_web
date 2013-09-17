@@ -1,4 +1,8 @@
 class covio_supervisor {
+  package {'supervisor':
+    ensure => installed,
+  }
+
   include supervisor
 
   supervisor::service { "coviolations_web":
