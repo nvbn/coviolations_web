@@ -14,16 +14,31 @@ class BaseLibrary(object):
         return fnc
 
     def register(self, name):
-        """Register in library"""
+        """Register function in library
+
+        :param name: name of method
+        :type name: str
+        :returns: decorator
+        """
         return partial(self._register_fnc, name)
 
     def get(self, name):
-        """Get item"""
+        """Get item from library
+
+        :param name: name of method
+        :type name: str
+        :returns: method -- registered method
+        """
         if self.has(name):
             return self._items[name]
         else:
             raise self.exception(name)
 
     def has(self, name):
-        """Has item"""
+        """Has item in library
+
+        :param name: name of method
+        :type name: str
+        :returns: bool
+        """
         return name in self._items
