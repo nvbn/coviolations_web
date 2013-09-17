@@ -124,6 +124,7 @@ class CommentPullRequestJob(MongoFlushMixin, TestCase):
                 {'name': 'dummy!!!', 'raw': 'rwww'},
                 {'name': 'dummy', 'raw': 'row'},
             ],
+            'commit': {'hash': 'test'},
         }
         jobs.comment_pull_request(models.Tasks.save(task))
         self.assert_(True)
