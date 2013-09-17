@@ -49,3 +49,4 @@ media/*
 !media/.gitkeep
 
 fabfile/private.py
+puppet/manifests/private.pp

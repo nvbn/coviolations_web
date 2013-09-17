@@ -1,6 +1,3 @@
-apt::ppa {'ppa:chris-lea/nginx-devel':
-  notify => Package['nginx'],
-}
 apt::ppa {'ppa:chris-lea/node.js':
   notify => [Package['nodejs']],
 }
