@@ -31,6 +31,11 @@ def install_requirements(mode='develop'):
     local('pip install -U -r requirements/{}.txt'.format(mode))
 
 
+def collect_static():
+    """Collect static"""
+    local('./manage.py collectstatic --noinput')
+
+
 def install(mode='develop'):
     """Install project"""
     install_requirements(mode)
@@ -39,7 +44,7 @@ def install(mode='develop'):
         compile_assets()
     update_db()
     if mode == 'production':
-        local('./manage.py collectstatic --noinput')
+        collect_static()
 
 
 update = install
