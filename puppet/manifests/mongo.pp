@@ -28,5 +28,6 @@ class covio_mongo {
   service {'mongodb':
     ensure => running,
     enable => true,
+    require => Package['mongodb-10gen'],
   }
 }
