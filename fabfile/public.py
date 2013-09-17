@@ -74,3 +74,17 @@ def prepare_server(branch='master'):
         sudo('chown www-data puppet/manifests/private.pp')
         sudo('puppet apply puppet/manifests/site.pp'
              ' --modulepath=puppet/modules/')
+
+
+def update_server(branch='master'):
+    """Update server"""
+    with cd('/var/www/coviolations'):
+        sudo('git checkout {}'.format(branch), user='www-data')
+        sudo('git submodule update')
+        put(
+            'puppet/manifests/private.pp', 'puppet/manifests/private.pp',
+            use_sudo=True,
+        )
+        sudo('chown www-data puppet/manifests/private.pp')
+        sudo('puppet apply puppet/manifests/site.pp'
+             ' --modulepath=puppet/modules/')
