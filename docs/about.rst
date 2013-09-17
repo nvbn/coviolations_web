@@ -12,6 +12,6 @@ coviolations.io web
 
 Server side of `coviolations.io <http://coviolations.io>`_
 
-`See docs of server side on read the docs <https://coviolations_web.readthedocs.org/>`_
+`See docs of server side on read the docs <http://coviolations-web.readthedocs.org/en/latest/>`_
 
 `See client docs on read the docs <https://coviolationsio.readthedocs.org/en/latest/>`_
