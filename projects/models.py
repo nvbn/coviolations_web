@@ -8,7 +8,6 @@ from tools.short import make_https
 from tasks.models import Tasks
 
 
-
 class ProjectManager(models.Manager):
     """Project manager"""
 
