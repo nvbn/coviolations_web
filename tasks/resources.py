@@ -192,3 +192,10 @@ class TaskResource(BaseTaskResource):
         if bundle.request.GET.get('self'):
             find_kwargs['spec']['owner_id'] = bundle.request.user.id
         return find_kwargs
+
+    @filters.add
+    def _add_branch_filter(self, find_kwargs, bundle):
+        """Add branch filter"""
+        if bundle.request.GET.get('branch'):
+            find_kwargs['spec']['commit.branch'] = bundle.request.GET['branch']
+        return find_kwargs
