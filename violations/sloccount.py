@@ -5,7 +5,12 @@ from .base import library
 
 @library.register('sloccount')
 def sloccount_violation(data):
-    """PEP8 violation parser"""
+    """PEP8 violation parser
+
+    :param data: task data
+    :type data: dict
+    :returns: dict
+    """
     lines = data['raw'].split('\n')
     langs = {}
     line = ''

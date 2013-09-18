@@ -80,10 +80,10 @@ class ProjectBadgeViewCase(MongoFlushMixin, TestCase):
     """Project badge view case"""
     mongo_flush = ['tasks']
 
-    def _get_and_assert(self, slug, badge):
+    def _get_and_assert(self, slug, badge, query=''):
         """Preform get and assert"""
         response = self.client.get(
-            reverse('projects_badge', args=(slug,)),
+            reverse('projects_badge', args=(slug,)) + query,
         )
         self.assertEqual(response.status_code, 302)
         self.assertIn(badge, response['Location'])
@@ -130,6 +130,16 @@ class ProjectBadgeViewCase(MongoFlushMixin, TestCase):
             'project': project.name,
         })
         self._get_and_assert(project.name, 'fail')
+
+    def test_get_badge_with_filtering(self):
+        """Test get badge with filtering"""
+        project = factories.ProjectFactory.create()
+        Tasks.save({
+            'status': const.STATUS_SUCCESS,
+            'project': project.name,
+            'commit': {'branch': 'test'}
+        })
+        self._get_and_assert(project.name, 'success', '?branch=test')
 
 
 class RegenerateTokenViewCase(TestCase):

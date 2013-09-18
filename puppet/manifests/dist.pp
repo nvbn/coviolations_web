@@ -1,0 +1,7 @@
+$domain = ''
+$db_user = ''
+$db_password = ''
+$github_app_id = ''
+$github_api_secret = ''
+$github_commenter_user = ''
+$github_commenter_password = ''

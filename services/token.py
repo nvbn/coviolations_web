@@ -6,7 +6,12 @@ from .utils import logger
 
 @library.register('token')
 def token_service(data):
-    """Create task from data dict"""
+    """Find project by token and create task
+
+    :param data: Data received from service
+    :type data: dict
+    :returns: bson.ObjectId or None -- pk of created task
+    """
     try:
         project = Project.objects.get(token=data['service']['token'])
 

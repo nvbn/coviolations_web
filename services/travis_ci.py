@@ -6,7 +6,12 @@ from .utils import logger
 
 @library.register('travis_ci')
 def travis_ci_service(data):
-    """Create task from data dict"""
+    """Create tasks from data received from travis-c
+
+    :param data: Data received from service
+    :type data: dict
+    :returns: bson.ObjectId or None -- pk of created task
+    """
     try:
         assert Tasks.find({
             'service.name': 'travis_ci',

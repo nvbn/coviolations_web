@@ -66,12 +66,14 @@ class Project(models.Model):
     def __unicode__(self):
         return self.name
 
-    def get_badge_url(self):
+    def get_badge_url(self, **kwargs):
         """Get or create https badge url"""
         if not self.badge_url:
-            self.badge_url = make_https(
-                reverse('projects_badge', args=(self.name,)),
-            )
+            local_url = reverse('projects_badge', args=(self.name,))
+            local_url += '?{}'.format('&'.join(
+                '{}={}'.format(key, value) for key, value in kwargs.items(),
+            ))
+            self.badge_url = make_https(local_url)
             self.save()
         return self.badge_url
 

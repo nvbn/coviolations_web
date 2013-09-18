@@ -6,7 +6,12 @@ from .base import library
 
 @library.register('py_unittest')
 def py_unittest_violation(data):
-    """Python unittest violation parser"""
+    """Python unittest violation parser
+
+    :param data: task data
+    :type data: dict
+    :returns: dict
+    """
     lines = data['raw'].split('\n')
     line = ''
     while len(lines) and not line.startswith('Ran'):
