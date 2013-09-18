@@ -7,7 +7,7 @@
 
 {% block content %}
     <h1>
-        <a href='https://github.com/{{ project.name }}'>
+        <a class='link-to-github' href='https://github.com/{{ project.name }}'>
             <i class="icon-github"></i>
         </a>
         {% if project.is_private %}
@@ -18,7 +18,7 @@
     </h1>
     <div class='col-lg-12 row'>
         <h3>
-            <a href='{{ commit.url }}'>
+            <a class='link-to-github' href='{{ commit.url }}'>
                 {{ commit.summary }}
             </a>
         </h3>
@@ -26,12 +26,12 @@
         {% for inner in commit.inner %}
             <tr>
                 <td>
-                    <a href='{{ inner.url }}' class='pull-left'>
+                    <a class='link-to-github' href='{{ inner.url }}' class='pull-left'>
                         #{{ inner.hash }}
                     </a>
                 </td>
                 <td>
-                    <a href='{{ inner.author.url }}' class='pull-left'>
+                    <a class='link-to-github' href='{{ inner.author.url }}' class='pull-left'>
                         <img class='small-avatar' src='{{ inner.author.avatar }}' />
                         {{ inner.author.name }}
                     </a>

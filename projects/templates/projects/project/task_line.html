@@ -1,7 +1,7 @@
 <script id="project-task-line-tmpl" type="text/template">
     <td>
         <% if (showProjectName) { %>
-            <a class='js-commit-name' href='/projects/<%= project %>/'>
+            <a class='js-commit-name link-to-github' href='<%= commit.url %>'>
                 <%= project %></a>:
         <% } %>
         <a href='/tasks/<%= id %>/' class='js-commit-name'>
@@ -10,7 +10,7 @@
     </td>
     <% if (showCommitSummary) { %>
         <td>
-            <a class='js-commit-name' href='/projects/<%= project %>/'>
+            <a class='js-commit-name' href='/tasks/<%= id %>/'>
                  <%= commit.summary %>
             </a>
         </td>
