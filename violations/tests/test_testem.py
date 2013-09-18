@@ -19,6 +19,7 @@ class TestemViolationCase(TestCase):
         self.assertEqual(result['plot']['fail'], 0)
 
     def test_fail(self):
+        """Test fail result"""
         data = {
             'raw': get_content('testem_fail.out'),
         }
