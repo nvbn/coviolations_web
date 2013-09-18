@@ -10,4 +10,4 @@ class Command(BaseCommand):
         for task in Tasks.find({}):
             task['violations'] = []
             task_id = Tasks.save(task)
-            create_task(task_id)
+            create_task.delay(task_id)
