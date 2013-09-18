@@ -10,6 +10,7 @@ from tastypie import fields
 from services.base import library
 from projects.models import Project
 from tools.mongo import Document
+from tools.filters import FiltersAccumulator
 from .jobs import create_task
 from .models import Tasks
 from .utils import logger
@@ -128,6 +129,8 @@ class TaskResource(BaseTaskResource):
     violations = fields.ListField(attribute='violations', null=True)
     id = fields.CharField(attribute='_id', null=True)
 
+    filters = FiltersAccumulator()
+
     class Meta:
         list_allowed_methods = ['get']
         detail_allowed_methods = ['get']
@@ -136,17 +139,9 @@ class TaskResource(BaseTaskResource):
 
     def obj_get_list(self, bundle, **kwargs):
         """Get object list"""
-        find_kwargs = reduce(
-            lambda kwargs, builder: builder(kwargs, bundle),
-            [
-                self._add_permission_filters,
-                self._show_hide_violations_fields,
-                self._add_project_filters,
-                self._add_owner_filters,
-            ],
-            self._get_initial_filters(),
-        )
-        return map(Document, Tasks.find(**find_kwargs))
+        return map(Document, Tasks.find(**self.filters.get_spec(
+            self, bundle, self._get_initial_filters(),
+        )))
 
     def _get_initial_filters(self):
         """Get initial filters"""
@@ -159,6 +154,7 @@ class TaskResource(BaseTaskResource):
             'sort': [('created', DESCENDING)],
         }
 
+    @filters.add
     def _add_permission_filters(self, find_kwargs, bundle):
         """Add permission filters"""
         if bundle.request.user.is_authenticated():
@@ -171,6 +167,7 @@ class TaskResource(BaseTaskResource):
             find_kwargs['spec']['is_private'] = {'$ne': True}
         return find_kwargs
 
+    @filters.add
     def _show_hide_violations_fields(self, find_kwargs, bundle):
         """Show/hide violations fields"""
         if bundle.request.GET.get('with_full_violations'):
@@ -182,12 +179,14 @@ class TaskResource(BaseTaskResource):
             find_kwargs['fields']['violations.plot'] = True
         return find_kwargs
 
+    @filters.add
     def _add_project_filters(self, find_kwargs, bundle):
         """Add project filters"""
         if bundle.request.GET.get('project'):
             find_kwargs['spec']['project'] = bundle.request.GET['project']
         return find_kwargs
 
+    @filters.add
     def _add_owner_filters(self, find_kwargs, bundle):
         """Add owner filters"""
         if bundle.request.GET.get('self'):
