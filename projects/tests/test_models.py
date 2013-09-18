@@ -1,5 +1,7 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
+from tools.mongo import MongoFlushMixin
+from tasks.models import Tasks
 from .. import models
 from . import factories
 from .base import MockGithubMixin
@@ -42,3 +44,18 @@ class ProjectManagerCase(MockGithubMixin, TestCase):
         self.assertItemsEqual(
             enabled, models.Project.objects.get_enabled_for_user(self.user),
         )
+
+
+class ProjectModelCase(MongoFlushMixin, TestCase):
+    """Project model case"""
+    mongo_flush = ['tasks']
+
+    def test_project_branches(self):
+        """Test getting project branches"""
+        project = factories.ProjectFactory()
+        Tasks.insert([{'project': project.name, 'commit': {
+            'branch': 'master',
+        }}, {'project': project.name, 'commit': {
+            'branch': 'develop',
+        }}] * 2)
+        self.assertItemsEqual(project.branches, ['master', 'develop'])
