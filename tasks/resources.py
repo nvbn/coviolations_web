@@ -23,6 +23,7 @@ class BaseTaskResource(Resource):
     def get_resource_uri(
         self, bundle_or_obj=None, url_name='api_dispatch_list',
     ):
+        raise
         """Get resource uri"""
         url_kwargs = {
             'resource_name': 'tasks/task',
