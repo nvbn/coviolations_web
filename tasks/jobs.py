@@ -84,7 +84,7 @@ def comment_pull_request(task_id):
     pull_request = repo.get_pull(task['pull_request_id'])
     html_comment = render_to_string(
         'tasks/pull_request_comment.html', {
-            'badge': project.get_badge_url(),
+            'badge': project.get_badge_url(commit=task['commit']['hash']),
             'task': task,
             'url': 'http://{}{}'.format(
                 Site.objects.get_current().domain,
