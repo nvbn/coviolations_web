@@ -34,6 +34,7 @@ VIOLATIONS = (
     'violations.py_unittest',
     'violations.pip_review',
     'violations.testem',
+    'violations.coverage',
 )
 
 SERVICES = (
