@@ -8,6 +8,5 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         for task in Tasks.find({}):
-            task['violations'] = []
             task_id = Tasks.save(task)
             create_task.delay(task_id)
