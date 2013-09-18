@@ -36,6 +36,23 @@
             </div>
         </div>
     {% endif %}
+    <div class='col-lg-12 row slider-holder'>
+        <div class='col-lg-6'>
+            <h2>Why coviolations?</h2>
+            <p>With coviolations you can:</p>
+            <ul>
+                <li>checking your code with pep8, coverage and many other tools;</li>
+                <li>create fancy commit representation;</li>
+                <li>control code quality with trending graphs;</li>
+                <li>show fancy test result representation.</li>
+            </ul>
+            <h2>How it works?</h2>
+            <p>When you push code to github repository, your ci tool run violations and tests on your code and send to coviolations. After that, coviolations parse test and violations result and create fancy representation.</p>
+        </div>
+        <div class='col-lg-6'>
+            <img class='left-svg' src='{% static 'img/how.svg' %}' />
+        </div>
+    </div>
     <div class='col-lg-12 row'>
         <div class='col-lg-6 js-how-to'>
             <h2>
