@@ -21,6 +21,10 @@ For enabling violation you need to add it to `settings.VIOLATIONS`, like:
 Available violations
 ---------------------
 
+.. automodule:: violations.coverage
+    :members:
+
+
 .. automodule:: violations.dummy
     :members:
 
