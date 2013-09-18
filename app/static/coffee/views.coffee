@@ -257,6 +257,23 @@ $ ->
             @trigger 'branchChanged', @$el.val()
 
 
+
+    class app.views.LinkToSourceView extends Backbone.View
+        ### Link to source view ###
+        tagName: 'a'
+        hrefTemplate: _.template 'https://github.com/<%= project %>/blob/<%= commit %>/<%= file %>#L<%= line %>'
+
+        render: ->
+            @$el.attr 'href', @getHref()
+
+        getHref: ->
+            @hrefTemplate
+                project: @options.project
+                commit: @options.commit
+                file: @$el.data 'file-name'
+                line: @$el.data 'line'
+
+
     class app.views.IndexPageView extends Backbone.View
         ### Index page view
 
@@ -584,3 +601,16 @@ $ ->
             view.$el.appendTo @$el.find('.js-charts-holder')
 
             @trigger 'renderPartFinished', 'trandChart'
+
+
+    class app.views.DetailTaskPageView extends Backbone.View
+        ### Task page view ###
+        tagName: 'div'
+
+        render: ->
+            @$el.find('.js-link-to-source').each (n, el) =>
+                view = new app.views.LinkToSourceView
+                    project: @options.project
+                    commit: @options.commit
+                    el: el
+                view.render()
