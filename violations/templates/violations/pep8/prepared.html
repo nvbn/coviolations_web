@@ -1,3 +1,18 @@
-<pre>
-{{ raw }}
-</pre>
+<table class='table table-striped'>
+    {% for file_name, line, symbol, violation in violations %}
+        <tr>
+            <td>
+                <a
+                    class='js-link-to-source'
+                    data-file-name='{{ file_name }}'
+                    data-line='{{ line }}'
+                    data-symbol='{{ symbol }}'
+                    href='#'
+                >
+                    {{ file_name }}:{{ line }}:{{ symbol }}
+                </a>
+            </td>
+            <td>{{ violation }}</td>
+        </tr>
+    {% endfor %}
+</table>

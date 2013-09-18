@@ -3,6 +3,13 @@ from tasks.const import STATUS_SUCCESS, STATUS_FAILED
 from .base import library
 
 
+def _prepare_source_line(line):
+    """Prepare source line"""
+    source, violation = line.split(': ')
+    file_name, line, symbol = source.split(':')
+    return file_name, line, symbol, violation
+
+
 @library.register('pep8')
 def pep8_violation(data):
     """PEP8 violation parser
@@ -17,7 +24,7 @@ def pep8_violation(data):
         'count': count,
     })
     data['prepared'] = render_to_string('violations/pep8/prepared.html', {
-        'raw': data['raw'],
+        'violations': map(_prepare_source_line, data['raw'].split('\n')[:-1]),
     })
     data['plot'] = {
         'count': count,
