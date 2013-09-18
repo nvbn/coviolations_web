@@ -247,6 +247,16 @@ $ ->
             @$el.find($(e.currentTarget).data('show')).removeClass 'hidden'
 
 
+    class app.views.SelectBranchView extends Backbone.View
+        ### Select branch view ###
+        tagName: 'select'
+        events:
+            'change': 'onChange'
+
+        onChange: ->
+            @trigger 'branchChanged', @$el.val()
+
+
     class app.views.IndexPageView extends Backbone.View
         ### Index page view
 
@@ -438,7 +448,18 @@ $ ->
             @initProgressBar()
             @initReloads()
             @renderToken()
+            @renderTasks()
+            @renderSelectBranch()
 
+        renderSelectBranch: ->
+            view = new app.views.SelectBranchView
+                el: @$el.find('.js-select-branch')
+            view.render()
+            view.on 'branchChanged', (branch) =>
+                @branch = branch
+                @reloadView()
+
+        renderTasks: ->
             @fetchCollection =>
                 @renderTaskLines()
 
@@ -461,20 +482,27 @@ $ ->
             ### Init view reloads on push ###
             @options.push.on 'task', (task) =>
                 if task.project == @options.project
-                    @fetchCollection =>
-                        @renderTaskLines()
-                        @trigger 'renderReload'
+                    @reloadView()
+
+        reloadView: ->
+            @renderTasks()
+            @trigger 'renderReload'
 
         fetchCollection: (callback) ->
             ### Fetch collection ###
+            data =
+                limit: 0
+                project: @options.project
+                with_violations: true
+
+            if @branch
+                data.branch = @branch
+
             @options.collection.fetch
-                data:
-                    limit: 0
-                    project: @options.project
-                    with_violations: true
+                data: data
                 reset: true
                 success: (collection) =>
-                    @options.collection = collection
+                    @collection = collection
                     callback.call @, collection
 
         renderToken: ->
@@ -489,7 +517,7 @@ $ ->
             ### Render task line view ###
             view = new app.views.TaskLineListView
                 el: @$el.find('.js-task-line-list')
-                collection: @options.collection
+                collection: @collection
                 showCommitSummary: true
 
             view.on 'renderFinished', =>
@@ -500,7 +528,7 @@ $ ->
         getPlotData: ->
             ### Prepare data for plotting ###
             data = new app.plotting.PlotData
-            @options.collection.each (task) =>
+            @collection.each (task) =>
                 violations = _.filter task.get('violations', []), (violation) ->
                     _.isObject violation.plot
 

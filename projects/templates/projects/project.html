@@ -39,6 +39,15 @@
             <img src='{{ project.get_badge_url }}' />
         </a>
 
+        <select
+            class="form-control select-branch js-select-branch"
+        >
+            <option value=''>Show all branches</option>
+            {% for branch in project.branches %}
+                <option value='{{ branch }}'>{{ branch }}</option>
+            {% endfor %}
+        </select>
+
         {% if user.is_authenticated and project.owner_id == user.id %}
             <form
                 action='{% url 'projects_regenerate' %}'
