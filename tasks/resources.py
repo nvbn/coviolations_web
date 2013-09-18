@@ -118,7 +118,7 @@ class RawTaskResource(BaseTaskResource):
         project.save()
 
 
-class TaskResource(Resource):
+class TaskResource(BaseTaskResource):
     """Task resource"""
     service = fields.DictField(attribute='service', null=True)
     created = fields.DateTimeField(attribute='created', null=True)
