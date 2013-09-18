@@ -20,6 +20,7 @@ class MockGithubMixin(object):
 
     def _create_repo(self, n):
         """Create repo"""
+        self.assertTrue(False)
         repo = MagicMock(
             url='http://test{}.com'.format(n),
             organization=None,
