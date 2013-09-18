@@ -1,7 +1,7 @@
 <script id="project-task-line-tmpl" type="text/template">
     <td>
         <% if (showProjectName) { %>
-            <a class='js-commit-name link-to-github' href='<%= commit.url %>'>
+            <a class='js-commit-name' href='/projects/<%= project %>/'>
                 <%= project %></a>:
         <% } %>
         <a href='/tasks/<%= id %>/' class='js-commit-name'>
