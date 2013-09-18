@@ -1,3 +1,36 @@
-<pre>
-{{ raw }}
-</pre>
+<table class='table table-striped'>
+    {% for fail in fails %}
+        <tr>
+            <td>
+                {{ fail.status }}
+            </td>
+            <td>
+                <strong>{{ fail.test_name }}</strong>
+                {% for line in fail.description %}
+                    <p>{{ line }}</p>
+                {% endfor %}
+            </td>
+            <td>
+                <pre>
+{% for line in fail.traceback %}
+{{ line }}
+{% endfor %}
+                </pre>
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+<table class='table table-bordered'>
+    <tr>
+        <td>Total tests count</td>
+        <td>{{ total }}</td>
+    </tr>
+    <tr>
+        <td>Failures</td>
+        <td>{{ failures }}</td>
+    </tr>
+    <tr>
+        <td>Errors</td>
+        <td>{{ errors }}</td>
+    </tr>
+</table>

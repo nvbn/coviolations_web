@@ -13,6 +13,7 @@ class CreateTaskJobCase(MongoFlushMixin, TestCase):
     def setUp(self):
         super(CreateTaskJobCase, self).setUp()
         self._mock_prepare_violations()
+        self._mock_fill_task()
         self._create_task()
 
     def _mock_prepare_violations(self):
@@ -20,8 +21,14 @@ class CreateTaskJobCase(MongoFlushMixin, TestCase):
         self._orig_prepare_violations = jobs.prepare_violations
         jobs.prepare_violations = MagicMock()
 
+    def _mock_fill_task(self):
+        """Mock fill task from github"""
+        self._orig_fill_task = jobs._fill_task_from_github
+        jobs._fill_task_from_github = MagicMock()
+
     def tearDown(self):
         jobs.prepare_violations = self._orig_prepare_violations
+        jobs._fill_task_from_github = self._orig_fill_task
 
     def _create_task(self):
         """Create task"""

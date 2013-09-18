@@ -52,6 +52,7 @@ class ProjectsResource(ModelResource):
     name = fields.CharField(attribute='name', readonly=True)
     url = fields.CharField(attribute='url', readonly=True)
     is_private = fields.BooleanField(attribute='is_private', readonly=True)
+    branches = fields.ListField(attribute='branches', readonly=True)
 
     class Meta:
         queryset = Project.objects.all()

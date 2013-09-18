@@ -21,7 +21,7 @@
 
 {% block content %}
     <h1>
-        <a href='https://github.com/{{ project.name }}'>
+        <a class='link-to-github' href='https://github.com/{{ project.name }}'>
             <i class="icon-github"></i>
         </a>
         {% if project.is_private %}
@@ -38,6 +38,15 @@
             <i class="icon-collapse"></i> Get badge:
             <img src='{{ project.get_badge_url }}' />
         </a>
+
+        <select
+            class="form-control select-branch js-select-branch"
+        >
+            <option value=''>Show all branches</option>
+            {% for branch in project.branches %}
+                <option value='{{ branch }}'>{{ branch }}</option>
+            {% endfor %}
+        </select>
 
         {% if user.is_authenticated and project.owner_id == user.id %}
             <form
