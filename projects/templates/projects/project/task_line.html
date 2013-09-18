@@ -5,13 +5,13 @@
                 <%= project %></a>:
         <% } %>
         <a href='/tasks/<%= id %>/' class='js-commit-name'>
-            <%= commit.branch %>#<%= commit.hash.slice(0, 6) %>
+            <%= commit.branch %>#<%= commit.range %>
         </a>
     </td>
     <% if (showCommitSummary) { %>
         <td>
-            <a class='js-commit-name' href='https://github.com/<%= project %>/commit/<%= commit.hash %>'>
-                <i class="icon-github"></i> <%= commit.summary %>
+            <a class='js-commit-name' href='/projects/<%= project %>/'>
+                 <%= commit.summary %>
             </a>
         </td>
     <% } %>

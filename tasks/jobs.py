@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from pymongo import DESCENDING
 from html2text import html2text
 from github import Github
@@ -42,8 +42,8 @@ def _fill_task_from_github(task_id):
     collection = Tasks.find({
         'project': task['project'],
         'commit.branch': task['commit']['branch'],
-        'created': {'$lt': task['created']},
-        'commit.hash': {'$ne': task['commit']['hash']}
+        'commit.hash': {'$ne': task['commit']['hash']},
+        'created': {'$lte': task['created'] + timedelta(seconds=5)},
     }, sort=[('created', DESCENDING)])
     if collection.count():
         previous = collection[0]['commit']['hash']
