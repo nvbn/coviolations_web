@@ -83,6 +83,7 @@ class ProjectManager(models.Manager):
                 url=repo.url,
                 is_private=repo.private,
             )
+        project.organization = organization
         project.icon = icon
         project.save()
         return project.id
