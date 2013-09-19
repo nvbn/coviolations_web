@@ -53,10 +53,11 @@ class ProjectsResource(ModelResource):
     url = fields.CharField(attribute='url', readonly=True)
     is_private = fields.BooleanField(attribute='is_private', readonly=True)
     branches = fields.ListField(attribute='branches', readonly=True)
+    icon = fields.CharField(attribute='icon', readonly=True, null=True)
 
     class Meta:
         queryset = Project.objects.all()
         authentication = Authentication()
         authorization = ProjectsAuthorization()
         resource_name = 'projects/project'
-        fields = ('name', 'is_enabled', 'id', 'is_private')
+        fields = ('name', 'is_enabled', 'id', 'is_private', 'icon')

@@ -1,3 +1,4 @@
+from mock import MagicMock
 from django.test import TestCase
 from django.contrib.auth.models import User
 from tools.mongo import MongoFlushMixin
@@ -16,7 +17,7 @@ class ProjectManagerCase(MockGithubMixin, TestCase):
 
     def test_create(self):
         """Test create"""
-        models.ProjectManager._get_remote_projects.return_value =\
+        User.github.get_user.return_value.get_repos.return_value =\
             map(self._create_repo, range(10))
         projects = models.Project.objects.get_or_create_for_user(self.user)
         self.assertEqual(projects.count(), 10)
@@ -28,7 +29,7 @@ class ProjectManagerCase(MockGithubMixin, TestCase):
                 owner=self.user, url='http://test{}.com'.format(n),
                 name='project {}'.format(n)
             )
-        models.ProjectManager._get_remote_projects.return_value =\
+        User.github.get_user.return_value.get_repos.return_value =\
             map(self._create_repo, range(10))
         projects = models.Project.objects.get_or_create_for_user(self.user)
         self.assertEqual(projects.count(), 10)

@@ -1,5 +1,4 @@
 from django.core.urlresolvers import reverse
-from github import Github
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
@@ -11,23 +10,21 @@ from tasks.models import Tasks
 class ProjectManager(models.Manager):
     """Project manager"""
 
-    def _get_remote_projects(self, user):
-        """Get remote projects"""
-        token = user.social_auth.get().extra_data['access_token']
-        github = Github(token)
-        github_user = github.get_user()
-        return github_user.get_repos('owner')
-
     def get_or_create_for_user(self, user):
         """Get or create for user"""
         projects = []
-        for repo in self._get_remote_projects(user):
-            projects.append(Project.objects.get_or_create(
+        github_user = user.github.get_user()
+        user_avatar = str(github_user.avatar_url)
+        for repo in github_user.get_repos('owner'):
+            project = Project.objects.get_or_create(
                 owner=user,
                 name=repo.full_name,
                 url=repo.url,
                 is_private=repo.private,
-            )[0].id)
+            )[0]
+            projects.append(project.id)
+            project.icon = user_avatar
+            project.save()
         self.filter(owner=user).exclude(id__in=projects).delete()
         return self.filter(owner=user).order_by('-last_use')
 
@@ -54,6 +51,9 @@ class Project(models.Model):
     token = UUIDField(null=True, auto=True, verbose_name=_('token'))
     is_private = models.BooleanField(
         default=False, verbose_name=_('is private'),
+    )
+    icon = models.CharField(
+        blank=True, null=True, max_length=300, verbose_name=_('icon'),
     )
 
     objects = ProjectManager()
@@ -100,6 +100,5 @@ class Project(models.Model):
     def repo(self):
         """Github repo of project with read access"""
         if not hasattr(self, '_repo'):
-            token = self.owner.social_auth.get().extra_data['access_token']
-            self._repo = Github(token).get_repo(self.name)
+            self._repo = self.owner.github.get_repo(self.name)
         return self._repo

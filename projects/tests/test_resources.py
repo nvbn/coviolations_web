@@ -22,7 +22,7 @@ class ProjectsResourceCase(MockGithubMixin, ResourceTestCase):
 
     def test_read_list(self):
         """Test read list"""
-        models.ProjectManager._get_remote_projects.return_value =\
+        User.github.get_user.return_value.get_repos.return_value =\
             map(self._create_repo, range(10))
         response = self.api_client.get('{}?fetch=true'.format(self.url))
         self.assertHttpOK(response)
