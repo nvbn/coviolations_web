@@ -95,3 +95,9 @@ class Project(models.Model):
     def branches(self):
         """Get project branches"""
         return Tasks.find({'project': self.name}).distinct('commit.branch')
+
+    @property
+    def repo(self):
+        """Github repo of project with read access"""
+        token = self.owner.social_auth.get().extra_data['access_token']
+        return Github(token).get_repo(self.name)
