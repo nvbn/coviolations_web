@@ -99,5 +99,7 @@ class Project(models.Model):
     @property
     def repo(self):
         """Github repo of project with read access"""
-        token = self.owner.social_auth.get().extra_data['access_token']
-        return Github(token).get_repo(self.name)
+        if not hasattr(self, '_repo'):
+            token = self.owner.social_auth.get().extra_data['access_token']
+            self._repo = Github(token).get_repo(self.name)
+        return self._repo
