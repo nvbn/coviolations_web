@@ -48,7 +48,7 @@ class ProjectViewCase(MockGithubMixin, TestCase):
         response = self.client.get(
             reverse('projects_project', args=(project.name,)),
         )
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 302)
 
     def test_404_for_private_and_not_owner(self):
         """Test 404 for private and not owner"""
@@ -60,7 +60,7 @@ class ProjectViewCase(MockGithubMixin, TestCase):
         response = self.client.get(
             reverse('projects_project', args=(project.name,)),
         )
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 403)
 
     def test_ok_for_private_and_owner(self):
         """Test 200 for private and owner"""

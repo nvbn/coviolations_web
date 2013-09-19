@@ -9,12 +9,11 @@ from .models import Tasks
 class TaskViewMixin(ProjectAccessMixin):
     """Task view mixin"""
 
-    def get_project(self, task):
+    def get_project(self, task=None, **kwargs):
         """Get project"""
-        project = Project.objects.get(name=task['project'])
-        if not self.check_can_access(project):
-            raise Http404()
-        return project
+        if task is None:
+            task = self.get_task(**kwargs)
+        return Project.objects.get(name=task['project'])
 
     def get_task(self, **kwargs):
         """Get task"""

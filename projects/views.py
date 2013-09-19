@@ -1,4 +1,3 @@
-from django.http import Http404
 from django.shortcuts import redirect
 from django.contrib.messages import add_message, INFO
 from django.utils.translation import ugettext_lazy as _
@@ -28,13 +27,7 @@ class ProjectView(ProjectAccessMixin, DetailView):
     context_object_name = 'project'
     model = Project
     slug_field = 'name'
-
-    def get_object(self, queryset=None):
-        """Get object"""
-        project = super(ProjectView, self).get_object(queryset)
-        if not self.check_can_access(project, self.request.user):
-            raise Http404()
-        return project
+    get_project = lambda self, **kwargs: self.get_object()
 
 
 class ProjectBadge(RedirectView):
