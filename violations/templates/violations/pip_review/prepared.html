@@ -1,3 +1,14 @@
-<pre>
-{{ raw }}
-</pre>
+<table class="table table-striped">
+    <tr>
+        <th>Package</th>
+        <th>Available</th>
+        <th>You have</th>
+    </tr>
+    {% for package, available, you_have in packages %}
+        <tr>
+           <td>{{ package }}</td>
+            <td>{{ available }}</td>
+            <td>{{ you_have }}</td>
+        </tr>
+    {% endfor %}
+</table>
