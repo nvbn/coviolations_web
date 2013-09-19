@@ -46,6 +46,17 @@ class ProjectManagerCase(MockGithubMixin, TestCase):
             enabled, models.Project.objects.get_enabled_for_user(self.user),
         )
 
+    def test_get_for_user_in_organization(self):
+        """Test get for user in organization"""
+        organization = factories.OrganizationFactory(users=[self.user])
+        factories.ProjectFactory.create_batch(10)
+        projects = factories.ProjectFactory.create_batch(
+            10, organization=organization,
+        )
+        self.assertItemsEqual(
+            projects, models.Project.objects.get_for_user(self.user),
+        )
+
 
 class ProjectModelCase(MongoFlushMixin, TestCase):
     """Project model case"""

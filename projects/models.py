@@ -1,5 +1,6 @@
 from django.core.urlresolvers import reverse
 from django.db import models
+from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 from django_extensions.db.fields import UUIDField
@@ -42,10 +43,26 @@ class ProjectManager(models.Manager):
         projects = [self._get_or_create_and_update(
             repo, user, str(github_user.avatar_url),
         ) for repo in github_user.get_repos('owner')]
+        projects += self._get_for_user_organizations(
+            user, github_user,
+        )
         self.filter(owner=user).exclude(id__in=projects).delete()
-        return self.filter(owner=user).order_by('-last_use')
+        return self.get_for_user(user).order_by('-last_use')
 
-    def _get_or_create_and_update(self, repo, user, icon):
+    def _get_for_user_organizations(self, user, github_user):
+        """Get for user organizations"""
+        project_ids = []
+        for github_organization in github_user.get_orgs():
+            organization = Organization.objects.get_with_user(
+                github_organization.login, user,
+            )
+            avatar = str(github_organization.avatar_url)
+            project_ids += [self._get_or_create_and_update(
+                repo, user, avatar, organization,
+            ) for repo in github_organization.get_repos('owner')]
+        return project_ids
+
+    def _get_or_create_and_update(self, repo, user, icon, organization=None):
         """Get or create and update"""
         try:
             project = Project.objects.get(
@@ -66,7 +83,11 @@ class ProjectManager(models.Manager):
 
     def get_enabled_for_user(self, user):
         """Get enabled projects available for user"""
-        return self.filter(owner=user, is_enabled=True)
+        return self.get_for_user(user).filter(is_enabled=True)
+
+    def get_for_user(self, user):
+        """Get for user"""
+        return self.filter(Q(owner=user) | Q(organization__users=user))
 
 
 class Project(models.Model):
@@ -90,6 +111,9 @@ class Project(models.Model):
     )
     icon = models.CharField(
         blank=True, null=True, max_length=300, verbose_name=_('icon'),
+    )
+    organization = models.ForeignKey(
+        Organization, blank=True, null=True, verbose_name=_('organization'),
     )
 
     objects = ProjectManager()
