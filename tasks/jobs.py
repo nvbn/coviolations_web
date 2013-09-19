@@ -34,11 +34,7 @@ def _prepare_single_commit(commit):
 def _fill_task_from_github(task_id):
     """Fill task from github"""
     task = Tasks.find_one(task_id)
-    github = Github(
-        client_id=settings.GITHUB_APP_ID,
-        client_secret=settings.GITHUB_API_SECRET,
-    )
-    repo = github.get_repo(task['project'])
+    project = Project.objects.get(name=task['project'])
     collection = Tasks.find({
         'project': task['project'],
         'commit.branch': task['commit']['branch'],
@@ -47,7 +43,7 @@ def _fill_task_from_github(task_id):
     }, sort=[('created', DESCENDING)])
     if collection.count():
         previous = collection[0]['commit']['hash']
-        comparison = repo.compare(
+        comparison = project.repo.compare(
             previous, task['commit']['hash'],
         )
         task['commit']['url'] = comparison.html_url
@@ -59,7 +55,7 @@ def _fill_task_from_github(task_id):
             _prepare_single_commit, comparison.commits,
         )
     else:
-        commit = repo.get_commit(task['commit']['hash'])
+        commit = project.repo.get_commit(task['commit']['hash'])
         task['commit']['url'] = commit.html_url
         task['commit']['range'] = task['commit']['hash'][:6]
         task['commit']['inner'] = [_prepare_single_commit(commit)]

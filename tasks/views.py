@@ -2,16 +2,17 @@ from bson import ObjectId
 from django.views.generic import TemplateView, View
 from django.http import HttpResponse, Http404
 from projects.models import Project
+from projects.utils import ProjectAccessMixin
 from .models import Tasks
 
 
-class TaskViewMixin(object):
+class TaskViewMixin(ProjectAccessMixin):
     """Task view mixin"""
 
     def get_project(self, task):
         """Get project"""
         project = Project.objects.get(name=task['project'])
-        if not project.can_access(self.request.user):
+        if not self.check_can_access(project):
             raise Http404()
         return project
 

@@ -1,6 +1,6 @@
 from django.core.urlresolvers import reverse
-from github import Github
 from django.db import models
+from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 from django_extensions.db.fields import UUIDField
@@ -8,32 +8,95 @@ from tools.short import make_https
 from tasks.models import Tasks
 
 
+class OrganizationManager(models.Manager):
+    """Organization manager"""
+
+    def get_with_user(self, name, user):
+        """Get and add user if need"""
+        organisation = self.get_or_create(name=name)[0]
+        if not organisation.users.filter(id=user.id).exists():
+            organisation.users.add(user)
+        return organisation
+
+
+class Organization(models.Model):
+    """Organization model"""
+    name = models.CharField(max_length=300, verbose_name=_('name'))
+    users = models.ManyToManyField(
+        User, related_name='organizations', verbose_name=_('users'),
+    )
+
+    objects = OrganizationManager()
+
+    class Meta:
+        verbose_name = _('Organization')
+        verbose_name_plural = _('Organization')
+
+    def __unicode__(self):
+        return self.name
+
+
 class ProjectManager(models.Manager):
     """Project manager"""
 
-    def _get_remote_projects(self, user):
-        """Get remote projects"""
-        token = user.social_auth.get().extra_data['access_token']
-        github = Github(token)
-        github_user = github.get_user()
-        return github_user.get_repos('owner')
+    def update_user_projects(self, user):
+        """Alias for get_or_create_for_user but without return"""
+        self.get_or_create_for_user(user)
 
     def get_or_create_for_user(self, user):
         """Get or create for user"""
-        projects = []
-        for repo in self._get_remote_projects(user):
-            projects.append(Project.objects.get_or_create(
+        github_user = user.github.get_user()
+        projects = [self._get_or_create_and_update(
+            repo, user, str(github_user.avatar_url),
+        ) for repo in github_user.get_repos('owner')]
+        projects += self._get_for_user_organizations(
+            user, github_user,
+        )
+        self.filter(owner=user).exclude(id__in=projects).delete()
+        return self.get_for_user(user).order_by('-last_use')
+
+    def _get_for_user_organizations(self, user, github_user):
+        """Get for user organizations"""
+        project_ids = []
+        for github_organization in github_user.get_orgs():
+            organization = Organization.objects.get_with_user(
+                github_organization.login, user,
+            )
+            avatar = str(github_organization.avatar_url)
+            project_ids += [self._get_or_create_and_update(
+                repo, user, avatar, organization,
+            ) for repo in github_organization.get_repos('owner')]
+        return project_ids
+
+    def _get_or_create_and_update(self, repo, user, icon, organization=None):
+        """Get or create and update"""
+        try:
+            project = Project.objects.get(
+                name=repo.full_name,
+                url=repo.url,
+                is_private=repo.private,
+            )
+        except Project.DoesNotExist:
+            project = Project(
                 owner=user,
                 name=repo.full_name,
                 url=repo.url,
                 is_private=repo.private,
-            )[0].id)
-        self.filter(owner=user).exclude(id__in=projects).delete()
-        return self.filter(owner=user).order_by('-last_use')
+            )
+        project.organization = organization
+        project.icon = icon
+        project.save()
+        return project.id
 
     def get_enabled_for_user(self, user):
         """Get enabled projects available for user"""
-        return self.filter(owner=user, is_enabled=True)
+        return self.get_for_user(user).filter(is_enabled=True)
+
+    def get_for_user(self, user):
+        """Get for user"""
+        return self.filter(
+            Q(owner=user) | Q(organization__users=user)
+        ).distinct()
 
 
 class Project(models.Model):
@@ -54,6 +117,12 @@ class Project(models.Model):
     token = UUIDField(null=True, auto=True, verbose_name=_('token'))
     is_private = models.BooleanField(
         default=False, verbose_name=_('is private'),
+    )
+    icon = models.CharField(
+        blank=True, null=True, max_length=300, verbose_name=_('icon'),
+    )
+    organization = models.ForeignKey(
+        Organization, blank=True, null=True, verbose_name=_('organization'),
     )
 
     objects = ProjectManager()
@@ -80,18 +149,32 @@ class Project(models.Model):
 
     def can_access(self, user):
         """Can access"""
-        # TODO: add organizations support
         if self.is_private:
+            if self.organization:
+                if self.organization.users.filter(
+                    id=user.id,
+                ).exists():
+                    return True
             return self.owner == user
         else:
             return True
 
     def get_allowed_users(self):
         """Get allowed users"""
-        # TODO: add organizations support
-        return [self.owner]
+        if self.organization:
+            users = list(self.organization.users.all())
+        else:
+            users = []
+        return [self.owner] + users
 
     @property
     def branches(self):
         """Get project branches"""
         return Tasks.find({'project': self.name}).distinct('commit.branch')
+
+    @property
+    def repo(self):
+        """Github repo of project with read access"""
+        if not hasattr(self, '_repo'):
+            self._repo = self.owner.github.get_repo(self.name)
+        return self._repo

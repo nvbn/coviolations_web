@@ -110,6 +110,8 @@ class RawTaskResource(BaseTaskResource):
             task_data['allowed_users'] = [
                 user.id for user in project.get_allowed_users()
             ]
+            if project.organization:
+                task_data['organization'] = project.organization.id
         task_id = Tasks.insert(task_data)
         create_task.delay(task_id)
         return task_id
@@ -165,6 +167,12 @@ class TaskResource(BaseTaskResource):
                 'is_private': {'$ne': True},
             }, {
                 'allowed_users': bundle.request.user.id,
+            }, {
+                'organization': {
+                    '$in': list(bundle.request.user.organizations.values_list(
+                        'id', flat=True,
+                    )),
+                }
             }]
         else:
             find_kwargs['spec']['is_private'] = {'$ne': True}

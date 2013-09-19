@@ -116,6 +116,7 @@ INSTALLED_APPS = (
     'social_auth',
     'tastypie',
 
+    'accounts',
     'app',
     'projects',
     'tasks',
