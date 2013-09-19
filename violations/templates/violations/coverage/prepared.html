@@ -1,3 +1,30 @@
-<pre>
-{{ raw }}
-</pre>
+<table class="table table-striped">
+    <tr>
+        <th>Name</th>
+        <th>Statements</th>
+        <th>Miss</th>
+        <th>Cover</th>
+    </tr>
+    {% for file_name, file_statements, file_miss, file_cover in each_file %}
+        <tr>
+            <td>
+                <a
+                    class='js-link-to-source'
+                    data-file-name='{{ file_name }}.py'
+                    href='#'
+                >
+                    {{ file_name }}
+                </a>
+            </td>
+            <td>{{ file_statements }}</td>
+            <td>{{ file_miss }}</td>
+            <td>{{ file_cover }}</td>
+        </tr>
+    {% endfor %}
+    <tr>
+        <th>Total</th>
+        <td>{{ statements }}</td>
+        <td>{{ miss }}</td>
+        <td>{{ cover }}</td>
+    </tr>
+</table>
