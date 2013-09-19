@@ -115,7 +115,11 @@ $ ->
 
         render: ->
             ### Render project line ###
-            @$el.html @template @model.attributes
+            context = _.extend
+                editable: @options.editable
+            , @model.attributes
+
+            @$el.html @template context
             @trigger 'renderFinished'
 
         enable: (e) ->
@@ -148,6 +152,7 @@ $ ->
             ### Render single project line ###
             lineView = new app.views.ProjectLineView
                 model: model
+                editable: @options.editable
             lineView.on 'renderFinished', =>
                 @waitRendering -= 1
                 if @waitRendering == 0
@@ -350,6 +355,7 @@ $ ->
                 projectView = new app.views.ManageProjectsView
                     el: @$el.find('.js-enabled-projects')
                     collection: collection
+                    editable: false
                 projectView.on 'renderFinished', $.proxy @_renderProjectsFinished, @
 
                 projectView.render()
@@ -436,6 +442,7 @@ $ ->
             view = new app.views.ManageProjectsView
                 el: @$el.find('.js-manage-projects')
                 collection: collection
+                editable: true
             view.on 'renderFinished', =>
                 @trigger 'renderFinished'
 
