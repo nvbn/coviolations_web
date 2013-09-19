@@ -1,1 +1,8 @@
-<p>Total: {{ total }}</p>
+<table class='table table-striped'>
+    {% for rank, value in totals %}
+        <tr>
+            <th>{{ rank }}</th>
+            <td>{{ value }}</td>
+        </tr>
+    {% endfor %}
+</table>

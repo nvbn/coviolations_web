@@ -1,5 +1,34 @@
-<p><strong>Total:</strong> {{ total }}</p>
-<p><strong>By languages:</strong></p>
-{% for name, value in langs.items %}
-    <p>{{ name }}: {{ value }}</p>
-{% endfor %}
+<strong>By directory:</strong>
+<table class='table table-striped'>
+    <tr>
+        <th>SLOC</th>
+        <th>Directory</th>
+        <th>SLOC-by-Language (Sorted)</th>
+    </tr>
+    {% for sloc, dir, by_lang in dirs %}
+        <tr>
+            <td>{{ sloc }}</td>
+            <td>{{ dir }}</td>
+            <td>{{ by_lang }}</td>
+        </tr>
+    {% endfor %}
+</table>
+<strong>Totals grouped by language (dominant language first):</strong>
+<table class='table table-striped'>
+    {% for name, value, percent in langs %}
+        <tr>
+            <th>{{ name }}</th>
+            <td>{{ value }}</td>
+            <td>{{ percent }}</td>
+        </tr>
+    {% endfor %}
+</table>
+<strong>Totals:</strong>
+<table class='table table-striped'>
+    {% for rank, value in totals %}
+        <tr>
+            <th>{{ rank }}</th>
+            <td>{{ value }}</td>
+        </tr>
+    {% endfor %}
+</table>
