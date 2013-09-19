@@ -17,7 +17,7 @@ class TaskViewMixin(ProjectAccessMixin):
 
     def get_task(self, **kwargs):
         """Get task"""
-        return Tasks.find_one(ObjectId(kwargs['pk']))
+        return Tasks.find_one(ObjectId(self.kwargs['pk']))
 
 
 class DetailTaskView(TaskViewMixin, TemplateView):

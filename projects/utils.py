@@ -12,13 +12,14 @@ class ProjectAccessMixin(AccessMixin):
     """Project access mixin"""
 
     def dispatch(self, request, *args, **kwargs):
+        default_result = super(ProjectAccessMixin, self).dispatch(
+            request, *args, **kwargs
+        )
         check_result = self.check_can_access(request)
         if check_result:
             return check_result
         else:
-            return super(ProjectAccessMixin, self).dispatch(
-                request, *args, **kwargs
-            )
+            return default_result
 
     def check_can_access(self, request, can_retry=True, **kwargs):
         """Check can user access"""
