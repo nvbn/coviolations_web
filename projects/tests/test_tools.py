@@ -1,4 +1,5 @@
 from mock import MagicMock
+from django.core.exceptions import PermissionDenied
 from django.test import TestCase
 from accounts.tests.factories import UserFactory
 from ..utils import ProjectAccessMixin
@@ -16,6 +17,7 @@ class ProjectAccessMixinCase(TestCase):
         Project.objects.update_user_projects = MagicMock()
         self.mixin = ProjectAccessMixin()
         self.project = factories.ProjectFactory()
+        self.mixin.get_project = MagicMock(return_value=self.project)
         self.user = UserFactory()
 
     def tearDown(self):
@@ -25,12 +27,15 @@ class ProjectAccessMixinCase(TestCase):
     def test_can_access(self):
         """Test can access"""
         Project.can_access.return_value = True
-        self.assertTrue(self.project.can_access(self.user))
+        self.assertIsNone(self.mixin.check_can_access(
+            MagicMock(user=self.user),
+        ))
 
     def test_call_update_if_organization(self):
         """Test call update if organization"""
         Project.can_access.return_value = False
-        self.assertFalse(self.project.can_access(self.user))
+        with self.assertRaises(PermissionDenied):
+            self.mixin.check_can_access(MagicMock(user=self.user))
         Project.objects.update_user_projects.asset_called_once_with(
             self.user,
         )

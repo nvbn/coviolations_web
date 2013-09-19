@@ -28,13 +28,7 @@ class ProjectView(ProjectAccessMixin, DetailView):
     context_object_name = 'project'
     model = Project
     slug_field = 'name'
-
-    def get_object(self, queryset=None):
-        """Get object"""
-        project = super(ProjectView, self).get_object(queryset)
-        if not self.check_can_access(project, self.request.user):
-            raise Http404()
-        return project
+    get_project = DetailView.get_object
 
 
 class ProjectBadge(RedirectView):
