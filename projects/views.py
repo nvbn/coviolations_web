@@ -28,7 +28,7 @@ class ProjectView(ProjectAccessMixin, DetailView):
     context_object_name = 'project'
     model = Project
     slug_field = 'name'
-    get_project = DetailView.get_object
+    get_project = lambda self, **kwargs: self.get_object()
 
 
 class ProjectBadge(RedirectView):

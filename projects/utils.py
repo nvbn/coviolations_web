@@ -20,9 +20,9 @@ class ProjectAccessMixin(AccessMixin):
                 request, *args, **kwargs
             )
 
-    def check_can_access(self, request, can_retry=True):
+    def check_can_access(self, request, can_retry=True, **kwargs):
         """Check can user access"""
-        project = self.get_project()
+        project = self.get_project(**kwargs)
         if not project.can_access(request.user):
             if (
                 project.organization and
