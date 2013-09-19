@@ -37,6 +37,10 @@ class Organization(models.Model):
 class ProjectManager(models.Manager):
     """Project manager"""
 
+    def update_user_projects(self, user):
+        """Alias for get_or_create_for_user but without return"""
+        self.get_or_create_for_user(user)
+
     def get_or_create_for_user(self, user):
         """Get or create for user"""
         github_user = user.github.get_user()

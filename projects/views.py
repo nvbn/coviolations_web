@@ -14,7 +14,7 @@ from tasks import const
 from tasks.exceptions import TaskDoesNotExists
 from .models import Project
 from .forms import RegenerateTokenForm, FindTaskForBadgeForm
-from .utils import logger
+from .utils import logger, ProjectAccessMixin
 
 
 class ManageProjectsView(LoginRequiredMixin, TemplateView):
@@ -22,7 +22,7 @@ class ManageProjectsView(LoginRequiredMixin, TemplateView):
     template_name = 'projects/manage.html'
 
 
-class ProjectView(DetailView):
+class ProjectView(ProjectAccessMixin, DetailView):
     """Project view"""
     template_name = 'projects/project.html'
     context_object_name = 'project'
@@ -31,10 +31,10 @@ class ProjectView(DetailView):
 
     def get_object(self, queryset=None):
         """Get object"""
-        obj = super(ProjectView, self).get_object(queryset)
-        if not obj.can_access(self.request.user):
+        project = super(ProjectView, self).get_object(queryset)
+        if not self.check_can_access(project, self.request.user):
             raise Http404()
-        return obj
+        return project
 
 
 class ProjectBadge(RedirectView):
