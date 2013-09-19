@@ -25,7 +25,7 @@ SERVICES = (
     'services.token',
 )
 
-PUSH_BIND = 'http://coviolations.io/sub'
+PUSH_BIND = 'https://coviolations.io/sub'
 
 INSTALLED_APPS += ('raven.contrib.django.raven_compat',)
 
