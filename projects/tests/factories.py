@@ -4,18 +4,6 @@ from accounts.tests.factories import UserFactory
 from .. import models
 
 
-class ProjectFactory(factory.DjangoModelFactory):
-    """Project factory"""
-    FACTORY_FOR = models.Project
-
-    name = factory.Sequence(lambda n: 'project {}'.format(n))
-    url = factory.Sequence(lambda n: 'http://test{}.com'.format(n))
-
-    @factory.sequence
-    def owner(n):
-        return User.objects.create_user('user{}'.format(n))
-
-
 class OrganizationFactory(factory.DjangoModelFactory):
     """Organization factory"""
     FACTORY_FOR = models.Organization
@@ -32,3 +20,16 @@ class OrganizationFactory(factory.DjangoModelFactory):
                 self.users.add(user)
         else:
             self.users = UserFactory.create_batch(10)
+
+
+class ProjectFactory(factory.DjangoModelFactory):
+    """Project factory"""
+    FACTORY_FOR = models.Project
+
+    name = factory.Sequence(lambda n: 'project {}'.format(n))
+    url = factory.Sequence(lambda n: 'http://test{}.com'.format(n))
+    organization = factory.SubFactory(OrganizationFactory)
+
+    @factory.sequence
+    def owner(n):
+        return User.objects.create_user('user{}'.format(n))

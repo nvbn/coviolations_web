@@ -140,16 +140,23 @@ class Project(models.Model):
 
     def can_access(self, user):
         """Can access"""
-        # TODO: add organizations support
         if self.is_private:
+            if self.organization:
+                if self.organization.users.filter(
+                    id=user.id,
+                ).exists():
+                    return True
             return self.owner == user
         else:
             return True
 
     def get_allowed_users(self):
         """Get allowed users"""
-        # TODO: add organizations support
-        return [self.owner]
+        if self.organization:
+            users = list(self.organization.users.all())
+        else:
+            users = []
+        return [self.owner] + users
 
     @property
     def branches(self):
