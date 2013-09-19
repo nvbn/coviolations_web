@@ -42,8 +42,9 @@ def py_unittest_violation(data):
         STATUS_SUCCESS if status.find('OK') == 0 else STATUS_FAILED
 
     data['preview'] = render_to_string('violations/py_tests/preview.html', {
-        'summary': summary,
-        'status': status,
+        'failures': 0,
+        'errors': 0,
+        'total': 0,
     })
 
     prepared_data = {
