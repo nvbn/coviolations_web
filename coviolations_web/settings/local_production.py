@@ -86,3 +86,4 @@ LOGGING = {
     },
 }
 
+USE_SSL = True
