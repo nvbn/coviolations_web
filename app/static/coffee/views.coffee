@@ -261,7 +261,7 @@ $ ->
     class app.views.LinkToSourceView extends Backbone.View
         ### Link to source view ###
         tagName: 'a'
-        hrefTemplate: _.template 'https://github.com/<%= project %>/blob/<%= commit %>/<%= file %>#L<%= line %>'
+        hrefTemplate: _.template 'https://github.com/<%= project %>/blob/<%= commit %>/<%= file %><% if (line){ %>#L<%= line %><% } %>'
 
         render: ->
             @$el.attr 'href', @getHref()
@@ -606,6 +606,8 @@ $ ->
     class app.views.DetailTaskPageView extends Backbone.View
         ### Task page view ###
         tagName: 'div'
+        events:
+            'click '
 
         render: ->
             @$el.find('.js-link-to-source').each (n, el) =>
@@ -614,3 +616,13 @@ $ ->
                     commit: @options.commit
                     el: el
                 view.render()
+
+            @minOffset = @$el.find('.js-first-violation').offset().top
+            @minOffset -= @$el.find('.js-violations-menu').height()
+            $(window).scroll $.proxy @onScroll,  @
+
+        onScroll: ->
+            if $(window).scrollTop() > @minOffset
+                @$el.find('.js-violations-menu').css 'display', 'block'
+            else
+                @$el.find('.js-violations-menu').css 'display', 'none'

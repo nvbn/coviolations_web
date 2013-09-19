@@ -11,6 +11,7 @@ from services.base import library
 from projects.models import Project
 from tools.mongo import Document
 from tools.filters import FiltersAccumulator
+from .const import STATUS_NEW
 from .jobs import create_task
 from .models import Tasks
 from .utils import logger
@@ -150,7 +151,9 @@ class TaskResource(BaseTaskResource):
                 'service', 'project', 'commit', 'plot',
                 'created', 'status',
             )},
-            'spec': {},
+            'spec': {
+                'status': {'$ne': STATUS_NEW},
+            },
             'sort': [('created', DESCENDING)],
         }
 

@@ -86,7 +86,7 @@
         var pushBind = '{{ push_bind|escapejs }}';
     </script>
 </head>
-<body>
+<body {% block bodyattrs %}{% endblock %}>
     {% for message in messages %}
         <span class="label label-success top-message">{{ message }}</span>
     {% endfor %}

@@ -71,6 +71,7 @@ def create_task(task_id):
     """Create task job"""
     data = Tasks.find_one(task_id)
     data['created'] = datetime.now()
+    data['status'] = const.STATUS_NEW
     task = services.base.library.get(data['service']['name'])(data)
 
     if task:

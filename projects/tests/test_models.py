@@ -57,5 +57,9 @@ class ProjectModelCase(MongoFlushMixin, TestCase):
             'branch': 'master',
         }}, {'project': project.name, 'commit': {
             'branch': 'develop',
-        }}] * 2)
+        }}, {'project': project.name, 'commit': {
+            'branch': 'master',
+        }}, {'project': project.name, 'commit': {
+            'branch': 'develop',
+        }}])
         self.assertItemsEqual(project.branches, ['master', 'develop'])
