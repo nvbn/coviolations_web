@@ -1,4 +1,3 @@
-from django.http import Http404
 from django.shortcuts import redirect
 from django.contrib.messages import add_message, INFO
 from django.utils.translation import ugettext_lazy as _
