@@ -87,7 +87,9 @@ class ProjectManager(models.Manager):
 
     def get_for_user(self, user):
         """Get for user"""
-        return self.filter(Q(owner=user) | Q(organization__users=user))
+        return self.filter(
+            Q(owner=user) | Q(organization__users=user)
+        ).distinct()
 
 
 class Project(models.Model):

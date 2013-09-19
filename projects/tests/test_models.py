@@ -27,7 +27,7 @@ class ProjectManagerCase(MockGithubMixin, TestCase):
         for n in range(10):
             factories.ProjectFactory(
                 owner=self.user, url='http://test{}.com'.format(n),
-                name='project {}'.format(n)
+                name='project {}'.format(n),
             )
         User.github.get_user.return_value.get_repos.return_value =\
             map(self._create_repo, range(10))
