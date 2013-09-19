@@ -1,9 +1,12 @@
 <script id="manage-project-line-tmpl" type="text/template">
     <td>
-        <% if (is_private){ %>
-            <i class="icon-lock"></i>
+        <% if (icon) { %>
+            <img src='<%= icon %>' class='small-avatar' />
         <% } %>
         <a href='/projects/<%= name %>/'><%= name %></a>
+        <% if (is_private) { %>
+            <i class="icon-lock"></i>
+        <% } %>
     </td>
     <td>
         <div class="btn-group pull-right">
