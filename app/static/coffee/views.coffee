@@ -261,7 +261,7 @@ $ ->
     class app.views.LinkToSourceView extends Backbone.View
         ### Link to source view ###
         tagName: 'a'
-        hrefTemplate: _.template 'https://github.com/<%= project %>/blob/<%= commit %>/<%= file %>#L<%= line %>'
+        hrefTemplate: _.template 'https://github.com/<%= project %>/blob/<%= commit %>/<%= file %><% if (line){ %>#L<%= line %><% } %>'
 
         render: ->
             @$el.attr 'href', @getHref()
