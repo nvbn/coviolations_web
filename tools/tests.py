@@ -1,6 +1,5 @@
 from mock import MagicMock
 from django.contrib.auth.models import User
-from .. import models
 
 
 class MockGithubMixin(object):

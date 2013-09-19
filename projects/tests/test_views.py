@@ -4,6 +4,7 @@ from django.test import TestCase
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from tools.mongo import MongoFlushMixin
+from tools.tests import MockGithubMixin
 from tasks.models import Tasks
 from tasks import const
 from ..models import Project
@@ -27,13 +28,14 @@ class ManageProjectViewCase(TestCase):
         self.assertEqual(response.status_code, 200)
 
 
-class ProjectViewCase(TestCase):
+class ProjectViewCase(MockGithubMixin, TestCase):
     """Project view case"""
 
     def setUp(self):
         project = factories.ProjectFactory.create()
         self.url = reverse('projects_project', args=(project.name,))
         self.user = User.objects.create_user('test', 'test@test.test', 'test')
+        super(ProjectViewCase, self).setUp()
 
     def test_ok(self):
         """Test status=200"""

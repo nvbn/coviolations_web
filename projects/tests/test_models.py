@@ -2,10 +2,10 @@ from django.test import TestCase
 from django.contrib.auth.models import User
 from accounts.tests.factories import UserFactory
 from tools.mongo import MongoFlushMixin
+from tools.tests import MockGithubMixin
 from tasks.models import Tasks
 from .. import models
 from . import factories
-from .base import MockGithubMixin
 
 
 class ProjectManagerCase(MockGithubMixin, TestCase):

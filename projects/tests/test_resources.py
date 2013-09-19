@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from tastypie.test import ResourceTestCase
+from tools.tests import MockGithubMixin
 from .. import models
-from .base import MockGithubMixin
 from . import factories
 
 
