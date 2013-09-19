@@ -627,6 +627,8 @@ $ ->
             @minOffset = @$el.find('.js-first-violation').offset().top
             @minOffset -= @$el.find('.js-violations-menu').height()
             $(window).scroll $.proxy @onScroll,  @
+            @$el.find('pre').addClass 'prettyprint'
+            prettyPrint()
 
         onScroll: ->
             if $(window).scrollTop() > @minOffset
