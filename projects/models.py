@@ -7,10 +7,23 @@ from tools.short import make_https
 from tasks.models import Tasks
 
 
+class OrganizationManager(models.Manager):
+    """Organization manager"""
+
+    def get_with_user(self, name, user):
+        """Get and add user if need"""
+        organisation = self.get_or_create(name=name)[0]
+        if not organisation.users.filter(id=user.id).exists():
+            organisation.users.add(user)
+        return organisation
+
+
 class Organization(models.Model):
     """Organization model"""
     name = models.CharField(max_length=300, verbose_name=_('name'))
     users = models.ManyToManyField(User, verbose_name=_('users'))
+
+    objects = OrganizationManager()
 
     class Meta:
         verbose_name = _('Organization')
@@ -25,21 +38,31 @@ class ProjectManager(models.Manager):
 
     def get_or_create_for_user(self, user):
         """Get or create for user"""
-        projects = []
         github_user = user.github.get_user()
-        user_avatar = str(github_user.avatar_url)
-        for repo in github_user.get_repos('owner'):
-            project = Project.objects.get_or_create(
+        projects = [self._get_or_create_and_update(
+            repo, user, str(github_user.avatar_url),
+        ) for repo in github_user.get_repos('owner')]
+        self.filter(owner=user).exclude(id__in=projects).delete()
+        return self.filter(owner=user).order_by('-last_use')
+
+    def _get_or_create_and_update(self, repo, user, icon):
+        """Get or create and update"""
+        try:
+            project = Project.objects.get(
+                name=repo.full_name,
+                url=repo.url,
+                is_private=repo.private,
+            )
+        except Project.DoesNotExist:
+            project = Project(
                 owner=user,
                 name=repo.full_name,
                 url=repo.url,
                 is_private=repo.private,
-            )[0]
-            projects.append(project.id)
-            project.icon = user_avatar
-            project.save()
-        self.filter(owner=user).exclude(id__in=projects).delete()
-        return self.filter(owner=user).order_by('-last_use')
+            )
+        project.icon = icon
+        project.save()
+        return project.id
 
     def get_enabled_for_user(self, user):
         """Get enabled projects available for user"""

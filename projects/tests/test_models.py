@@ -1,6 +1,6 @@
-from mock import MagicMock
 from django.test import TestCase
 from django.contrib.auth.models import User
+from accounts.tests.factories import UserFactory
 from tools.mongo import MongoFlushMixin
 from tasks.models import Tasks
 from .. import models
@@ -64,3 +64,37 @@ class ProjectModelCase(MongoFlushMixin, TestCase):
             'branch': 'develop',
         }}])
         self.assertItemsEqual(project.branches, ['master', 'develop'])
+
+
+class OrganizationManagerCase(TestCase):
+    """Organization manager case"""
+
+    def setUp(self):
+        self.user = User.objects.create_user('user')
+
+    def test_create_and_add_user(self):
+        """Test create and add user"""
+        organization =\
+            models.Organization.objects.get_with_user('test', self.user)
+        self.assertEqual(organization.users.count(), 1)
+        self.assertEqual(models.Organization.objects.count(), 1)
+
+    def test_create_with_exists_user(self):
+        """Test create with exists user"""
+        factories.OrganizationFactory(
+            name='test', users=[self.user],
+        )
+        organization =\
+            models.Organization.objects.get_with_user('test', self.user)
+        self.assertItemsEqual(organization.users.all(), [self.user])
+        self.assertEqual(models.Organization.objects.count(), 1)
+
+    def test_add_user_to_exists(self):
+        """Test add user to exists"""
+        factories.OrganizationFactory(
+            name='test', users=[self.user],
+        )
+        user = UserFactory()
+        organization =\
+            models.Organization.objects.get_with_user('test', user)
+        self.assertItemsEqual(organization.users.all(), [self.user, user])
