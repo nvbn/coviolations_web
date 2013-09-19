@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from tastypie.test import ResourceTestCase
 from projects.tests.factories import ProjectFactory
 from tools.mongo import MongoFlushMixin
@@ -84,25 +85,35 @@ class TaskResourceCase(BaseTaskResourceCase):
         super(TaskResourceCase, self).setUp()
         self.url = '/api/v1/tasks/task/'
 
-    def _create_tasks(self, project='test', count=20):
+    def _create_tasks(self, project='test', count=20, **kwargs):
         """Create tasks"""
-        models.Tasks.insert([{
-            'service': {
+        models.Tasks.insert([dict(
+            service={
                 'name': 'dummy',
             },
-            'project': project,
-            'commit': {
+            project=project,
+            commit={
                 'branch': 'develop',
                 'commit': 'asdfg',
                 'author': 'nvbn',
             },
-            'violations': [{
+            violations=[{
                 'name': 'dummy',
                 'raw': '1',
                 'status': 1,
                 'prepared': '123{}'.format(n),
-            }]
-        } for n in range(count)])
+            }],
+            **kwargs
+        ) for n in range(count)])
+
+    def _create_user(self):
+        """Create user"""
+        user = User.objects.create_user('test', 'test@test.test', 'test')
+        self.api_client.client.login(
+            username='test',
+            password='test',
+        )
+        return user
 
     def test_get_all(self):
         """Test get all"""
@@ -137,3 +148,37 @@ class TaskResourceCase(BaseTaskResourceCase):
         response = self.api_client.get('{}?project=test'.format(self.url))
         data = self.deserialize(response)
         self.assertEqual(data['meta']['total_count'], 5)
+
+    def test_owner_access_private(self):
+        """Test owner access private"""
+        user = self._create_user()
+        ProjectFactory(owner=user, is_private=True, name='test')
+        self._create_tasks(is_private=True, allowed_users=[user.id])
+        response = self.api_client.get(self.url)
+        data = self.deserialize(response)
+        self.assertEqual(data['meta']['total_count'], 20)
+
+    def test_organization_member_access_private(self):
+        """Test organization member access private"""
+        user = self._create_user()
+        project = ProjectFactory(
+            owner=user, is_private=True,
+            name='test', organization__users=[user],
+        )
+        self._create_tasks(
+            is_private=True, organization=project.organization.id,
+        )
+        response = self.api_client.get(self.url)
+        data = self.deserialize(response)
+        self.assertEqual(data['meta']['total_count'], 20)
+
+    def test_other_user_cant_access_private(self):
+        """Test other user cant access private"""
+        user = self._create_user()
+        ProjectFactory(
+            owner=user, is_private=True, name='test',
+        )
+        self._create_tasks(is_private=True)
+        response = self.api_client.get(self.url)
+        data = self.deserialize(response)
+        self.assertEqual(data['meta']['total_count'], 0)

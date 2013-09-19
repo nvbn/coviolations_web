@@ -22,7 +22,9 @@ class OrganizationManager(models.Manager):
 class Organization(models.Model):
     """Organization model"""
     name = models.CharField(max_length=300, verbose_name=_('name'))
-    users = models.ManyToManyField(User, verbose_name=_('users'))
+    users = models.ManyToManyField(
+        User, related_name='organizations', verbose_name=_('users'),
+    )
 
     objects = OrganizationManager()
 
