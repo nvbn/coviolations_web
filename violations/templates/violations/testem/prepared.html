@@ -1,3 +1,31 @@
-<pre>
-{{ raw }}
-</pre>
+<table class='table table-striped'>
+    {% for status, num, browser, comment, out in runs %}
+        <tr>
+            <td>{{ status }}</td>
+            <td>{{ num }}</td>
+            <td>{{ browser }}</td>
+            <td>
+                {{ comment }}
+                {% if out %}
+<pre>{% for line in out %}{{ line }}
+{% endfor %}</pre>
+                {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+
+<table class='table table-striped'>
+    <tr>
+        <th>Tests</th>
+        <td>{{ tests }}</td>
+    </tr>
+    <tr>
+        <th>Pass</th>
+        <td>{{ pass }}</td>
+    </tr>
+    <tr>
+        <th>Fail</th>
+        <td>{{ fail }}</td>
+    </tr>
+</table>

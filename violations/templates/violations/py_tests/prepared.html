@@ -11,11 +11,8 @@
                 {% endfor %}
             </td>
             <td>
-                <pre>
-{% for line in fail.traceback %}
-{{ line }}
-{% endfor %}
-                </pre>
+<pre>{% for line in fail.traceback %}{{ line }}
+{% endfor %}</pre>
             </td>
         </tr>
     {% endfor %}
