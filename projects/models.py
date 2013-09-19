@@ -7,6 +7,19 @@ from tools.short import make_https
 from tasks.models import Tasks
 
 
+class Organization(models.Model):
+    """Organization model"""
+    name = models.CharField(max_length=300, verbose_name=_('name'))
+    users = models.ManyToManyField(User, verbose_name=_('users'))
+
+    class Meta:
+        verbose_name = _('Organization')
+        verbose_name_plural = _('Organization')
+
+    def __unicode__(self):
+        return self.name
+
+
 class ProjectManager(models.Manager):
     """Project manager"""
 
