@@ -29,9 +29,9 @@ def jslint_violation(data):
             else:
                 files.append([line, False, []])
         elif line[0] == '#':
-            files[-1][2] = [line, []]
+            files[-1][2].append([line, []])
         elif line.find('    ') == 0:
-            files[-1][2][1].append(line.strip())
+            files[-1][2][-1][1].append(line.strip())
 
     data['prepared'] = render_to_string('violations/jslint/prepared.html', {
         'violations': files,

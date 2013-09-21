@@ -1,5 +1,5 @@
 <table class="table table-striped">
-    {% for name, is_ok, errors in violtaions %}
+    {% for name, is_ok, errors in violations %}
         {% if is_ok %}
             <tr>
                 <th>
@@ -25,7 +25,8 @@
                     </th>
                     <td>
                         {{ title }}
-                        <pre>{{ code }}</pre>
+<pre>{% for line in code %}{{ line }}
+{% endfor %}</pre>
                     </td>
                 </tr>
             {% endfor %}
