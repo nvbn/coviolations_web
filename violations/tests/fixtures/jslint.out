@@ -1,0 +1,134 @@
+
+server/games.js
+ #1 Missing 'use strict' statement.
+    this._id = id; // Line 10, Pos 5
+ #2 Unexpected dangling '_' in '_id'.
+    this._id = id; // Line 10, Pos 10
+ #3 Unexpected dangling '_' in '_gameCollection'.
+    this._gameCollection = gameCollection; // Line 11, Pos 10
+ #4 Unexpected dangling '_' in '_players'.
+    this._players = []; // Line 12, Pos 10
+ #5 Missing 'use strict' statement.
+    return this._id; // Line 16, Pos 5
+ #6 Unexpected dangling '_' in '_id'.
+    return this._id; // Line 16, Pos 17
+ #7 Missing 'use strict' statement.
+    if (this._players.length > 1) { // Line 20, Pos 5
+ #8 Unexpected dangling '_' in '_players'.
+    if (this._players.length > 1) { // Line 20, Pos 14
+ #9 Unexpected dangling '_' in '_players'.
+    this._players.push(p); // Line 23, Pos 10
+#10 Unexpected dangling '_' in '_players'.
+    if (this._players.length > 1) { // Line 24, Pos 14
+#11 Unexpected dangling '_' in '_addHandlers'.
+    this._addHandlers(); // Line 25, Pos 14
+#12 Unexpected dangling '_' in '_players'.
+    this._players[0].emit(Messages.PLAYER_CONNECTED, 0); // Line 26, Pos 14
+#13 Unexpected dangling '_' in '_addHandlers'.
+    Game.prototype._addHandlers = function () { // Line 31, Pos 16
+#14 Missing 'use strict' statement.
+    var p1 = this._players[0], // Line 32, Pos 5
+#15 Unexpected dangling '_' in '_players'.
+    var p1 = this._players[0], // Line 32, Pos 19
+#16 Unexpected dangling '_' in '_players'.
+    p2 = this._players[1], // Line 33, Pos 19
+#17 Missing 'use strict' statement.
+    if (!this._players.length) return; // Line 63, Pos 5
+#18 Unexpected dangling '_' in '_players'.
+    if (!this._players.length) return; // Line 63, Pos 15
+#19 Expected '{' and instead saw 'return'.
+    if (!this._players.length) return; // Line 63, Pos 32
+#20 Expected 'return' at column 5, not column 32.
+    if (!this._players.length) return; // Line 63, Pos 32
+#21 Unexpected dangling '_' in '_players'.
+    opponent = this._players[opponent]; // Line 65, Pos 21
+#22 Unexpected dangling '_' in '_players'.
+    this._players = []; // Line 66, Pos 10
+#23 Unexpected dangling '_' in '_gameCollection'.
+    this._gameCollection.removeGame(this._id); // Line 68, Pos 10
+#24 Unexpected dangling '_' in '_id'.
+    this._gameCollection.removeGame(this._id); // Line 68, Pos 42
+#25 Missing 'use strict' statement.
+    this._games = {}; // Line 72, Pos 5
+#26 Unexpected dangling '_' in '_games'.
+    this._games = {}; // Line 72, Pos 10
+#27 Missing 'use strict' statement.
+    return this._games[game]; // Line 76, Pos 5
+#28 Unexpected dangling '_' in '_games'.
+    return this._games[game]; // Line 76, Pos 17
+#29 Missing 'use strict' statement.
+    if (this._games[game]) { // Line 80, Pos 5
+#30 Unexpected dangling '_' in '_games'.
+    if (this._games[game]) { // Line 80, Pos 14
+#31 'game' was used before it was defined.
+    if (this._games[game]) { // Line 80, Pos 21
+#32 'game' was used before it was defined.
+    var game = new Game(id, this); // Line 83, Pos 9
+#33 Unexpected dangling '_' in '_games'.
+    this._games[id] = game; // Line 84, Pos 10
+#34 Missing 'use strict' statement.
+    if (this._games[id]) { // Line 89, Pos 5
+#35 Unexpected dangling '_' in '_games'.
+    if (this._games[id]) { // Line 89, Pos 14
+#36 Unexpected dangling '_' in '_games'.
+    delete this._games[id]; // Line 90, Pos 21
+#37 Unexpected 'exports'.
+    exports.GameCollection = GameCollection; // Line 96, Pos 1
+#38 Stopping.  (98% scanned).
+     // Line 96, Pos 1
+
+server/mserver.js
+ #1 Expected exactly one space between 'function' and '('.
+    (function() { // Line 3, Pos 10
+ #2 Missing 'use strict' statement.
+    var app, express; // Line 4, Pos 3
+ #3 Expected 'var' at column 5, not column 3.
+    var app, express; // Line 4, Pos 3
+ #4 Expected 'express' at column 5, not column 3.
+    express = require('express'); // Line 6, Pos 3
+ #5 Expected 'app' at column 5, not column 3.
+    app = express(); // Line 8, Pos 3
+ #6 Expected 'app' at column 5, not column 3.
+    app.engine('html', require('ejs').renderFile); // Line 10, Pos 3
+ #7 Expected 'app' at column 5, not column 3.
+    app.set('view engine', 'html'); // Line 12, Pos 3
+ #8 Expected 'app' at column 5, not column 3.
+    app.set('views', __dirname + '/views'); // Line 14, Pos 3
+ #9 Unexpected dangling '_' in '__dirname'.
+    app.set('views', __dirname + '/views'); // Line 14, Pos 20
+#10 Expected 'app' at column 5, not column 3.
+    app.get('/', function(req, res) { // Line 16, Pos 3
+#11 Expected exactly one space between 'function' and '('.
+    app.get('/', function(req, res) { // Line 16, Pos 24
+#12 Expected 'return' at column 9, not column 5.
+    return res.render('index'); // Line 17, Pos 5
+#13 Expected '}' at column 5, not column 3.
+    }); // Line 18, Pos 3
+#14 Expected 'app' at column 5, not column 3.
+    app.param('token', /^.*$/); // Line 20, Pos 3
+#15 Insecure '.'.
+    app.param('token', /^.*$/); // Line 20, Pos 24
+#16 Expected 'app' at column 5, not column 3.
+    app.get('/join/:token', function(req, res) { // Line 22, Pos 3
+#17 Expected exactly one space between 'function' and '('.
+    app.get('/join/:token', function(req, res) { // Line 22, Pos 35
+#18 Expected 'return' at column 9, not column 5.
+    return res.render(''); // Line 23, Pos 5
+#19 Expected '}' at column 5, not column 3.
+    }); // Line 24, Pos 3
+#20 Expected 'app' at column 5, not column 3.
+    app.listen(8000); // Line 26, Pos 3
+#21 Unexpected '.'.
+    }).call(this); // Line 28, Pos 3
+
+server/server.js
+ #1 Missing 'use strict' statement.
+    app.use(express.static(__dirname + '/../game')); // Line 9, Pos 5
+ #2 Unexpected dangling '_' in '__dirname'.
+    app.use(express.static(__dirname + '/../game')); // Line 9, Pos 28
+ #3 Unexpected '(space)'.
+    JOIN_GAME: 'join-game'  // Line 22, Pos 31
+ #4 Missing 'use strict' statement.
+    socket.on(Requests.CREATE_GAME, function (gameName) { // Line 26, Pos 5
+ #5 Unexpected '(space)'.
+    var game = games.getGame(gameName);  // Line 35, Pos 44

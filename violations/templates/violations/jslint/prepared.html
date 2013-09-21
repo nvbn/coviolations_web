@@ -1,0 +1,34 @@
+<table class="table table-striped">
+    {% for name, is_ok, errors in violtaions %}
+        {% if is_ok %}
+            <tr>
+                <th>
+                    <a
+                        href="#"
+                        class='js-link-to-source'
+                        data-file-name='{{ name }}'
+                    >{{ name }}</a>
+                </th>
+                <td>
+                    is ok
+                </td>
+            </tr>
+        {% else %}
+            {% for title, code in errors %}
+                <tr>
+                    <th>
+                        <a
+                            href="#"
+                            class='js-link-to-source'
+                            data-file-name='{{ name }}'
+                        >{{ name }}</a>
+                    </th>
+                    <td>
+                        {{ title }}
+                        <pre>{{ code }}</pre>
+                    </td>
+                </tr>
+            {% endfor %}
+        {% endif %}
+    {% endfor %}
+</table>
