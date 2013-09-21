@@ -17,12 +17,23 @@ from .utils import logger
 from . import const
 
 
+def _pretty_author(author):
+    """Get pretty author"""
+    if author.name and author.login:
+        template = '{author.name} ({author.login})'
+    elif author.name:
+        template = '{author.name}'
+    else:
+        template = '{author.login}'
+    return template.format(author=author)
+
+
 def _prepare_single_commit(commit):
     """Prepare single commit"""
     return {
         'author': {
             'avatar': commit.author.avatar_url,
-            'name': commit.author.name,
+            'name': _pretty_author(commit.author),
             'url': commit.author.html_url,
         },
         'message': commit.commit.message,
