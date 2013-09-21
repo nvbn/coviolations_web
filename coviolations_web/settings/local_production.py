@@ -18,6 +18,7 @@ VIOLATIONS = (
     'violations.pip_review',
     'violations.testem',
     'violations.coverage',
+    'violations.jslint',
 )
 
 SERVICES = (
