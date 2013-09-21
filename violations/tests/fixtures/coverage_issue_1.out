@@ -1,0 +1,10 @@
+Name                                 Stmts   Miss  Cover
+--------------------------------------------------------
+race_registrator/__init__                0      0   100%
+race_registrator/settings/__init__       2      0   100%
+race_registrator/settings/base          23      0   100%
+race_registrator/settings/ci_local      10      0   100%
+race_registrator/settings/local          1      0   100%
+race_registrator/urls                    4      0   100%
+--------------------------------------------------------
+TOTAL                                   40      0   100%

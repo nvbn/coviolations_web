@@ -15,7 +15,7 @@ def coverage_violation(data):
     line = data['raw'].split('\n')[-2]
     statements, miss, cover = [
         part for part in line.split(' ')
-        if len(part) > 1 and 'TOTAL' not in part
+        if len(part) > 0 and 'TOTAL' not in part
     ]
     each_file = [
         filter(len, line.split(' '))
