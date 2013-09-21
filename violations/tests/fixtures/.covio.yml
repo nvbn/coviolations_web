@@ -1,4 +1,4 @@
-endpoint: http://localhosy:8000/api/v1/tasks/raw/
+endpoint: http://localhost:8000/api/v1/tasks/raw/
 violations:
   pep8: cat pep8.out
   sloccount: cat sloccount.out
