@@ -599,16 +599,21 @@ $ ->
 
         _renderTrendChartView: (name, datasets, colorNames) ->
             ### Render single trend chart ###
-            view = new app.views.TrendChartView
-                labels: _.map(_.range(30), (-> ''))
-                datasets: datasets
-                name: name
-                colorNames: colorNames
-            view.render()
-            view.$el.appendTo @$el.find('.js-charts-holder')
+            if @_datasetHasValues datasets
+                view = new app.views.TrendChartView
+                    labels: _.map(_.range(30), (-> ''))
+                    datasets: datasets
+                    name: name
+                    colorNames: colorNames
+                view.render()
+                view.$el.appendTo @$el.find('.js-charts-holder')
 
             @trigger 'renderPartFinished', 'trandChart'
 
+        _datasetHasValues: (dataset) ->
+            ### Is dataset has values? ###
+            _.any dataset, (item) ->
+                _.any item.data
 
     class app.views.DetailTaskPageView extends Backbone.View
         ### Task page view ###
