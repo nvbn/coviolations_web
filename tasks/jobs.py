@@ -131,7 +131,7 @@ def prepare_violations(task_id):
         task=str(task_id), project=task['project'],
     )
 
-    if task.get('pull_request_id') and not task.get('is_private'):
+    if task.get('pull_request_id'):
         comment_pull_request.delay(task_id)
 
 
@@ -140,9 +140,15 @@ def comment_pull_request(task_id):
     """Comment pull request on github"""
     task = Tasks.find_one(task_id)
     project = Project.objects.get(name=task['project'])
-    github = Github(
-        settings.GITHUB_COMMENTER_USER, settings.GITHUB_COMMENTER_PASSWORD,
-    )
+    if task.get('is_private'):
+        if project.comment_from_owner_account:
+            github = project.owner.github
+        else:
+            return
+    else:
+        github = Github(
+            settings.GITHUB_COMMENTER_USER, settings.GITHUB_COMMENTER_PASSWORD,
+        )
     repo = github.get_repo(project.name)
     pull_request = repo.get_pull(task['pull_request_id'])
     html_comment = render_to_string(
