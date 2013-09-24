@@ -600,7 +600,7 @@ $ ->
         _renderTrendChartView: (name, datasets, colorNames) ->
             ### Render single trend chart ###
             view = new app.views.TrendChartView
-                labels: _.map _.range(30), -> ''
+                labels: _.map(_.range(30), (-> ''))
                 datasets: datasets
                 name: name
                 colorNames: colorNames
