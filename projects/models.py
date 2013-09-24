@@ -124,6 +124,9 @@ class Project(models.Model):
     organization = models.ForeignKey(
         Organization, blank=True, null=True, verbose_name=_('organization'),
     )
+    comment_from_owner_account = models.BooleanField(
+        default=False, verbose_name=_('comment from owner account'),
+    )
 
     objects = ProjectManager()
 
