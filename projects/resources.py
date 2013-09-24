@@ -60,4 +60,8 @@ class ProjectsResource(ModelResource):
         authentication = Authentication()
         authorization = ProjectsAuthorization()
         resource_name = 'projects/project'
-        fields = ('name', 'is_enabled', 'id', 'is_private', 'icon')
+        fields = (
+            'name', 'is_enabled', 'id',
+            'is_private', 'icon',
+            'comment_from_owner_account',
+        )

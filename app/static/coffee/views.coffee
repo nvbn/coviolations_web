@@ -262,7 +262,6 @@ $ ->
             @trigger 'branchChanged', @$el.val()
 
 
-
     class app.views.LinkToSourceView extends Backbone.View
         ### Link to source view ###
         tagName: 'a'
@@ -277,6 +276,35 @@ $ ->
                 commit: @options.commit
                 file: @$el.data 'file-name'
                 line: @$el.data 'line'
+
+
+    class app.views.ProjectSettingsView extends LazyTemplatedView
+        ### Project settings view ###
+        tagName: 'div'
+        templates:
+            template: '#project-settings-tmpl'
+        events:
+            'click .js-enabled-line button': 'changeEnabled'
+            'click .js-comment-line button': 'changeComment'
+
+        initialize: ->
+            ### Bind change event ###
+            super
+            @model.on 'change', $.proxy @render, @
+
+        render: ->
+            @$el.html @template @model.attributes
+
+        changeEnabled: (e) ->
+            ### Change is_enabled of project ###
+            @model.set 'is_enabled', $(e.currentTarget).hasClass 'js-yes'
+            @model.save()
+
+        changeComment: (e) ->
+            ### Change comment_from_owner_account attribute ###
+            @model.set 'comment_from_owner_account',
+                $(e.currentTarget).hasClass 'js-yes'
+            @model.save()
 
 
     class app.views.IndexPageView extends Backbone.View
@@ -474,6 +502,7 @@ $ ->
             @renderToken()
             @renderTasks()
             @renderSelectBranch()
+            @renderSettings()
 
         renderSelectBranch: ->
             view = new app.views.SelectBranchView
@@ -492,6 +521,19 @@ $ ->
 
                 @renderCharts()
                 prettyPrint()
+
+        renderSettings: ->
+            ### Render settings for author ###
+            holder = @$el.find('.js-project-settings')
+            if holder.length
+                project = new app.models.UserProject
+                    id: @options.projectId
+                project.fetch
+                    success: =>
+                        view = new app.views.ProjectSettingsView
+                            model: project
+                            el: holder
+                        view.render()
 
         initProgressBar: ->
             ### Init progress bar and subscribe to updates ###

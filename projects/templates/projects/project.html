@@ -4,6 +4,7 @@
 {% block extrahead %}
     <script type="text/javascript">
         var project = '{{ project.name|escapejs }}';
+        var projectId = {{ project.id }};
     </script>
     <script
         type="text/javascript"
@@ -13,6 +14,7 @@
     {% include 'projects/project/violation_plot.html' %}
     {% include 'projects/project/generate_token.html' %}
     {% include 'projects/project/generate_token_alert.html' %}
+    {% include 'projects/project/settings.html' %}
 {% endblock %}
 
 {% block title %}
@@ -53,6 +55,7 @@
                 action='{% url 'projects_regenerate' %}'
                 method='post' class='pull-right js-generate-token'
             ></form>
+            <div class="col-lg-12 row js-project-settings"></div>
         {% endif %}
 
         <div id='js-get-badge-in' class='collapse row col-lg-12 well badge-help'>

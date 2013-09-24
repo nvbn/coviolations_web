@@ -11,6 +11,9 @@ $ ->
         ### User project model ###
         urlRoot: '/api/v1/projects/project/'
 
+        url: ->
+            @urlRoot + @get('id') + '/'
+
 
     class app.models.UserProjectCollection extends Backbone.Collection
         ### User project collection ###
