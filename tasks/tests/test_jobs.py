@@ -107,6 +107,24 @@ class PrepareViolationsJobCase(MongoFlushMixin, TestCase):
             if violation['status'] is const.STATUS_FAILED
         ]), 1)
 
+    def test_nofail_argument(self):
+        """Test nofail argument"""
+        task = {
+            'violations': [
+                {'name': 'dummy!!!', 'raw': 'rwww', 'nofail': True},
+            ],
+            'owner_id': 1,
+            'project': 'test',
+        }
+        task_id = models.Tasks.insert(task)
+        jobs.prepare_violations(task_id)
+        get_worker().work(burst=True)
+
+        task = models.Tasks.find_one(task_id)
+        self.assertEqual(
+            task['violations'][0]['status'], const.STATUS_SUCCESS,
+        )
+
 
 class CommentPullRequestJob(MongoFlushMixin, TestCase):
     """Comment pull request job case"""

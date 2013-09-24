@@ -3,3 +3,6 @@ violations:
   sloccount: sloccount .
   py_unittest: cat test_out
   coverage: coverage report
+  pip_review:
+    command: pip-review
+    nofail: true

@@ -96,7 +96,7 @@ def _prepare_violation(violation):
     """Prepare single violation"""
     try:
         violation_creator = violations.base.library.get(violation['name'])
-        return violation_creator(violation)
+        result = violation_creator(violation)
     except ViolationDoesNotExists as e:
         logger.warning(
             "Violation doesn't exists: {}".format(e), exc_info=True, extra={
@@ -105,10 +105,14 @@ def _prepare_violation(violation):
         )
 
         violation['status'] = const.STATUS_FAILED
-        return violation
+        result = violation
     except Exception as e:
         logger.exception('Violation failed: {}'.format(e))
-        return violation
+        result = violation
+
+    if result.get('nofail', False):
+        violation['status'] = const.STATUS_SUCCESS
+    return result
 
 
 @job
