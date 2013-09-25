@@ -503,6 +503,7 @@ $ ->
             @renderTasks()
             @renderSelectBranch()
             @renderSettings()
+            @renderMenu()
 
         renderSelectBranch: ->
             view = new app.views.SelectBranchView
@@ -521,6 +522,17 @@ $ ->
 
                 @renderCharts()
                 prettyPrint()
+
+        renderMenu: ->
+            @minOffset = @$el.find('.js-options').offset().top
+            @minOffset -= @$el.find('.js-project-menu').height()
+            $(window).scroll $.proxy @onScroll,  @
+
+        onScroll: ->
+            if $(window).scrollTop() > @minOffset
+                @$el.find('.js-project-menu').css 'display', 'block'
+            else
+                @$el.find('.js-project-menu').css 'display', 'none'
 
         renderSettings: ->
             ### Render settings for author ###

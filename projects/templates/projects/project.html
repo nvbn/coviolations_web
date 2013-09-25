@@ -21,6 +21,12 @@
     {{ project }}
 {% endblock %}
 
+{% block bodyattrs %}
+    data-spy="scroll"
+    data-target="#project-menu"
+    data-offset="70"
+{% endblock %}
+
 {% block content %}
     <h1>
         <a class='link-to-github' href='https://github.com/{{ project.name }}'>
@@ -31,7 +37,33 @@
         {% endif %}
         {{ project }}
     </h1>
-    <div class="col-lg-12">
+
+    <div class='col-lg-12 row js-project-menu' id='project-menu'>
+        <ul class="nav nav-pills">
+            <li>
+                <a class='scroll-to-top' href='#'>
+                    <i class="icon-long-arrow-up"></i>
+                </a>
+            </li>
+            <li>
+                <a href='#options'>
+                    Options
+                </a>
+            </li>
+            <li>
+                <a href='#graphics'>
+                    Graphics
+                </a>
+            </li>
+            <li>
+                <a href='#history'>
+                    History
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="col-lg-12 js-options project-block" id="options">
         <a
             href='#'
             class='get-badge js-get-badge'
@@ -91,9 +123,9 @@
             </div>
         </div>
     </div>
-    <div class='row col-lg-12 js-charts-holder'></div>
+    <div class='row col-lg-12 js-charts-holder project-block' id="graphics"></div>
 
-    <div class='row col-lg-12'>
+    <div class='row col-lg-12 project-block' id="history">
         <table class="table table-hover js-task-line-list">
         </table>
     </div>
