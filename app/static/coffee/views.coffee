@@ -676,6 +676,11 @@ $ ->
             'click '
 
         render: ->
+            @renderLinks()
+            @renderViolations()
+            @renderIcon()
+
+        renderLinks: ->
             @$el.find('.js-link-to-source').each (n, el) =>
                 view = new app.views.LinkToSourceView
                     project: @options.project
@@ -683,12 +688,17 @@ $ ->
                     el: el
                 view.render()
 
+        renderViolations: ->
             if @$el.find('.js-first-violation').length
                 @minOffset = @$el.find('.js-first-violation').offset().top
                 @minOffset -= @$el.find('.js-violations-menu').height()
                 $(window).scroll $.proxy @onScroll,  @
                 @$el.find('pre').addClass 'prettyprint'
                 prettyPrint()
+
+        renderIcon: ->
+            favicon=new Favico
+            favicon.badge @options.broken
 
         onScroll: ->
             if $(window).scrollTop() > @minOffset

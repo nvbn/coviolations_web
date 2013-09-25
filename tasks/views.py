@@ -4,6 +4,7 @@ from django.http import HttpResponse, Http404
 from projects.models import Project
 from projects.utils import ProjectAccessMixin
 from .models import Tasks
+from .const import STATUS_FAILED
 
 
 class TaskViewMixin(ProjectAccessMixin):
@@ -30,6 +31,10 @@ class DetailTaskView(TaskViewMixin, TemplateView):
         context = dict(task)
         context['pk'] = kwargs['pk']
         context['project'] = self.get_project(task)
+        context['broken'] = len([
+            violation for violation in task.get('violations', [])
+            if violation['status'] == STATUS_FAILED
+        ])
         return context
 
 

@@ -138,6 +138,7 @@ BOWER_INSTALLED_APPS = (
     'google-code-prettify',
     'sockjs-client',
     'nprogress',
+    'favico.js'
 )
 
 TEST_RUNNER = 'discover_runner.DiscoverRunner'
