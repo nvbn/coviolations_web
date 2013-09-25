@@ -33,7 +33,7 @@ class DetailTaskView(TaskViewMixin, TemplateView):
         context['project'] = self.get_project(task)
         context['broken'] = len([
             violation for violation in task.get('violations', [])
-            if violation['status'] == STATUS_FAILED
+            if violation.get('status') == STATUS_FAILED
         ])
         return context
 
