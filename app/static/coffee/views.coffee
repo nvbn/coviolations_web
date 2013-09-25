@@ -503,7 +503,7 @@ $ ->
             @renderTasks()
             @renderSelectBranch()
             @renderSettings()
-            @renderMenu()
+            @on 'renderFinished', $.proxy @renderMenu, @
 
         renderSelectBranch: ->
             view = new app.views.SelectBranchView
