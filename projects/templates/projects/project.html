@@ -87,7 +87,6 @@
                 action='{% url 'projects_regenerate' %}'
                 method='post' class='pull-right js-generate-token'
             ></form>
-            <div class="col-lg-12 row js-project-settings"></div>
         {% endif %}
 
         <div id='js-get-badge-in' class='collapse row col-lg-12 well badge-help'>
@@ -122,6 +121,10 @@
                 </div>
             </div>
         </div>
+
+        {% if user.is_authenticated and project.owner_id == user.id %}
+            <div class="col-lg-12 row js-project-settings"></div>
+        {% endif %}
     </div>
     <div class='row col-lg-12 js-charts-holder project-block' id="graphics"></div>
 
