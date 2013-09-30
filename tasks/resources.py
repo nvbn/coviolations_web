@@ -6,6 +6,7 @@ from django.http import Http404
 from django.core.urlresolvers import reverse
 from tastypie.resources import Resource
 from tastypie.bundle import Bundle
+from tastypie.paginator import Paginator
 from tastypie import fields
 from services.base import library
 from projects.models import Project
@@ -122,6 +123,21 @@ class RawTaskResource(BaseTaskResource):
         project.save()
 
 
+class TaskPaginator(Paginator):
+    """Paginator for tasks"""
+
+    def get_count(self):
+        """Get tasks count"""
+        return self.objects.count()
+
+    def get_slice(self, limit, offset):
+        """Get tasks slice"""
+        objects = self.objects.skip(offset)
+        if limit:
+            objects = objects.limit(limit)
+        return objects
+
+
 class TaskResource(BaseTaskResource):
     """Task resource"""
     service = fields.DictField(attribute='service', null=True)
@@ -139,12 +155,37 @@ class TaskResource(BaseTaskResource):
         detail_allowed_methods = ['get']
         resource_name = 'tasks/task'
         detail_uri_name = 'pk'
+        paginator_class = TaskPaginator
+
+    def get_list(self, request, **kwargs):
+        """Get list without casting pymongo query to list"""
+        base_bundle = self.build_bundle(request=request)
+        objects = self.obj_get_list(
+            bundle=base_bundle, **self.remove_api_resource_names(kwargs)
+        )
+        paginator = self._meta.paginator_class(
+            request.GET, objects, resource_uri=self.get_resource_uri(),
+            limit=self._meta.limit, max_limit=self._meta.max_limit,
+            collection_name=self._meta.collection_name,
+        )
+        to_be_serialized = paginator.page()
+        bundles = []
+
+        for obj in to_be_serialized[self._meta.collection_name]:
+            bundle = self.build_bundle(obj=Document(obj), request=request)
+            bundles.append(self.full_dehydrate(bundle, for_list=True))
+
+        to_be_serialized[self._meta.collection_name] = bundles
+        to_be_serialized = self.alter_list_data_to_serialize(
+            request, to_be_serialized,
+        )
+        return self.create_response(request, to_be_serialized)
 
     def obj_get_list(self, bundle, **kwargs):
         """Get object list"""
-        return map(Document, Tasks.find(**self.filters.get_spec(
+        return Tasks.find(**self.filters.get_spec(
             self, bundle, self._get_initial_filters(),
-        )))
+        ))
 
     def _get_initial_filters(self):
         """Get initial filters"""
