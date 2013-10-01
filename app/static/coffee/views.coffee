@@ -49,6 +49,19 @@ $ ->
         ### Task line list view ###
         tagName: 'table'
 
+        initialize: ->
+            @meta = @collection.meta
+            if @options.endLess
+                @reloadWaypoint()
+
+        reloadWaypoint: ->
+            @options.endLess.waypoint 'disable'
+            @options.endLess.waypoint
+                offset: '100%'
+                handler: => @onReached()
+                continuous: true
+            @options.endLess.waypoint 'enable'
+
         render: ->
             ### Render task line list ###
             if @collection.meta.total_count
@@ -74,6 +87,21 @@ $ ->
 
             view.render()
             @$el.append(view.$el)
+
+        onReached: ->
+            if @meta.total_count > (@meta.offset + @meta.limit)
+                @options.endLess.html 'Loading...'
+                data = _.extend
+                    limit: @meta.limit
+                    offset: @meta.offset + @meta.limit
+                , @options.endLessData
+                @collection.fetch
+                    data: data
+                    success: (collection) =>
+                        @meta = collection.meta
+                        collection.each $.proxy @_renderTaskLine, @
+                        @reloadWaypoint()
+                        @options.endLess.html ''
 
 
     class app.views.TrendChartView extends LazyTemplatedView
@@ -569,7 +597,7 @@ $ ->
         fetchCollection: (callback) ->
             ### Fetch collection ###
             data =
-                limit: 0
+                limit: 30
                 project: @options.project
                 with_violations: true
 
@@ -597,6 +625,10 @@ $ ->
                 el: @$el.find('.js-task-line-list')
                 collection: @collection
                 showCommitSummary: true
+                endLess: $('#js-history-end')
+                endLessData:
+                    project: @options.project
+                    with_violations: true
 
             view.on 'renderFinished', =>
                 @trigger 'renderPartFinished', 'taskLine'
