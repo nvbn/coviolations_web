@@ -10,3 +10,12 @@ STATUSES = (
     (STATUS_SUCCESS, _('success')),
     (STATUS_FAILED, _('failed')),
 )
+
+GITHUB_STATES = {
+    STATUS_NEW: 'pending',
+    STATUS_SUCCESS: 'success',
+    STATUS_FAILED: 'failure',
+}
+
+GITHUB_DESCRIPTION_OK = 'coviolations.io mark commit as safe'
+GITHUB_DESCRIPTION_FAIL = 'coviolations.io mark commit as unsafe'

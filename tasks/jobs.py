@@ -131,6 +131,7 @@ def prepare_violations(task_id):
         task=str(task_id), project=task['project'],
     )
 
+    mark_commit_with_status(task_id)
     if task.get('pull_request_id'):
         comment_pull_request.delay(task_id)
 
@@ -163,4 +164,21 @@ def comment_pull_request(task_id):
     )
     pull_request.create_issue_comment(
         html2text(html_comment)
+    )
+
+
+@job
+def mark_commit_with_status(task_id):
+    """Mark commit with status"""
+    task = Tasks.find_one(task_id)
+    project = Project.objects.get(name=task['project'])
+    commit = project.repo.get_commit(task['commit']['hash'])
+    commit.create_status(
+        const.GITHUB_STATES.get(task['status'], 'error'),
+        reverse('tasks_detail', args=(str(task['_id']),)),
+        (
+            const.GITHUB_DESCRIPTION_OK
+            if task['status'] == const.STATUS_SUCCESS else
+            const.GITHUB_DESCRIPTION_FAIL
+        ),
     )

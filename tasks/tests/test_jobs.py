@@ -61,6 +61,18 @@ class PrepareViolationsJobCase(MongoFlushMixin, TestCase):
     """Prepare violations job case"""
     mongo_flush = ['tasks']
 
+    def setUp(self):
+        super(PrepareViolationsJobCase, self).setUp()
+        self._mock_mark_commit()
+
+    def _mock_mark_commit(self):
+        """Mock mark_commit_with_status job"""
+        self._orig_mark_commit = jobs.mark_commit_with_status
+        jobs.mark_commit_with_status = MagicMock()
+
+    def tearDown(self):
+        jobs.mark_commit_with_status = self._orig_mark_commit
+
     def test_prepare(self):
         """Test prepare"""
         tasks = [{
@@ -125,6 +137,18 @@ class PrepareViolationsJobCase(MongoFlushMixin, TestCase):
             task['violations'][0]['status'], const.STATUS_SUCCESS,
         )
 
+    def test_mark_commit_with_status_called(self):
+        """Test mark commit with status called"""
+        task = {
+            'violations': [],
+            'owner_id': 1,
+            'project': 'test',
+        }
+        task_id = models.Tasks.insert(task)
+        jobs.prepare_violations(task_id)
+        get_worker().work(burst=True)
+        self.assertEqual(jobs.mark_commit_with_status.call_count, 1)
+
 
 class CommentPullRequestJob(MongoFlushMixin, TestCase):
     """Comment pull request job case"""
@@ -153,3 +177,50 @@ class CommentPullRequestJob(MongoFlushMixin, TestCase):
         }
         jobs.comment_pull_request(models.Tasks.save(task))
         self.assert_(True)
+
+
+class MarkCommitWithStatusCase(MongoFlushMixin, TestCase):
+    """Test mark commit with status job"""
+    mongo_flush = ['tasks']
+
+    def setUp(self):
+        super(MarkCommitWithStatusCase, self).setUp()
+        self._mock_github()
+        ProjectFactory(name='test')
+
+    def _mock_github(self):
+        """Mock github"""
+        jobs.Project._repo = MagicMock()
+
+    def tearDown(self):
+        del jobs.Project._repo
+
+    def test_mark_as_success(self):
+        """Test mark as success"""
+        task = {
+            'project': 'test',
+            'violations': [],
+            'commit': {'hash': 'test'},
+            'status': const.STATUS_SUCCESS,
+        }
+        jobs.mark_commit_with_status(models.Tasks.save(task))
+        jobs.Project._repo.get_commit.return_value\
+            .create_status.assert_called_once_with(
+                'success', '/tasks/{}/'.format(task['_id']),
+                'coviolations.io mark commit as safe'
+            )
+
+    def test_mark_as_failed(self):
+        """Test mark as failed"""
+        task = {
+            'project': 'test',
+            'violations': [],
+            'commit': {'hash': 'test'},
+            'status': const.STATUS_FAILED,
+        }
+        jobs.mark_commit_with_status(models.Tasks.save(task))
+        jobs.Project._repo.get_commit.return_value\
+            .create_status.assert_called_once_with(
+                'failure', '/tasks/{}/'.format(task['_id']),
+                'coviolations.io mark commit as unsafe'
+            )
