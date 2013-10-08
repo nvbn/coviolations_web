@@ -10,6 +10,20 @@ def _prepare_source_line(line):
     return file_name, line, symbol, violation
 
 
+def _prepare_lines_for_comments(lines):
+    """Prepare lines to comments"""
+    for line in lines:
+        try:
+            yield {
+                'body': line[3],
+                'line': int(line[1]),
+                'path': line[0],
+                'position': int(line[2]),
+            }
+        except Exception:
+            pass
+
+
 @library.register('pep8')
 def pep8_violation(data):
     """PEP8 violation parser
@@ -23,9 +37,12 @@ def pep8_violation(data):
     data['preview'] = render_to_string('violations/pep8/preview.html', {
         'count': count,
     })
+    lines = map(_prepare_source_line, data['raw'].split('\n')[:-1])
     data['prepared'] = render_to_string('violations/pep8/prepared.html', {
-        'violations': map(_prepare_source_line, data['raw'].split('\n')[:-1]),
+        'violations': lines,
     })
+    if not data.get('nocomment'):
+        data['lines'] = list(_prepare_lines_for_comments(lines))
     data['plot'] = {
         'count': count,
     }
