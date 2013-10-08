@@ -19,7 +19,6 @@ from .utils import logger
 from .exceptions import ServiceNotFound
 
 
-
 class BaseTaskResource(Resource):
     """Base task resource"""
 
@@ -30,7 +29,10 @@ class BaseTaskResource(Resource):
         url_kwargs = {
             'resource_name': 'tasks/task',
             'api_name': 'v1',
-        }
+        }#test
+
+
+
         if bundle_or_obj:
             url_name = 'api_dispatch_detail'
             url_kwargs.update(
@@ -49,7 +51,7 @@ class BaseTaskResource(Resource):
             pk = bundle_or_obj.id
         return {
             'pk': str(pk),
-        }#ooo
+        }
 
 
 class RawTaskResource(BaseTaskResource):
