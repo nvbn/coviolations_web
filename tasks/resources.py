@@ -29,9 +29,7 @@ class BaseTaskResource(Resource):
         url_kwargs = {
             'resource_name': 'tasks/task',
             'api_name': 'v1',
-        }#test
-
-
+        }
 
         if bundle_or_obj:
             url_name = 'api_dispatch_detail'
