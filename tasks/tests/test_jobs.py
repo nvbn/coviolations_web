@@ -153,7 +153,7 @@ class PrepareViolationsJobCase(MongoFlushMixin, TestCase):
         task_id = models.Tasks.insert(task)
         jobs.prepare_violations(task_id)
         get_worker().work(burst=True)
-        jobs.mark_commit_with_status.delay.call_count.should.be.equal(1)
+        jobs.mark_commit_with_status.call_count.should.be.equal(1)
 
     def test_comment_lines_called(self):
         """Test comment lines called"""
@@ -165,7 +165,7 @@ class PrepareViolationsJobCase(MongoFlushMixin, TestCase):
         task_id = models.Tasks.insert(task)
         jobs.prepare_violations(task_id)
         get_worker().work(burst=True)
-        jobs.comment_lines.delay.call_count.should.be.equal(1)
+        jobs.comment_lines.call_count.should.be.equal(1)
 
 
 class CommentPullRequestJob(MongoFlushMixin, TestCase):
