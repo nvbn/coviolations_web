@@ -3,6 +3,7 @@ from tastypie.test import ResourceTestCase
 from projects.tests.factories import ProjectFactory
 from tools.mongo import MongoFlushMixin
 from .. import models
+from ..const import STATUS_SUCCESS
 
 
 class BaseTaskResourceCase(MongoFlushMixin, ResourceTestCase):
@@ -92,6 +93,7 @@ class TaskResourceCase(BaseTaskResourceCase):
                 'name': 'dummy',
             },
             project=project,
+            status=STATUS_SUCCESS,
             commit={
                 'branch': 'develop',
                 'commit': 'asdfg',
