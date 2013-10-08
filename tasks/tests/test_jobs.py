@@ -1,3 +1,4 @@
+import sure
 from mock import MagicMock
 from django.test import TestCase
 from django_rq import get_worker
@@ -49,7 +50,7 @@ class CreateTaskJobCase(MongoFlushMixin, TestCase):
 
     def test_create(self):
         """Test create"""
-        self.assertEqual(models.Tasks.count(), 1)
+        models.Tasks.count().should.be.equal(1)
 
     def test_propagating(self):
         """Test propagating to prepare violations"""
@@ -90,9 +91,9 @@ class PrepareViolationsJobCase(MongoFlushMixin, TestCase):
             task_id = models.Tasks.save(task)
             jobs.prepare_violations(task_id)
         get_worker().work(burst=True)
-        self.assertEqual(10, sum(
+        sum(
             [len(task['violations']) for task in models.Tasks.find()]
-        ))
+        ).should.be.equal(10)
 
     def test_not_fail_all(self):
         """Not fail all if fail one"""
@@ -110,14 +111,14 @@ class PrepareViolationsJobCase(MongoFlushMixin, TestCase):
         get_worker().work(burst=True)
 
         task = models.Tasks.find_one(task_id)
-        self.assertEqual(len([
+        [
             violation for violation in task['violations']
             if violation['status'] is const.STATUS_SUCCESS
-        ]), 2)
-        self.assertEqual(len([
+        ].should.have.length_of(2)
+        [
             violation for violation in task['violations']
             if violation['status'] is const.STATUS_FAILED
-        ]), 1)
+        ].should.have.length_of(1)
 
     def test_nofail_argument(self):
         """Test nofail argument"""
@@ -133,9 +134,7 @@ class PrepareViolationsJobCase(MongoFlushMixin, TestCase):
         get_worker().work(burst=True)
 
         task = models.Tasks.find_one(task_id)
-        self.assertEqual(
-            task['violations'][0]['status'], const.STATUS_SUCCESS,
-        )
+        task['violations'][0]['status'].should.be.equal(const.STATUS_SUCCESS)
 
     def test_mark_commit_with_status_called(self):
         """Test mark commit with status called"""
@@ -147,7 +146,7 @@ class PrepareViolationsJobCase(MongoFlushMixin, TestCase):
         task_id = models.Tasks.insert(task)
         jobs.prepare_violations(task_id)
         get_worker().work(burst=True)
-        self.assertEqual(jobs.mark_commit_with_status.call_count, 1)
+        jobs.mark_commit_with_status.call_count.should.be.equal(1)
 
 
 class CommentPullRequestJob(MongoFlushMixin, TestCase):
@@ -175,8 +174,9 @@ class CommentPullRequestJob(MongoFlushMixin, TestCase):
             ],
             'commit': {'hash': 'test'},
         }
-        jobs.comment_pull_request(models.Tasks.save(task))
-        self.assert_(True)
+        jobs.comment_pull_request.when\
+            .called_with(models.Tasks.save(task))\
+            .should_not.throw(Exception)
 
 
 class MarkCommitWithStatusCase(MongoFlushMixin, TestCase):
