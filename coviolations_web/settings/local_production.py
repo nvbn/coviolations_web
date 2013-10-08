@@ -27,6 +27,7 @@ SERVICES = (
 )
 
 PUSH_BIND = 'https://coviolations.io/sub'
+REDIS_PUSH = 'coviolations_push'
 
 INSTALLED_APPS += ('raven.contrib.django.raven_compat',)
 
