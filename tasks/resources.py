@@ -19,6 +19,7 @@ from .utils import logger
 from .exceptions import ServiceNotFound
 
 
+
 class BaseTaskResource(Resource):
     """Base task resource"""
 
@@ -48,7 +49,7 @@ class BaseTaskResource(Resource):
             pk = bundle_or_obj.id
         return {
             'pk': str(pk),
-        }
+        }#ooo
 
 
 class RawTaskResource(BaseTaskResource):
