@@ -7,6 +7,7 @@ from django.template.loader import render_to_string
 from django.contrib.sites.models import Site
 from django.conf import settings
 from django_rq import job
+from tools.short import make_https
 from violations.exceptions import ViolationDoesNotExists
 import services.base
 import violations.base
@@ -176,7 +177,7 @@ def mark_commit_with_status(task_id):
     commit = project.repo.get_commit(task['commit']['hash'])
     commit.create_status(
         const.GITHUB_STATES.get(task['status'], 'error'),
-        reverse('tasks_detail', args=(str(task['_id']),)),
+        make_https(reverse('tasks_detail', args=(str(task['_id']),))),
         (
             const.GITHUB_DESCRIPTION_OK
             if task['status'] == const.STATUS_SUCCESS else

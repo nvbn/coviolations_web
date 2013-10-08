@@ -205,13 +205,20 @@ class MarkCommitWithStatusCase(MongoFlushMixin, TestCase):
     def setUp(self):
         super(MarkCommitWithStatusCase, self).setUp()
         self._mock_github()
+        self._mock_make_https()
         ProjectFactory(name='test')
 
     def _mock_github(self):
         """Mock github"""
         jobs.Project._repo = MagicMock()
 
+    def _mock_make_https(self):
+        """Mock make https"""
+        self._orig_make_https = jobs.make_https
+        jobs.make_https = MagicMock(return_value='test')
+
     def tearDown(self):
+        jobs.make_https = self._orig_make_https
         del jobs.Project._repo
 
     def test_mark_as_success(self):
@@ -225,7 +232,7 @@ class MarkCommitWithStatusCase(MongoFlushMixin, TestCase):
         jobs.mark_commit_with_status(models.Tasks.save(task))
         jobs.Project._repo.get_commit.return_value\
             .create_status.assert_called_once_with(
-                'success', '/tasks/{}/'.format(task['_id']),
+                'success', 'test',
                 'coviolations.io mark commit as safe'
             )
 
@@ -240,7 +247,7 @@ class MarkCommitWithStatusCase(MongoFlushMixin, TestCase):
         jobs.mark_commit_with_status(models.Tasks.save(task))
         jobs.Project._repo.get_commit.return_value\
             .create_status.assert_called_once_with(
-                'failure', '/tasks/{}/'.format(task['_id']),
+                'failure', 'test',
                 'coviolations.io mark commit as unsafe'
             )
 
