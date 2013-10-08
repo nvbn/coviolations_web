@@ -127,15 +127,15 @@ def prepare_violations(task_id):
     ]) else const.STATUS_FAILED
     Tasks.save(task)
 
+    mark_commit_with_status.delay(task_id)
+    if task.get('pull_request_id'):
+        comment_pull_request.delay(task_id)
+    comment_lines.delay(task_id)
+
     sender.send(
         type='task', owner=task['owner_id'],
         task=str(task_id), project=task['project'],
     )
-
-    mark_commit_with_status(task_id)
-    if task.get('pull_request_id'):
-        comment_pull_request(task_id)
-    comment_lines(task_id)
 
 
 @job
