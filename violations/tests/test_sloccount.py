@@ -1,3 +1,4 @@
+import sure
 from django.test import TestCase
 from tasks.const import STATUS_SUCCESS
 from ..sloccount import sloccount_violation
@@ -13,5 +14,5 @@ class SloccountViolationCase(TestCase):
             'raw': get_content('sloccount.out'),
         }
         result = sloccount_violation(data)
-        self.assertEqual(result['status'], STATUS_SUCCESS)
-        self.assertEqual(result['plot']['total'], 2629)
+        result['status'].should.be.equal(STATUS_SUCCESS)
+        result['plot']['total'].should.be.equal(2629)
