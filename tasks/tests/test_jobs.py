@@ -65,14 +65,21 @@ class PrepareViolationsJobCase(MongoFlushMixin, TestCase):
     def setUp(self):
         super(PrepareViolationsJobCase, self).setUp()
         self._mock_mark_commit()
+        self._mock_comment_lines()
 
     def _mock_mark_commit(self):
         """Mock mark_commit_with_status job"""
         self._orig_mark_commit = jobs.mark_commit_with_status
         jobs.mark_commit_with_status = MagicMock()
 
+    def _mock_comment_lines(self):
+        """Mock comment lines"""
+        self._orig_comment_lines = jobs.comment_lines
+        jobs.comment_lines = MagicMock()
+
     def tearDown(self):
         jobs.mark_commit_with_status = self._orig_mark_commit
+        jobs.comment_lines = self._orig_comment_lines
 
     def test_prepare(self):
         """Test prepare"""
@@ -146,7 +153,19 @@ class PrepareViolationsJobCase(MongoFlushMixin, TestCase):
         task_id = models.Tasks.insert(task)
         jobs.prepare_violations(task_id)
         get_worker().work(burst=True)
-        jobs.mark_commit_with_status.call_count.should.be.equal(1)
+        jobs.mark_commit_with_status.delay.call_count.should.be.equal(1)
+
+    def test_comment_lines_called(self):
+        """Test comment lines called"""
+        task = {
+            'violations': [],
+            'owner_id': 1,
+            'project': 'test',
+        }
+        task_id = models.Tasks.insert(task)
+        jobs.prepare_violations(task_id)
+        get_worker().work(burst=True)
+        jobs.comment_lines.delay.call_count.should.be.equal(1)
 
 
 class CommentPullRequestJob(MongoFlushMixin, TestCase):
@@ -224,3 +243,52 @@ class MarkCommitWithStatusCase(MongoFlushMixin, TestCase):
                 'failure', '/tasks/{}/'.format(task['_id']),
                 'coviolations.io mark commit as unsafe'
             )
+
+
+class CommentLinesCase(MongoFlushMixin, TestCase):
+    """Comment lines case"""
+    mongo_flush = ['tasks']
+
+    def setUp(self):
+        super(CommentLinesCase, self).setUp()
+        self._mock_github()
+        ProjectFactory(name='test')
+
+    def _mock_github(self):
+        """Mock github api"""
+        self._orig_github = jobs.Github
+        jobs.Github = MagicMock()
+
+    def tearDown(self):
+        jobs.Github = self._orig_github
+
+    def test_not_comment_without_lines(self):
+        """Test not comment without lines"""
+        task = {
+            'project': 'test',
+            'violations': [{'name': 'dummy'}],
+            'commit': {'hash': 'test'},
+        }
+        jobs.comment_lines(models.Tasks.save(task))
+        jobs.Github.call_count.should.be.equal(0)
+
+    def test_create_comments(self):
+        """Test create comments"""
+        task = {
+            'project': 'test',
+            'violations': [
+                {
+                    'name': 'dummy', 'lines': [
+                        {
+                            'body': 'test', 'line': 1,
+                            'path': 'test', 'position': 12
+                        },
+                    ] * 2,
+                }
+            ] * 2,
+            'commit': {'hash': 'test'},
+        }
+        jobs.comment_lines(models.Tasks.save(task))
+        jobs.Github.return_value.get_repo.return_value\
+            .get_commit.return_value.create_comment\
+            .call_count.should.be.equal(4)

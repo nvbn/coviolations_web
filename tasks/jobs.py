@@ -131,9 +131,10 @@ def prepare_violations(task_id):
         task=str(task_id), project=task['project'],
     )
 
-    mark_commit_with_status(task_id)
+    mark_commit_with_status.delay(task_id)
     if task.get('pull_request_id'):
         comment_pull_request.delay(task_id)
+    comment_lines.delay(task_id)
 
 
 @job
@@ -182,3 +183,32 @@ def mark_commit_with_status(task_id):
             const.GITHUB_DESCRIPTION_FAIL
         ),
     )
+
+
+@job
+def comment_lines(task_id):
+    """Comment lines of code"""
+    task = Tasks.find_one(task_id)
+    lines = reduce(
+        lambda acc, violation: acc + violation.get('lines', []),
+        task['violations'], [],
+    )
+    if not len(lines):
+        return
+
+    project = Project.objects.get(name=task['project'])
+    if task.get('is_private'):
+        if project.comment_from_owner_account:
+            github = project.owner.github
+        else:
+            return
+    else:
+        github = Github(
+            settings.GITHUB_COMMENTER_USER, settings.GITHUB_COMMENTER_PASSWORD,
+        )
+    repo = github.get_repo(project.name)
+    commit = repo.get_commit(task['commit']['hash'])
+    for line in lines:
+        commit.create_comment(
+            line['body'], line['line'], line['path'], line.get('position', 0),
+        )
