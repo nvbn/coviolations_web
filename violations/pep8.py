@@ -17,7 +17,7 @@ def _prepare_lines_for_comments(lines):
             yield {
                 'body': line[3],
                 'line': int(line[1]),
-                'path': line[0],
+                'path': line[0][2:] if line.startswith('./') else line[0],
                 'position': int(line[2]),
             }
         except Exception:
