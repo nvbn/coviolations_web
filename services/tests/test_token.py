@@ -1,3 +1,4 @@
+import sure
 from testfixtures import LogCapture
 from django.test import TestCase
 from tools.mongo import MongoFlushMixin
@@ -25,9 +26,9 @@ class TokenServiceCase(MongoFlushMixin, TestCase):
         })
         data = Tasks.find_one(task_id)
         with LogCapture() as log_capture:
-            self.assertIsNone(token_service(data))
-            self.assertIn('ERROR', list(log_capture.actual())[0])
-        self.assertEqual(Tasks.find({}).count(), 0)
+            token_service(data).should.be.none
+            list(log_capture.actual())[0].should.contain('ERROR')
+        Tasks.find({}).count().should.be.equal(0)
 
     def test_fail_with_wrong_project(self):
         """Test fail with wrong project"""
@@ -40,9 +41,9 @@ class TokenServiceCase(MongoFlushMixin, TestCase):
         })
         data = Tasks.find_one(task_id)
         with LogCapture() as log_capture:
-            self.assertIsNone(token_service(data))
-            self.assertIn('ERROR', list(log_capture.actual())[0])
-        self.assertEqual(Tasks.find({}).count(), 0)
+            token_service(data).should.be.none
+            list(log_capture.actual())[0].should.contain('ERROR')
+        Tasks.find({}).count().should.be.equal(0)
 
     def test_success(self):
         """Test success"""
@@ -54,6 +55,4 @@ class TokenServiceCase(MongoFlushMixin, TestCase):
             }
         })
         data = Tasks.find_one(task_id)
-        self.assertEqual(
-            task_id, token_service(data),
-        )
+        task_id.should.be.equal(token_service(data))
