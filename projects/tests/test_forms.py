@@ -1,3 +1,4 @@
+import sure
 from django.test import TestCase
 from django.contrib.auth.models import User
 from tools.mongo import MongoFlushMixin
@@ -20,7 +21,7 @@ class RegenerateTokenFormCase(TestCase):
         form = RegenerateTokenForm(self.user, {
             'project': project.id,
         })
-        self.assertTrue(form.is_valid())
+        form.is_valid().should.be.true
 
     def test_invalid_with_other_user(self):
         """Test invalid with other user"""
@@ -28,7 +29,7 @@ class RegenerateTokenFormCase(TestCase):
         form = RegenerateTokenForm(self.user, {
             'project': project.id,
         })
-        self.assertFalse(form.is_valid())
+        form.is_valid().should.be.false
 
     def test_regenerating(self):
         """Test regenerating"""
@@ -37,8 +38,8 @@ class RegenerateTokenFormCase(TestCase):
         form = RegenerateTokenForm(self.user, {
             'project': project.id,
         })
-        self.assertTrue(form.is_valid())
-        self.assertNotEqual(initial_token, form.save().token)
+        form.is_valid().should.be.true
+        initial_token.should_not.be.equal(form.save().token)
 
 
 class FindTaskForBadgeFormCase(MongoFlushMixin, TestCase):
@@ -55,7 +56,7 @@ class FindTaskForBadgeFormCase(MongoFlushMixin, TestCase):
         }
         defaults.update(kwargs)
         form = FindTaskForBadgeForm(defaults)
-        self.assertTrue(form.is_valid())
+        form.is_valid().should.be.true
         return form
 
     def _create_task(self, **kwargs):
@@ -69,14 +70,13 @@ class FindTaskForBadgeFormCase(MongoFlushMixin, TestCase):
     def test_task_not_found(self):
         """Test task not found"""
         form = self._get_form()
-        with self.assertRaises(TaskDoesNotExists):
-            form.get_task()
+        form.get_task.when.called_with().should.throw(TaskDoesNotExists)
 
     def test_find_by_project(self):
         """Test find by project"""
         self._create_task()
         form = self._get_form()
-        self.assertEqual(form.get_task()['status'], STATUS_SUCCESS)
+        form.get_task()['status'].should.be.equal(STATUS_SUCCESS)
 
     def test_find_by_commit(self):
         """Test find by commit"""
@@ -84,7 +84,7 @@ class FindTaskForBadgeFormCase(MongoFlushMixin, TestCase):
         for n in range(10):
             self._create_task(commit={'hash': 'test{}'.format(n)})
         form = self._get_form(commit='test')
-        self.assertEqual(form.get_task()['status'], STATUS_FAILED)
+        form.get_task()['status'].should.be.equal(STATUS_FAILED)
 
     def test_find_by_branch(self):
         """Test find by branch"""
@@ -92,4 +92,4 @@ class FindTaskForBadgeFormCase(MongoFlushMixin, TestCase):
         for n in range(10):
             self._create_task(commit={'branch': 'test{}'.format(n)})
         form = self._get_form(branch='test')
-        self.assertEqual(form.get_task()['status'], STATUS_FAILED)
+        form.get_task()['status'].should.be.equal(STATUS_FAILED)

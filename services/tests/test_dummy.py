@@ -1,3 +1,4 @@
+import sure
 from django.test import TestCase
 from projects.tests.factories import ProjectFactory
 from tasks.models import Tasks
@@ -24,4 +25,4 @@ class DummyServiceCase(MongoFlushMixin, TestCase):
 
     def test_create_task(self):
         """Test create task"""
-        self.assertEqual(Tasks.count(), 1)
+        Tasks.count().should.be.equal(1)

@@ -1,3 +1,4 @@
+import sure
 from django.contrib.auth.models import User
 from tastypie.test import ResourceTestCase
 from tools.tests import MockGithubMixin
@@ -25,20 +26,20 @@ class ProjectsResourceCase(MockGithubMixin, ResourceTestCase):
         User.github.get_user.return_value.get_repos.return_value =\
             map(self._create_repo, range(10))
         response = self.api_client.get('{}?fetch=true'.format(self.url))
-        self.assertHttpOK(response)
-        self.assertEqual(self.deserialize(response)['meta']['total_count'], 10)
+        response.status_code.should.be.equal(200)
+        self.deserialize(response)['meta']['total_count'].should.be.equal(10)
 
     def test_read_self(self):
         """Test read self"""
         project = factories.ProjectFactory.create(owner=self.user)
         response = self.api_client.get('{}{}/'.format(self.url, project.id))
-        self.assertHttpOK(response)
+        response.status_code.should.be.equal(200)
 
     def test_read_other(self):
         """Test read self"""
         project = factories.ProjectFactory.create()
         response = self.api_client.get('{}{}/'.format(self.url, project.id))
-        self.assertHttpUnauthorized(response)
+        response.status_code.should.be.equal(401)
 
     def test_update_is_enabled(self):
         """Test update is_enabled"""
@@ -48,8 +49,8 @@ class ProjectsResourceCase(MockGithubMixin, ResourceTestCase):
                 'is_enabled': True,
             },
         )
-        self.assertHttpAccepted(response)
-        self.assertTrue(models.Project.objects.get().is_enabled)
+        response.status_code.should.be.within([202, 204])
+        models.Project.objects.get().is_enabled.should.be.true
 
     def test_not_update_name(self):
         """Test not update name"""
@@ -61,10 +62,8 @@ class ProjectsResourceCase(MockGithubMixin, ResourceTestCase):
                 'name': 'nope',
             },
         )
-        self.assertHttpAccepted(response)
-        self.assertEqual(
-            models.Project.objects.get().name, 'test',
-        )
+        response.status_code.should.be.within([202, 204])
+        models.Project.objects.get().name.should.be.equal('test')
 
     def test_not_update_url(self):
         """Test not update url"""
@@ -76,10 +75,8 @@ class ProjectsResourceCase(MockGithubMixin, ResourceTestCase):
                 'url': 'http://nope.nope/',
             },
         )
-        self.assertHttpAccepted(response)
-        self.assertEqual(
-            models.Project.objects.get().url, 'http://test.test',
-        )
+        response.status_code.should.be.within([202, 204])
+        models.Project.objects.get().url.should.be.equal('http://test.test')
 
     def test_get_enabled(self):
         """Test get enabled"""
@@ -90,5 +87,5 @@ class ProjectsResourceCase(MockGithubMixin, ResourceTestCase):
             30, owner=self.user, is_enabled=False,
         )
         response = self.api_client.get('{}'.format(self.url))
-        self.assertHttpOK(response)
-        self.assertEqual(self.deserialize(response)['meta']['total_count'], 10)
+        response.status_code.should.be.equal(200)
+        self.deserialize(response)['meta']['total_count'].should.be.equal(10)

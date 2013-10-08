@@ -1,3 +1,4 @@
+import sure
 from mock import MagicMock
 from django.test import TestCase
 from django.core.urlresolvers import reverse
@@ -30,7 +31,7 @@ class DetailTaskViewCase(BaseTaskViewCase):
     def test_ok(self):
         """Test status=200"""
         response = self.client.get(self.url)
-        self.assertEqual(response.status_code, 200)
+        response.status_code.should.be.equal(200)
 
 
 class RawViolationViewCase(BaseTaskViewCase):
@@ -48,4 +49,4 @@ class RawViolationViewCase(BaseTaskViewCase):
     def test_ok(self):
         """Test status=200"""
         response = self.client.get(self.url)
-        self.assertEqual(response.status_code, 200)
+        response.status_code.should.be.equal(200)

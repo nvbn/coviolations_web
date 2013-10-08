@@ -1,3 +1,4 @@
+import sure
 from django.contrib.auth.models import User
 from tastypie.test import ResourceTestCase
 from projects.tests.factories import ProjectFactory
@@ -40,7 +41,7 @@ class RawTaskResourceCase(BaseTaskResourceCase):
                 {'name': 'dummy', 'raw': '1'},
             ]
         })
-        self.assertEqual(1, models.Tasks.count())
+        models.Tasks.count().should.be.equal(1)
 
     def test_error_on_wrong_service(self):
         """Test error on wrong service"""
@@ -58,7 +59,7 @@ class RawTaskResourceCase(BaseTaskResourceCase):
                 {'name': 'dummy', 'raw': '1'},
             ]
         })
-        self.assertEqual(response.status_code, 404)
+        response.status_code.should.be.equal(404)
 
     def test_error_on_wrong_project(self):
         """Test error on wrong project"""
@@ -76,7 +77,7 @@ class RawTaskResourceCase(BaseTaskResourceCase):
                 {'name': 'dummy', 'raw': '1'},
             ]
         })
-        self.assertEqual(response.status_code, 404)
+        response.status_code.should.be.equal(404)
 
 
 class TaskResourceCase(BaseTaskResourceCase):
@@ -122,16 +123,16 @@ class TaskResourceCase(BaseTaskResourceCase):
         self._create_tasks()
         response = self.api_client.get(self.url)
         data = self.deserialize(response)
-        self.assertEqual(data['meta']['total_count'], 20)
-        self.assertIsNone(data['objects'][0]['violations'])
+        data['meta']['total_count'].should.be.equal(20)
+        data['objects'][0]['violations'].should.be.none
 
     def test_get_all_with_violations(self):
         """Test get all with violations"""
         self._create_tasks()
         response = self.api_client.get('{}?with_violations=1'.format(self.url))
         data = self.deserialize(response)
-        self.assert_(data['objects'][0]['violations'][0]['name'])
-        self.assert_(data['objects'][0]['violations'][0]['status'])
+        data['objects'][0]['violations'][0]['name'].should.be.ok
+        data['objects'][0]['violations'][0]['status'].should.be.ok
 
     def test_get_with_full_violations(self):
         """Test get with full violations"""
@@ -140,8 +141,8 @@ class TaskResourceCase(BaseTaskResourceCase):
             '{}?with_full_violations=1'.format(self.url),
         )
         data = self.deserialize(response)
-        self.assert_(data['objects'][0]['violations'][0]['raw'])
-        self.assert_(data['objects'][0]['violations'][0]['prepared'])
+        data['objects'][0]['violations'][0]['raw'].should.be.ok
+        data['objects'][0]['violations'][0]['prepared'].should.be.ok
 
     def test_filter_by_project(self):
         """Test filter by project"""
@@ -149,7 +150,7 @@ class TaskResourceCase(BaseTaskResourceCase):
         self._create_tasks('nope', 10)
         response = self.api_client.get('{}?project=test'.format(self.url))
         data = self.deserialize(response)
-        self.assertEqual(data['meta']['total_count'], 5)
+        data['meta']['total_count'].should.be.equal(5)
 
     def test_owner_access_private(self):
         """Test owner access private"""
@@ -158,7 +159,7 @@ class TaskResourceCase(BaseTaskResourceCase):
         self._create_tasks(is_private=True, allowed_users=[user.id])
         response = self.api_client.get(self.url)
         data = self.deserialize(response)
-        self.assertEqual(data['meta']['total_count'], 20)
+        data['meta']['total_count'].should.be.equal(20)
 
     def test_organization_member_access_private(self):
         """Test organization member access private"""
@@ -172,7 +173,7 @@ class TaskResourceCase(BaseTaskResourceCase):
         )
         response = self.api_client.get(self.url)
         data = self.deserialize(response)
-        self.assertEqual(data['meta']['total_count'], 20)
+        data['meta']['total_count'].should.be.equal(20)
 
     def test_other_user_cant_access_private(self):
         """Test other user cant access private"""
@@ -183,4 +184,4 @@ class TaskResourceCase(BaseTaskResourceCase):
         self._create_tasks(is_private=True)
         response = self.api_client.get(self.url)
         data = self.deserialize(response)
-        self.assertEqual(data['meta']['total_count'], 0)
+        data['meta']['total_count'].should.be.equal(0)

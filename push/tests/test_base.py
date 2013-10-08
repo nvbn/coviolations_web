@@ -1,3 +1,4 @@
+import sure
 from mock import MagicMock
 from django.test import TestCase
 from .. import base
@@ -15,4 +16,4 @@ class PushSenderCase(TestCase):
     def test_send(self):
         """Test send"""
         base.sender.send(owner='test')
-        self.assertEqual(base.sender.r.publish.call_count, 1)
+        base.sender.r.publish.call_count.should.be.equal(1)

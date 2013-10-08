@@ -1,3 +1,4 @@
+import sure
 from mock import MagicMock
 from testfixtures import LogCapture
 from django.test import TestCase
@@ -34,18 +35,18 @@ class TravisCiServiceCase(MongoFlushMixin, TestCase):
         self._create_task()
         data = self._create_task()
         with LogCapture() as log_capture:
-            self.assertIsNone(travis_ci.travis_ci_service(data))
-            self.assertIn('ERROR', list(log_capture.actual())[0])
-        self.assertEqual(Tasks.find({}).count(), 1)
+            travis_ci.travis_ci_service(data).should.be.none
+            list(log_capture.actual())[0].should.contain('ERROR')
+        Tasks.find({}).count().should.be.equal(1)
 
     def test_fail_on_travis_api_error(self):
         """Test fail on travis api error"""
         travis_ci.requests.get.side_effect = Exception
         data = self._create_task()
         with LogCapture() as log_capture:
-            self.assertIsNone(travis_ci.travis_ci_service(data))
-            self.assertIn('ERROR', list(log_capture.actual())[0])
-        self.assertEqual(Tasks.find({}).count(), 0)
+            travis_ci.travis_ci_service(data).should.be.none
+            list(log_capture.actual())[0].should.contain('ERROR')
+        Tasks.find({}).count().should.be.equal(0)
 
     def test_fail_on_wrong_project(self):
         """Test fail on wrong project"""
@@ -57,9 +58,9 @@ class TravisCiServiceCase(MongoFlushMixin, TestCase):
         )
         data = self._create_task()
         with LogCapture() as log_capture:
-            self.assertIsNone(travis_ci.travis_ci_service(data))
-            self.assertIn('ERROR', list(log_capture.actual())[0])
-        self.assertEqual(Tasks.find({}).count(), 0)
+            travis_ci.travis_ci_service(data).should.be.none
+            list(log_capture.actual())[0].should.contain('ERROR')
+        Tasks.find({}).count().should.be.equal(0)
 
     def test_success(self):
         """Test success create task"""
@@ -70,6 +71,4 @@ class TravisCiServiceCase(MongoFlushMixin, TestCase):
             })
         )
         data = self._create_task()
-        self.assertEqual(
-            travis_ci.travis_ci_service(data),  data['_id'],
-        )
+        travis_ci.travis_ci_service(data).should.be.equal(data['_id'])

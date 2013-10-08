@@ -1,3 +1,4 @@
+import sure
 from datetime import datetime
 from testfixtures import LogCapture
 from django.test import TestCase
@@ -25,7 +26,7 @@ class ManageProjectViewCase(TestCase):
             password='test',
         )
         response = self.client.get(self.url)
-        self.assertEqual(response.status_code, 200)
+        response.status_code.should.be.equal(200)
 
 
 class ProjectViewCase(MockGithubMixin, TestCase):
@@ -40,7 +41,7 @@ class ProjectViewCase(MockGithubMixin, TestCase):
     def test_ok(self):
         """Test status=200"""
         response = self.client.get(self.url)
-        self.assertEqual(response.status_code, 200)
+        response.status_code.should.be.equal(200)
 
     def test_404_for_private_and_not_authenticated(self):
         """Test 404 for private and not authenticated"""
@@ -48,7 +49,7 @@ class ProjectViewCase(MockGithubMixin, TestCase):
         response = self.client.get(
             reverse('projects_project', args=(project.name,)),
         )
-        self.assertEqual(response.status_code, 302)
+        response.status_code.should.be.equal(302)
 
     def test_404_for_private_and_not_owner(self):
         """Test 404 for private and not owner"""
@@ -60,7 +61,7 @@ class ProjectViewCase(MockGithubMixin, TestCase):
         response = self.client.get(
             reverse('projects_project', args=(project.name,)),
         )
-        self.assertEqual(response.status_code, 403)
+        response.status_code.should.be.equal(403)
 
     def test_ok_for_private_and_owner(self):
         """Test 200 for private and owner"""
@@ -75,7 +76,7 @@ class ProjectViewCase(MockGithubMixin, TestCase):
         response = self.client.get(
             reverse('projects_project', args=(project.name,)),
         )
-        self.assertEqual(response.status_code, 200)
+        response.status_code.should.be.equal(200)
 
 
 class ProjectBadgeViewCase(MongoFlushMixin, TestCase):
@@ -87,8 +88,8 @@ class ProjectBadgeViewCase(MongoFlushMixin, TestCase):
         response = self.client.get(
             reverse('projects_badge', args=(slug,)) + query,
         )
-        self.assertEqual(response.status_code, 302)
-        self.assertIn(badge, response['Location'])
+        response.status_code.should.be.equal(302)
+        badge.should.be.within(response['Location'])
 
     def test_unknown_because_project_not_exists(self):
         """Test redirect to unknown badge if project not exists"""
@@ -164,16 +165,15 @@ class RegenerateTokenViewCase(TestCase):
         """Test not valid data"""
         with LogCapture() as log_capture:
             response = self.client.post(self.url, {})
-            self.assertIn('WARNING', list(log_capture.actual())[0])
-        self.assertEqual(response.status_code, 302)
+            list(log_capture.actual())[0].should.contain('WARNING')
+        response.status_code.should.be.equal(302)
 
     def test_valid(self):
         """Test valid"""
         response = self.client.post(self.url, {
             'project': self.project.id,
         })
-        self.assertEqual(response.status_code, 302)
-
-        self.assertNotEqual(
-            self.project.token, Project.objects.get(id=self.project.id).token,
+        response.status_code.should.be.equal(302)
+        self.project.token.should_not.be.equal(
+            Project.objects.get(id=self.project.id).token,
         )

@@ -1,3 +1,4 @@
+import sure
 from django.test import TestCase
 from tasks.const import STATUS_SUCCESS, STATUS_FAILED
 from ..pep8 import pep8_violation
@@ -11,8 +12,8 @@ class PEP8ViolationCase(TestCase):
         """Test success result"""
         data = {'raw': ''}
         result = pep8_violation(data)
-        self.assertEqual(result['status'], STATUS_SUCCESS)
-        self.assertEqual(result['plot']['count'], 0)
+        result['status'].should.be.equal(STATUS_SUCCESS)
+        result['plot']['count'].should.be.equal(0)
 
     def test_fail_on_real(self):
         """Test fail on real data"""
@@ -20,5 +21,5 @@ class PEP8ViolationCase(TestCase):
             'raw': get_content('pep8.out'),
         }
         result = pep8_violation(data)
-        self.assertEqual(result['status'], STATUS_FAILED)
-        self.assertEqual(result['plot']['count'], 307)
+        result['status'].should.be.equal(STATUS_FAILED)
+        result['plot']['count'].should.be.equal(307)

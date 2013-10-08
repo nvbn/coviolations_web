@@ -1,3 +1,4 @@
+import sure
 from mock import MagicMock
 from django.core.exceptions import PermissionDenied
 from django.test import TestCase
@@ -27,15 +28,16 @@ class ProjectAccessMixinCase(TestCase):
     def test_can_access(self):
         """Test can access"""
         Project.can_access.return_value = True
-        self.assertIsNone(self.mixin.check_can_access(
+        self.mixin.check_can_access(
             MagicMock(user=self.user),
-        ))
+        ).should.be.none
 
     def test_call_update_if_organization(self):
         """Test call update if organization"""
         Project.can_access.return_value = False
-        with self.assertRaises(PermissionDenied):
-            self.mixin.check_can_access(MagicMock(user=self.user))
+        self.mixin.check_can_access.when\
+            .called_with(MagicMock(user=self.user))\
+            .should.throw(PermissionDenied)
         Project.objects.update_user_projects.asset_called_once_with(
             self.user,
         )

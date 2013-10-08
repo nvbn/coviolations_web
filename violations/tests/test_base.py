@@ -1,3 +1,4 @@
+import sure
 from django.test import TestCase
 from ..base import ViolationsLibrary
 from ..exceptions import ViolationDoesNotExists
@@ -15,12 +16,12 @@ class ViolationsLibraryCase(TestCase):
         def violation():
             pass
 
-        self.assertEqual(self.library.get('dummy'), violation)
+        self.library.get('dummy').should.be.equal(violation)
 
     def test_not_found(self):
         """Test violation not found"""
-        with self.assertRaises(ViolationDoesNotExists):
-            self.library.get('dummy!!!')
+        self.library.get.when.called_with('dummy!!!')\
+            .should.throw(ViolationDoesNotExists)
 
     def test_has(self):
         """Test has method"""
@@ -28,5 +29,5 @@ class ViolationsLibraryCase(TestCase):
         def violation():
             pass
 
-        self.assertTrue(self.library.has('dummy'))
-        self.assertFalse(self.library.has('dummy!!!'))
+        self.library.has('dummy').should.be.true
+        self.library.has('dummy!!!').should.be.false

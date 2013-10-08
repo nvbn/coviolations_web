@@ -1,3 +1,4 @@
+import sure
 import json
 from mock import MagicMock
 from tornado.testing import AsyncTestCase
@@ -22,7 +23,7 @@ class SubscriptionConnectionCase(AsyncTestCase):
             'method': 'subscribe',
             'owner': 'test',
         }))
-        self.assertEqual(self.connection.owner, 'test')
+        self.connection.owner.should.be.equal('test')
 
     def test_on_redis(self):
         """Test on redis message"""
@@ -34,4 +35,4 @@ class SubscriptionConnectionCase(AsyncTestCase):
                 'owner': 'test',
             }),
         ))
-        self.assertEqual(self.connection.send.call_count, 1)
+        self.connection.send.call_count.should.be.equal(1)
