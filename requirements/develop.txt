@@ -1,5 +1,6 @@
 -r base.txt
 mock
 factory_boy
+sure
 testfixtures
 Werkzeug
