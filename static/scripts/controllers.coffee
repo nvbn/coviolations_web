@@ -19,3 +19,8 @@ define ['angular', 'angles'], (angular, angles) ->
     module.controller 'IndexCtrl', [
         '$scope', IndexCtrl,
     ]
+
+    DashboardCtrl = ($scope, $http) -> @
+    module.controller 'DashboardCtrl', [
+        '$scope', '$http', DashboardCtrl,
+    ]
