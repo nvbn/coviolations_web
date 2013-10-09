@@ -5,10 +5,10 @@
             p.
                 With coviolations checking your code with pep8, coverage and many
                  other tools automaticaly after each push to source code repository.
-            a.btn.btn-default(href='#')
+            a.btn.btn-default(href='/login/github/')
                 i.icon-github
                 |  Sign in with github
-            a.btn.btn-default(href='#')
+            a.btn.btn-default(href='https://coviolationsio.readthedocs.org/en/latest/')
                 i.icon-book
                 |  Read docs
         img.col-lg-7.row(src='/static/img/how.svg')
@@ -40,10 +40,9 @@
             p.
                 If you not found needed metric, you could easily write it
                  and we will add it to project.
-            a.btn.btn-default(href='#')
+            a.btn.btn-default(href='https://coviolationsio.readthedocs.org/en/latest/violations.html')
                 i.icon-plus
                 |  Show how
-
 
 .col-lg-12.row.index-block.index-odd-block
     .col-lg-12.row
@@ -51,15 +50,15 @@
             h2 Visualise test results
             p
                 | Coviolations work as companion with ci tools like
-                a(href='#')  travis-ci
+                a(href='https://travis-ci.org/')  travis-ci
                 |,
-                a(href='#')  drone.io
+                a(href='https://drone.io/')  drone.io
                 |  and
-                a(href='#')  jenkins-ci
+                a(href='http://jenkins-ci.org/')  jenkins-ci
                 |. And it will create fancy represntation with trend graphics,
                 |  code examples and many more.
             p You can saw total success/failed tasks chart here.
-            a.btn.btn-default(href='#')
+            a.btn.btn-default(href='/projects/nvbn/coviolations_web/')
                 i.icon-bar-chart
                 |  Show for this project
         .col-lg-5.row.col-lg-offset-1
@@ -71,6 +70,7 @@
             span.plot-color-line
                 span.plot-color-row(style="background-color: {{failedColor}}")
                 |  failed {{failedPercent}}%
+
 .col-lg-12.row.index-block.index-even-block
     h2 Perfect integration with github
     .col-lg-5.row
@@ -82,6 +82,6 @@
             li set success or failed status to commits;
             li create summary report for pull requests;
             li comment lines of code with errors and warnings.
-        a.btn.btn-default(href='#')
+        a.btn.btn-default(href='https://github.com/nvbn/coviolations_web/commit/ac7f633f01bc2ea59bc7b19d362fceb1ec07893e#commitcomment-4281977')
             i.icon-external-link
             |  Example
