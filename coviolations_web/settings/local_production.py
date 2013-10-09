@@ -70,6 +70,11 @@ LOGGING = {
             'handlers': ['console'],
             'propagate': False,
         },
+        "rq.worker": {
+            "handlers": ["sentry"],
+            "level": "DEBUG",
+            'propagate': False,
+        },
         'coviolations_tasks': {
             'level': 'DEBUG',
             'handlers': ['console', 'sentry'],
