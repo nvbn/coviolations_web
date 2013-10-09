@@ -1,0 +1,87 @@
+.col-lg-12.row.index-block.index-odd-block.index-top-block
+    .col-lg-12.row
+        .col-lg-5.row
+            h1 coviolations.io
+            p.
+                With coviolations checking your code with pep8, coverage and many
+                 other tools automaticaly after each push to source code repository.
+            a.btn.btn-default(href='#')
+                i.icon-github
+                |  Sign in with github
+            a.btn.btn-default(href='#')
+                i.icon-book
+                |  Read docs
+        img.col-lg-7.row(src='/static/img/how.svg')
+
+.col-lg-12.row.index-block.index-even-block
+    h2 Controll code quality and detect "smell"
+    .col-lg-12.row
+        .col-lg-6.row
+            p Supported metrics
+            ul
+                li
+                    code pep8
+                li
+                    code sloccount
+                li
+                    code python unittest
+                li
+                    code pip-review
+                li
+                    code testem
+                li
+                    code coverage
+                li
+                    code jslint
+        .col-lg-6.row
+            p.
+                You can detect code "smell", monitoring code quality and
+                 see trands with available code metrics.
+            p.
+                If you not found needed metric, you could easily write it
+                 and we will add it to project.
+            a.btn.btn-default(href='#')
+                i.icon-plus
+                |  Show how
+
+
+.col-lg-12.row.index-block.index-odd-block
+    .col-lg-12.row
+        .col-lg-6.row
+            h2 Visualise test results
+            p
+                | Coviolations work as companion with ci tools like
+                a(href='#')  travis-ci
+                |,
+                a(href='#')  drone.io
+                |  and
+                a(href='#')  jenkins-ci
+                |. And it will create fancy represntation with trend graphics,
+                |  code examples and many more.
+            p You can saw total success/failed tasks chart here.
+            a.btn.btn-default(href='#')
+                i.icon-bar-chart
+                |  Show for this project
+        .col-lg-5.row.col-lg-offset-1
+            canvas.index-total-chart(piechart, options='chartOptions', data='chartData', width=350, height=350)
+            br
+            span.plot-color-line
+                span.plot-color-row(style="background-color: {{successColor}}")
+                |  success {{successPercent}}%
+            span.plot-color-line
+                span.plot-color-row(style="background-color: {{failedColor}}")
+                |  failed {{failedPercent}}%
+.col-lg-12.row.index-block.index-even-block
+    h2 Perfect integration with github
+    .col-lg-5.row
+        img(src='/static/images/octocat.png')
+    .col-lg-7.row
+        p Coviolations have perfect integration with github, it can:
+        ul
+            li build metrics for each push to repository;
+            li set success or failed status to commits;
+            li create summary report for pull requests;
+            li comment lines of code with errors and warnings.
+        a.btn.btn-default(href='#')
+            i.icon-external-link
+            |  Example

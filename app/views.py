@@ -11,7 +11,7 @@ from tasks.models import Tasks
 
 class IndexView(TemplateView):
     """Index page view"""
-    template_name = 'index.html'
+    template_name = 'base.html'
 
     def get_context_data(self, **kwargs):
         """Get day statistic"""

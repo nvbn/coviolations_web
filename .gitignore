@@ -34,7 +34,6 @@ nbproject
 coviolations_web/settings/local.py
 ENV/*
 logs/
-static_collected/
 crontab.sh
 gunicorn.conf.py
 
@@ -43,8 +42,8 @@ gunicorn.conf.py
 
 components/*
 !componens/.gitkeep
-static/*
-!static/.gitkeep
+static_collected/*
+!static_collected/.gitkeep
 media/*
 !media/.gitkeep
 
