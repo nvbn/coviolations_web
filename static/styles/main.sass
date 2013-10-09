@@ -9,6 +9,12 @@ $neutral-color: #eeeeee
 $icon-size: 20pt
 
 
+@mixin with-projects
+    .project-icon, .icon-lock
+        width: $icon-size
+        margin-right: $default-offset
+
+
 .plot-color-line
     margin-left: $default-offset
     line-height: $main-font
@@ -25,6 +31,9 @@ $icon-size: 20pt
 
     .navbar-documentation
         margin-left: $default-offset
+
+.top-row
+    margin-top: -20pt
 
 
 .index-block
@@ -48,16 +57,12 @@ $icon-size: 20pt
 .dashboard-row
     font-size: $main-font
 
-.top-dashboard-row
-    margin-top: -20pt
+.enabled-projects-row
     background: $info-color
+    @include with-projects
 
     .add-project-button
         margin-left: $default-offset
-
-    .project-icon, .icon-lock
-        width: $icon-size
-        margin-right: $default-offset
 
 .last-tasks-row
     background: $neutral-color
@@ -67,3 +72,9 @@ $icon-size: 20pt
 
     .failed
         background: $fail-color
+
+
+.manage-projects-row
+    background: $info-color
+    font-size: $main-font
+    @include with-projects

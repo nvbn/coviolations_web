@@ -1,10 +1,10 @@
 include top_menu.jade
 
-.col-lg-12.row.top-dashboard-row.dashboard-row
+.col-lg-12.row.top-row.enabled-projects-row.dashboard-row
     h2
         | Enabled projects
         a.btn.btn-default.add-project-button(
-            href='/projects/manage/', tooltip='Add new project',
+            href='#/projects/manage/', tooltip='Add new project',
             tooltip-placement='right'
         )
             i.icon-plus
@@ -27,7 +27,7 @@ include top_menu.jade
         )
             td
                 a(href='/projects/{{task.project}}/') {{task.project}}
-                | :
+                | :&nbsp;
                 a(href='/tasks/{{task.id}}/').
                     {{task.commit.branch}}\#{{task.commit.range}}
             td

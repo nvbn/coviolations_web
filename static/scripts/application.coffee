@@ -1,4 +1,4 @@
-define ['angular', 'controllers'], (angular, controllers) ->
+define ['angular', 'controllers'], (angular) ->
     angular.module('coviolations', ['coviolations.controllers'])
         .config ['$routeProvider', ($routeProvider) ->
             $routeProvider
@@ -8,6 +8,9 @@ define ['angular', 'controllers'], (angular, controllers) ->
                 .when '/dashboard/',
                     templateUrl: '/static/views/dashboard.html'
                     controller: 'DashboardCtrl'
+                .when '/projects/manage/',
+                    templateUrl: '/static/views/manage.html'
+                    controller: 'ManageCtrl'
                 .otherwise
                     redirectTo:
                         if window.isAuthenticated then '/dashboard/' else '/welcome/'

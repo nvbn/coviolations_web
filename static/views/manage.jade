@@ -1,0 +1,22 @@
+include top_menu.jade
+
+.col-lg-12.row.top-row.manage-projects-row
+    h2 Manage projects
+    table.table.table-hover
+        tr(ng-show='loading')
+            td Loading...
+        tr(ng-repeat="project in projects")
+            td
+                img.project-icon(ng-src='{{project.icon}}')
+                i.icon-lock(ng-show="project.is_private")
+                a(href='/projects/{{project.name}}') {{project.name}}
+            td
+                .btn-group.pull-right
+                    button.btn.btn-default(
+                        type='button', ng-model='project.is_enabled',
+                        btn-radio='true'
+                    ) Yes
+                    button.btn.btn-default(
+                        type='button', ng-model='project.is_enabled',
+                        btn-radio='false'
+                    ) No
