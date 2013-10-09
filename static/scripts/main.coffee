@@ -1,10 +1,11 @@
 require.config
     baseUrl: '/static/scripts/'
     shim:
-        angular:
-            exports: 'angular'
         jquery:
             exports: '$'
+        angular:
+            exports: 'angular'
+            deps: ['jquery']
         bootsrap:
             deps: ['jquery']
             exports: '$.fn.popover'
@@ -23,7 +24,9 @@ require.config
             deps: ['angular', 'chartjs']
             exports: 'angles'
         angularBootstrap:
-            deps: ['angular', 'jquery']
+            deps: ['angular']
+        ngInfiniteScroll:
+            deps: ['angular']
     paths:
         angular: '../angular/angular.min'
         jquery: '../jquery/jquery.min'
@@ -35,6 +38,7 @@ require.config
         nprogress: '../nprogress/nprogress'
         angles: '../angles/libs/angles'
         angularBootstrap: '../angular-bootstrap/ui-bootstrap-tpls.min'
+        ngInfiniteScroll: '../ngInfiniteScroll/ng-infinite-scroll'
     urlArgs: "bust=" + (new Date()).getTime()
 
 

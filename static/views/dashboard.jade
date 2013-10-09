@@ -1,6 +1,6 @@
 include top_menu.jade
 
-.col-lg-12.row.top-dashboard-row
+.col-lg-12.row.top-dashboard-row.dashboard-row
     h2
         | Enabled projects
         a.btn.btn-default.add-project-button(
@@ -14,3 +14,21 @@ include top_menu.jade
                 img.project-icon(ng-src='{{project.icon}}')
                 i.icon-lock(ng-show="project.is_private")
                 a(href='/projects/{{project.name}}') {{project.name}}
+
+.col-lg-12.row.last-tasks-row.dashboard-row
+    h2 Last performed tasks
+    table.table.table-hover(
+        infinite-scroll='tasks.load()',
+        infinite-scroll-distance='2'
+    )
+        tr(
+            ng-repeat='task in tasks.items'
+            class='{{task.status == 1 && "success" || "failed"}}'
+        )
+            td
+                a(href='/projects/{{task.project}}/') {{task.project}}
+                | :
+                a(href='/tasks/{{task.id}}/').
+                    {{task.commit.branch}}\#{{task.commit.range}}
+            td
+                span.pull-right {{task.created}}
