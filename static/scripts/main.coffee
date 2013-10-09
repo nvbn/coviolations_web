@@ -22,6 +22,8 @@ require.config
         angles:
             deps: ['angular', 'chartjs']
             exports: 'angles'
+        angularBootstrap:
+            deps: ['angular', 'jquery']
     paths:
         angular: '../angular/angular.min'
         jquery: '../jquery/jquery.min'
@@ -32,6 +34,7 @@ require.config
         sockjs: '../sockjs-client/sockjs.min'
         nprogress: '../nprogress/nprogress'
         angles: '../angles/libs/angles'
+        angularBootstrap: '../angular-bootstrap/ui-bootstrap-tpls.min'
     urlArgs: "bust=" + (new Date()).getTime()
 
 

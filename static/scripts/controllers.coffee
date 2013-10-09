@@ -1,5 +1,8 @@
-define ['angular', 'angles'], (angular, angles) ->
-    module = angular.module('coviolations.controllers', ['angles'])
+define ['angular', 'angles', 'angularBootstrap'], (angular) ->
+    module = angular.module 'coviolations.controllers', [
+        'angles'
+        'ui.bootstrap'
+    ]
     IndexCtrl = ($scope) ->
         $scope.isAuthenticated = window.isAuthenticated
         $scope.successColor = "#5cb85c"
@@ -20,7 +23,10 @@ define ['angular', 'angles'], (angular, angles) ->
         '$scope', IndexCtrl,
     ]
 
-    DashboardCtrl = ($scope, $http) -> @
+    DashboardCtrl = ($scope, $http) ->
+        $http.get('/api/v1/projects/project/?limit=0').success (data) =>
+                $scope.projects = data.objects
+                console.log $scope
     module.controller 'DashboardCtrl', [
         '$scope', '$http', DashboardCtrl,
     ]

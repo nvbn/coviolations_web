@@ -1,26 +1,34 @@
 $title-font: 20pt
 $main-font: 15pt
 $button-offset: 5pt
+$default-offset: 10pt
 $success-color: #dff0d8
 $fail-color: #f2dede
+$info-color: #f0f7fd
+$neutral-color: #eeeeee
+$icon-size: 20pt
+
 
 .plot-color-line
-    margin-left: 10pt
-    line-height: 20pt
+    margin-left: $default-offset
+    line-height: $main-font
 
     .plot-color-row
         display: inline-block
-        width: 20pt
-        height: 20pt
+        width: $icon-size
+        height: $icon-size
         margin-bottom: -4pt
 
 
-.navbar-documentation
-    margin-left: 10pt
+.top-menu
+    background: $success-color
+
+    .navbar-documentation
+        margin-left: $default-offset
 
 
 .index-block
-    padding-bottom: 10pt
+    padding-bottom: $default-offset
     font-size: $main-font
 
     a.btn
@@ -34,4 +42,17 @@ $fail-color: #f2dede
     background: $fail-color
 
 .index-top-block
-    padding-top: 10pt
+    padding-top: $default-offset
+
+
+.top-dashboard-row
+    margin-top: -20pt
+    background: $info-color
+    font-size: $main-font
+
+    .add-project-button
+        margin-left: $default-offset
+
+    .project-icon, .icon-lock
+        width: $icon-size
+        margin-right: $default-offset

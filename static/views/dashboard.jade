@@ -1,2 +1,16 @@
 include top_menu.jade
 
+.col-lg-12.row.top-dashboard-row
+    h2
+        | Enabled projects
+        a.btn.btn-default.add-project-button(
+            href='/projects/manage/', tooltip='Add new project',
+            tooltip-placement='right'
+        )
+            i.icon-plus
+    table.table.table-hover
+        tr(ng-repeat="project in projects")
+            td
+                img.project-icon(ng-src='{{project.icon}}')
+                i.icon-lock(ng-show="project.is_private")
+                a(href='/projects/{{project.name}}') {{project.name}}

@@ -139,6 +139,7 @@ BOWER_INSTALLED_APPS = (
     'angular',
     'requirejs',
     'angles',
+    'angular-bootstrap',
 )
 
 TEST_RUNNER = 'discover_runner.DiscoverRunner'
