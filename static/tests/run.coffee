@@ -1,5 +1,9 @@
 window.testSuite = true
 require ['/static/scripts/main.js'], ->
     mocha.setup 'bdd'
-    require ['/static/tests/test_models.js'], ->
+    Mocha.Runner.prototype.checkGlobals = -> @
+    require [
+        '/static/tests/test_models.js'
+        '/static/tests/test_controllers.js'
+    ], ->
         mocha.run()

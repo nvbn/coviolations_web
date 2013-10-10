@@ -30,12 +30,12 @@ define [
                 get: =>
                     success: (callback) =>
                         callback.call null,
-                            objects: _.map _.range(10), ->
+                            objects: _.map _.range(5), ->
                                 created: "2013-10-10T10:31:07.280000"
                             meta:
-                                total_count: 10
+                                total_count: 5
             Tasks = models.getTaskModel(http)
             tasks = new Tasks 5
             tasks.load()
             tasks.load()
-            tasks.canLoad.should.be.falsy
+            tasks.canLoad.should.be.false

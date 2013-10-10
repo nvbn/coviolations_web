@@ -25,7 +25,7 @@ define ['angular', 'underscore'], (angular, _) ->
             onLoaded: (data) ->
                 _.each data.objects, (item) =>
                     @items.push @prepareItem item
-                if data.meta.total_count < @offset
+                if data.meta.total_count <= @offset
                     @canLoad = false
 
             prepareItem: (item) ->

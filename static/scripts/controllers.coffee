@@ -56,3 +56,7 @@ define [
     module.controller 'ManageCtrl', [
         '$scope', '$http', ManageCtrl,
     ]
+
+    IndexCtrl: IndexCtrl
+    DashboardCtrl: DashboardCtrl
+    ManageCtrl: ManageCtrl
