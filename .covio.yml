@@ -6,3 +6,4 @@ violations:
   pip_review:
     command: pip-review
     nofail: true
+  testem: cat testem.out

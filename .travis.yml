@@ -7,12 +7,16 @@ services:
 before_install:
   - sudo apt-get update -qq
   - sudo apt-get install -qq sloccount
+  - "export DISPLAY=:99.0"
+  - "sh -e /etc/init.d/xvfb start"
 install:
-  - npm install -g bower
+  - npm install -g bower testem coffee-script jade
+  - gem install sass
   - pip install fabric
   - cp coviolations_web/settings/local_ci.py coviolations_web/settings/local.py
   - fab install:ci
 script:
+  - fab test_client:ci
   - coverage run manage.py test violations projects tasks services app push 2>test_out
 after_script:
   - coverage report

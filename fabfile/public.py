@@ -5,6 +5,7 @@ def compile_assets():
     """Compile sass and coffee"""
     local('coffee -c . .')
     local('sass app/static/sass/style.sass app/static/sass/style.css')
+    local('jade . .')
 
 
 def install_assets():
@@ -90,12 +91,15 @@ def update_server(branch='master'):
              ' --modulepath=puppet/modules/')
 
 
-def test_client():
+def test_client(mode=None):
     """Test client with testem"""
+    if mode == 'ci':
+        compile_assets()
+        install_assets()
     local('./manage.py collectstatic --noinput')
     local('mkdir -p client_tests')
     local('cp static_collected -a client_tests/static')
     local('cp static/tests/testem.yml client_tests')
     with lcd('client_tests'):
-        local('testem')
+        local('testem ci --timeout 30 >> ../testem.out' if mode == 'ci' else 'testem')
         local('rm -rf *')
