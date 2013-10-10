@@ -1,7 +1,7 @@
 define ['angular', 'underscore'], (angular, _) ->
     module = angular.module 'coviolations.models', []
 
-    module.factory 'Tasks', ($http) ->
+    getTaskModel = ($http) ->
         class Tasks
             ### Tasks model ###
 
@@ -31,3 +31,7 @@ define ['angular', 'underscore'], (angular, _) ->
             prepareItem: (item) ->
                 item.created = item.created.replace('T', ' ').slice(0, -7)
                 item
+
+    module.factory 'Tasks', getTaskModel
+
+    getTaskModel: getTaskModel

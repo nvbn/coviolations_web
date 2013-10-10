@@ -1,4 +1,11 @@
 framework: mocha
 src_files:
+  - static/sinon/lib/sinon.js
+  - static/sinon/lib/sinon/match.js
+  - static/sinon/lib/sinon/spy.js
+  - static/sinon/lib/sinon/call.js
+  - static/sinon/lib/sinon/stub.js
+  - static/sinon/lib/sinon/mock.js
+  - static/sinon/lib/sinon/assert.js
   - static/requirejs/require.js
   - static/tests/run.js

@@ -29,8 +29,6 @@ require.config
             deps: ['angular']
         chai:
             exports: ['chai']
-        sinon:
-            exports: ['sinon']
     paths:
         angular: '../angular/angular.min'
         jquery: '../jquery/jquery.min'
@@ -44,7 +42,6 @@ require.config
         angularBootstrap: '../angular-bootstrap/ui-bootstrap-tpls.min'
         ngInfiniteScroll: '../ngInfiniteScroll/ng-infinite-scroll'
         chai: '../chai/chai'
-        sinon: '../sinon/lib/sinon'
     urlArgs: "bust=" + (new Date()).getTime()
 
 if not window.testSuite
