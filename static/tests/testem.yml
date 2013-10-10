@@ -1,0 +1,4 @@
+framework: mocha
+src_files:
+  - static/requirejs/require.js
+  - static/tests/run.js

@@ -27,6 +27,10 @@ require.config
             deps: ['angular']
         ngInfiniteScroll:
             deps: ['angular']
+        chai:
+            exports: ['chai']
+        sinon:
+            exports: ['sinon']
     paths:
         angular: '../angular/angular.min'
         jquery: '../jquery/jquery.min'
@@ -39,8 +43,10 @@ require.config
         angles: '../angles/libs/angles'
         angularBootstrap: '../angular-bootstrap/ui-bootstrap-tpls.min'
         ngInfiniteScroll: '../ngInfiniteScroll/ng-infinite-scroll'
+        chai: '../chai/chai'
+        sinon: '../sinon/lib/sinon'
     urlArgs: "bust=" + (new Date()).getTime()
 
-
-require ['angular', 'application'], ->
-    angular.bootstrap document, ['coviolations']
+if not window.testSuite
+    require ['angular', 'application'], ->
+        angular.bootstrap document, ['coviolations']

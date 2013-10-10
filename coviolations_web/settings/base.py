@@ -141,6 +141,8 @@ BOWER_INSTALLED_APPS = (
     'angles',
     'angular-bootstrap',
     'ngInfiniteScroll',
+    'chai',
+    'sinon',
 )
 
 TEST_RUNNER = 'discover_runner.DiscoverRunner'

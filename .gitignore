@@ -49,3 +49,5 @@ media/*
 
 fabfile/private.py
 puppet/manifests/private.pp
+
+client_tests
