@@ -24,3 +24,16 @@ define [
             controllers.IndexCtrl scope
             scope.successPercent.should.be.equal 10
             scope.failedPercent.should.be.equal 5
+
+    describe 'Dashboard controller', =>
+        http =
+            get: ->
+                success: (callback) ->
+                    callback.call null,
+                        objects: 'test'
+        tasks = -> {load: -> @}
+
+        it 'should fill projects', =>
+            scope = {}
+            controllers.DashboardCtrl scope, http, tasks
+            scope.projects.should.be.equal 'test'
