@@ -37,3 +37,23 @@ define [
             scope = {}
             controllers.DashboardCtrl scope, http, tasks
             scope.projects.should.be.equal 'test'
+
+    describe 'Manage projects controller', =>
+        it 'should fill projects', =>
+            scope = {$watch: -> @}
+            controllers.ManageCtrl scope,
+                get: ->
+                    success: (callback) ->
+                        callback.call null,
+                            objects: 'test'
+            scope.projects.should.be.equal 'test'
+
+        it 'should change loading state', =>
+            scope = {$watch: -> @}
+            controllers.ManageCtrl scope,
+                get: =>
+                    scope.loading.should.be.true
+                    success: (callback) =>
+                        callback.call null,
+                            objects: 'test'
+                        scope.loading.should.be.false
