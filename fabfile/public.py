@@ -101,5 +101,5 @@ def test_client(mode=None):
     local('cp static_collected -a client_tests/static')
     local('cp static/tests/testem.yml client_tests')
     with lcd('client_tests'):
-        local('testem ci --timeout 30 >> ../testem.out' if mode == 'ci' else 'testem')
+        local('testem ci >> ../testem.out' if mode == 'ci' else 'testem')
         local('rm -rf *')
