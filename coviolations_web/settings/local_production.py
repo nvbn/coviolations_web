@@ -72,7 +72,7 @@ LOGGING = {
         },
         "rq.worker": {
             "handlers": ["sentry"],
-            "level": "DEBUG",
+            "level": "ERROR",
             'propagate': False,
         },
         'coviolations_tasks': {
