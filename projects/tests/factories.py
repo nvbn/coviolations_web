@@ -26,7 +26,7 @@ class ProjectFactory(factory.DjangoModelFactory):
     """Project factory"""
     FACTORY_FOR = models.Project
 
-    name = factory.Sequence(lambda n: 'project {}'.format(n))
+    name = factory.Sequence(lambda n: 'project{}'.format(n))
     url = factory.Sequence(lambda n: 'http://test{}.com'.format(n))
     organization = factory.SubFactory(OrganizationFactory)
 

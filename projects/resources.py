@@ -60,6 +60,7 @@ class ProjectsResource(ModelResource):
         authentication = Authentication()
         authorization = ProjectsAuthorization()
         resource_name = 'projects/project'
+        detail_uri_name = 'name'
         fields = (
             'name', 'is_enabled', 'id',
             'is_private', 'icon',

@@ -32,20 +32,20 @@ class ProjectsResourceCase(MockGithubMixin, ResourceTestCase):
     def test_read_self(self):
         """Test read self"""
         project = factories.ProjectFactory.create(owner=self.user)
-        response = self.api_client.get('{}{}/'.format(self.url, project.id))
+        response = self.api_client.get('{}{}/'.format(self.url, project.name))
         response.status_code.should.be.equal(200)
 
     def test_read_other(self):
         """Test read self"""
         project = factories.ProjectFactory.create()
-        response = self.api_client.get('{}{}/'.format(self.url, project.id))
+        response = self.api_client.get('{}{}/'.format(self.url, project.name))
         response.status_code.should.be.equal(401)
 
     def test_update_is_enabled(self):
         """Test update is_enabled"""
         project = factories.ProjectFactory.create(owner=self.user)
         response = self.api_client.put(
-            '{}{}/'.format(self.url, project.id), data={
+            '{}{}/'.format(self.url, project.name), data={
                 'is_enabled': True,
             },
         )
@@ -58,7 +58,7 @@ class ProjectsResourceCase(MockGithubMixin, ResourceTestCase):
             owner=self.user, name='test',
         )
         response = self.api_client.put(
-            '{}{}/'.format(self.url, project.id), data={
+            '{}{}/'.format(self.url, project.name), data={
                 'name': 'nope',
             },
         )
@@ -71,7 +71,7 @@ class ProjectsResourceCase(MockGithubMixin, ResourceTestCase):
             owner=self.user, url='http://test.test',
         )
         response = self.api_client.put(
-            '{}{}/'.format(self.url, project.id), data={
+            '{}{}/'.format(self.url, project.name), data={
                 'url': 'http://nope.nope/',
             },
         )
