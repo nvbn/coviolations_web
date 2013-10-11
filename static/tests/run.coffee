@@ -5,5 +5,6 @@ require ['/static/scripts/main.js'], ->
     require [
         '/static/tests/test_models.js'
         '/static/tests/test_controllers.js'
+        '/static/tests/test_plottings.js'
     ], ->
         mocha.run()

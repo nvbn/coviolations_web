@@ -27,6 +27,9 @@ require.config
             deps: ['angular']
         ngInfiniteScroll:
             deps: ['angular']
+        underscoreString:
+            deps: ['underscore']
+            exports: '_.str'
         chai:
             exports: ['chai']
     paths:
@@ -41,6 +44,7 @@ require.config
         angles: '../angles/libs/angles'
         angularBootstrap: '../angular-bootstrap/ui-bootstrap-tpls.min'
         ngInfiniteScroll: '../ngInfiniteScroll/ng-infinite-scroll'
+        underscoreString: '../underscore.string/dist/underscore.string.min'
         chai: '../chai/chai'
     urlArgs: "bust=" + (new Date()).getTime()
 

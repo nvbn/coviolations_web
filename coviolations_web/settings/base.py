@@ -141,6 +141,7 @@ BOWER_INSTALLED_APPS = (
     'angles',
     'angular-bootstrap',
     'ngInfiniteScroll',
+    'underscore.string',
     'chai',
     'sinon',
 )
