@@ -54,6 +54,7 @@ class ProjectsResource(ModelResource):
     is_private = fields.BooleanField(attribute='is_private', readonly=True)
     branches = fields.ListField(attribute='branches', readonly=True)
     icon = fields.CharField(attribute='icon', readonly=True, null=True)
+    badge_url = fields.CharField(attribute='get_badge_url', readonly=True)
 
     class Meta:
         queryset = Project.objects.all()
