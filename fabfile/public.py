@@ -95,7 +95,7 @@ def test_client(mode=None):
     """Test client with testem"""
     if mode == 'ci':
         compile_assets()
-        install_assets()
+        local('./manage.py bower_install')
     local('./manage.py collectstatic --noinput')
     local('mkdir -p client_tests')
     local('cp static_collected -a client_tests/static')
