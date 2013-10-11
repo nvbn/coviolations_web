@@ -91,15 +91,12 @@ def update_server(branch='master'):
              ' --modulepath=puppet/modules/')
 
 
-def test_client(mode=None):
+def test_client():
     """Test client with testem"""
-    if mode == 'ci':
-        compile_assets()
-        local('./manage.py bower_install')
     local('./manage.py collectstatic --noinput')
     local('mkdir -p client_tests')
     local('cp static_collected -a client_tests/static')
     local('cp static/tests/testem.yml client_tests')
     with lcd('client_tests'):
-        local('testem ci >> ../testem.out' if mode == 'ci' else 'testem')
+        local('testem')
         local('rm -rf *')
