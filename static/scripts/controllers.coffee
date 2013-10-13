@@ -18,6 +18,7 @@ define [
     ]
 
     IndexCtrl = ($scope) ->
+        ### Index page controller ###
         $scope.isAuthenticated = window.isAuthenticated
         $scope.successColor = "#5cb85c"
         $scope.failedColor = "#d9534f"
@@ -38,6 +39,7 @@ define [
     ]
 
     DashboardCtrl = ($scope, $http, Tasks) ->
+        ### Dashboard controller ###
         $http.get('/api/v1/projects/project/?limit=0').success (data) =>
             $scope.projects = data.objects
 
@@ -50,6 +52,7 @@ define [
     ]
 
     ManageCtrl = ($scope, $http) ->
+        ### Manage projects page controller ###
         $scope.loading = true
         $http.get('/api/v1/projects/project/?fetch=true&limit=0').success (data) =>
             $scope.projects = data.objects
@@ -64,6 +67,7 @@ define [
     ]
 
     ProjectCtrl = ($scope, $http, $routeParams, Tasks) ->
+        ### Single project page controller ###
         projectName = _.sprintf '%s/%s', $routeParams['owner'], $routeParams['name']
         projectUrl = _.sprintf '/api/v1/projects/project/%s/', projectName
 
