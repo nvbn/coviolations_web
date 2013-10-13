@@ -9,6 +9,7 @@ define [
     'ngprogress'
     'models'
     'services'
+    'directives'
 ], (angular, _, _s, plottings) ->
     _.mixin _s.exports()
 
@@ -19,6 +20,7 @@ define [
         'ngProgress'
         'coviolations.models'
         'coviolations.services'
+        'coviolations.directives'
     ]
 
     IndexCtrl = ($scope) ->
@@ -45,8 +47,13 @@ define [
     DashboardCtrl = ($scope, $http, ngProgress, Tasks) ->
         ### Dashboard controller ###
         ngProgress.start()
-        $http.get('/api/v1/projects/project/?limit=0').success (data) =>
+        $http.get(
+            '/api/v1/projects/project/?limit=0&with_success_percent=true'
+        ).success (data) =>
             $scope.projects = data.objects
+            _.each $scope.projects, (project) =>
+                plot = new plottings.SuccessPercentPlot project
+                project.chart = plot.createChartObject()
             ngProgress.complete()
 
         $scope.tasks = new Tasks 20,

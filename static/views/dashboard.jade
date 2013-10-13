@@ -14,6 +14,11 @@ include top_menu.jade
                 img.project-icon(ng-src='{{project.icon}}')
                 i.icon-lock(ng-show="project.is_private")
                 a(href='#/projects/{{project.name}}') {{project.name}}
+                br
+                canvas(
+                    fullfill, linechart, options='project.chart.options',
+                    data='project.chart.data', height=100
+                )
 
 .col-lg-12.row.last-tasks-row.dashboard-row
     h2 Last performed tasks

@@ -101,5 +101,33 @@ define ['underscore'], (_) ->
 
             color
 
+
+    class SuccessPercentPlot
+        ### Success percent plot ###
+
+        constructor: (@project) ->
+            @prepareData()
+
+        prepareData: ->
+            prepared = _.flatten [_.map(_.range(100), -> 0), [
+                @project.success_percents.reverse()
+            ]]
+            @data = _.last prepared, 100
+
+        createChartObject: ->
+            data:
+                labels: _.map(_.range(100), (-> ''))
+                datasets: [
+                    fillColor: "#5bc0de"
+                    strokeColor: "#5bc0de"
+                    data: @data
+                ]
+            options:
+                pointDot: false
+                animation: false
+                scaleShowLabels: false
+
+
     PlotData: PlotData
     PlotColorer: PlotColorer
+    SuccessPercentPlot: SuccessPercentPlot
