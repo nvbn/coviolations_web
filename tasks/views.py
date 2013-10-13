@@ -1,10 +1,9 @@
 from bson import ObjectId
-from django.views.generic import TemplateView, View
-from django.http import HttpResponse, Http404
+from django.views.generic import View
+from django.http import HttpResponse
 from projects.models import Project
 from projects.utils import ProjectAccessMixin
 from .models import Tasks
-from .const import STATUS_FAILED
 
 
 class TaskViewMixin(ProjectAccessMixin):
@@ -19,23 +18,6 @@ class TaskViewMixin(ProjectAccessMixin):
     def get_task(self, **kwargs):
         """Get task"""
         return Tasks.find_one(ObjectId(self.kwargs['pk']))
-
-
-class DetailTaskView(TaskViewMixin, TemplateView):
-    """Detail task"""
-    template_name = 'tasks/detail_task.html'
-
-    def get_context_data(self, **kwargs):
-        """Get context data"""
-        task = self.get_task(**kwargs)
-        context = dict(task)
-        context['pk'] = kwargs['pk']
-        context['project'] = self.get_project(task)
-        context['broken'] = len([
-            violation for violation in task.get('violations', [])
-            if violation.get('status') == STATUS_FAILED
-        ])
-        return context
 
 
 class RawViolationView(TaskViewMixin, View):

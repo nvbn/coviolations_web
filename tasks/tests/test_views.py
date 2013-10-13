@@ -20,20 +20,6 @@ class BaseTaskViewCase(MongoFlushMixin, TestCase):
         TaskViewMixin.get_project = self._orig_get_project
 
 
-class DetailTaskViewCase(BaseTaskViewCase):
-    """Detail task view"""
-
-    def setUp(self):
-        super(DetailTaskViewCase, self).setUp()
-        task_id = Tasks.insert({})
-        self.url = reverse('tasks_detail', args=(str(task_id),))
-
-    def test_ok(self):
-        """Test status=200"""
-        response = self.client.get(self.url)
-        response.status_code.should.be.equal(200)
-
-
 class RawViolationViewCase(BaseTaskViewCase):
     """Raw violation view"""
 
