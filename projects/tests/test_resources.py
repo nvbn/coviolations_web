@@ -89,3 +89,39 @@ class ProjectsResourceCase(MockGithubMixin, ResourceTestCase):
         response = self.api_client.get('{}'.format(self.url))
         response.status_code.should.be.equal(200)
         self.deserialize(response)['meta']['total_count'].should.be.equal(10)
+
+    def test_has_token_if_owner(self):
+        """Test has token if owner"""
+        project = factories.ProjectFactory(owner=self.user)
+        response = self.api_client.get('{}{}/'.format(
+            self.url,
+            project.name,
+        ))
+        self.assertHttpOK(response)
+        self.assertEqual(
+            self.deserialize(response)['token'], project.token,
+        )
+
+    def test_blank_token_if_not_owner(self):
+        """Test has blank token if owner"""
+        project = factories.ProjectFactory()
+        response = self.api_client.get('{}{}/'.format(
+            self.url,
+            project.name,
+        ))
+        self.assertHttpOK(response)
+        self.assertEqual(
+            self.deserialize(response)['token'], '',
+        )
+
+    def test_regenerate_token(self):
+        """Test regenerate token"""
+        project = factories.ProjectFactory(owner=self.user)
+        self.api_client.put('{}{}/'.format(
+            self.url,
+            project.name,
+        ), data={'token': None})
+        updated = models.Project.objects.get(id=project.id)
+        self.assertNotEqual(
+            updated.token, project.token,
+        )

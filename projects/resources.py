@@ -55,6 +55,8 @@ class ProjectsResource(ModelResource):
     branches = fields.ListField(attribute='branches', readonly=True)
     icon = fields.CharField(attribute='icon', readonly=True, null=True)
     badge_url = fields.CharField(attribute='get_badge_url', readonly=True)
+    owner_id = fields.CharField(attribute='owner_id', readonly=True)
+    token = fields.CharField(attribute='token', blank=True, null=True)
 
     class Meta:
         queryset = Project.objects.all()
@@ -67,3 +69,12 @@ class ProjectsResource(ModelResource):
             'is_private', 'icon',
             'comment_from_owner_account',
         )
+
+    def dehydrate(self, bundle):
+        """Attach token to bundle if owner"""
+        if not (
+            bundle.request.user.is_authenticated() and
+            bundle.obj.owner == bundle.request.user
+        ):
+            bundle.data['token'] = ''
+        return bundle
