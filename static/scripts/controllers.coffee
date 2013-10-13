@@ -85,6 +85,7 @@ define [
     ProjectCtrl = ($scope, $http, $routeParams, $modal, ngProgress, Tasks) ->
         ### Single project page controller ###
         ngProgress.start()
+        $scope.isAuthenticated = window.isAuthenticated
         projectName = _.sprintf '%s/%s', $routeParams['owner'], $routeParams['name']
         projectUrl = _.sprintf '/api/v1/projects/project/%s/', projectName
 
@@ -141,6 +142,7 @@ define [
     TaskCtrl = ($scope, $http, $routeParams, ngProgress, favicoService) ->
         ### Single task controller ###
         ngProgress.start()
+        $scope.isAuthenticated = window.isAuthenticated
         taskUrl = _.sprintf '/api/v1/tasks/task/%s/', $routeParams['pk']
 
         $http.get(taskUrl).success (data) =>
