@@ -52,6 +52,18 @@ include top_menu.jade
                 .. image:: {{project.badge_url}}
                 :target: https://{{domain}}/#/project/{{project.name}}
 
+.col-lg-12.row
+    .col-lg-4.row(ng-repeat='chart in charts')
+        h2 {{chart.name}}
+        canvas(
+            linechart, options='chart.options', data='chart.data',
+            width=350, height=220
+        )
+        br
+        span.plot-color-line(ng-repeat='color in chart.colors')
+            span.plot-color-row(style="background-color: {{color.code}}")
+            |  {{color.name}}
+
 .col-lg-12.last-tasks-row.row.project-page-row
     table.table.table-hover(
         infinite-scroll='tasks.load()',

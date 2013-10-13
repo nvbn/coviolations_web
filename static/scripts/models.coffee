@@ -12,9 +12,10 @@ define ['angular', 'underscore', 'underscoreString'], (angular, _, _s) ->
                 @canLoad = true
                 @offset = 0
 
-            load: ->
+            load: (callback=->@) ->
                 if @canLoad
-                    $http.get(@getUrl()).success _.bind @onLoaded, @
+                    $http.get(@getUrl()).success (data) =>
+                        @onLoaded(data, callback)
                     @offset += @limit
 
             getUrl: ->
@@ -33,11 +34,12 @@ define ['angular', 'underscore', 'underscoreString'], (angular, _, _s) ->
                     base.push _.sprintf '&%s=', uriName
                     base.push @options[option]
 
-            onLoaded: (data) ->
+            onLoaded: (data, callback) ->
                 _.each data.objects, (item) =>
                     @items.push @prepareItem item
                 if data.meta.total_count <= @offset
                     @canLoad = false
+                callback.call @
 
             prepareItem: (item) ->
                 item.created = item.created.replace('T', ' ').slice(0, -7)

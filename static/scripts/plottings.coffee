@@ -43,6 +43,44 @@ define ['underscore'], (_) ->
                             else
                                 0
 
+        _preparePlot: (plot) ->
+            prepared = _.flatten [_.map(_.range(30), -> 0), [plot.reverse()]]
+            _.last prepared, 30
+
+        _checkDatasets: (datasets) ->
+            datasets.length and (_.any datasets, (item) ->
+                _.any item.data)
+
+        _createChartObject: (name, datasets, colors) ->
+            name: name
+            data:
+                labels: _.map(_.range(30), (-> ''))
+                datasets: datasets
+            options:
+                pointDot: false
+                datasetFill: false
+                animation: false
+            colors: colors
+
+        createChartObjects: ->
+            ### Create objects for angles ###
+            _.reduce _.keys(@violations), (acc, name) =>
+                colorer = new PlotColorer
+                colors = []
+                datasets = _.map @violations[name].plots, (plot, plotName) =>
+                    color = colorer.getColor()
+                    colors.push
+                        name: plotName
+                        code: color.strokeColor
+                    _.extend
+                        data: @_preparePlot plot
+                    , color
+
+                if @_checkDatasets datasets
+                    acc.push @_createChartObject name, datasets, colors
+                return acc
+            , []
+
 
     class PlotColorer
         ### Plot colors selector ###

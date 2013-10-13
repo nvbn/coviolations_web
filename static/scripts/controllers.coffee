@@ -77,13 +77,15 @@ define [
                 if not $scope.branches
                     $scope.branches = data.branches
         loadProject()
-
         $scope.$watch 'branch', (branch) =>
             $scope.tasks = new Tasks 20,
                 withViolations: true
                 project: projectName
                 branch: branch
-            $scope.tasks.load()
+            $scope.tasks.load =>
+                plotData = new plottings.PlotData $scope.tasks.items
+                plotData.normalise()
+                $scope.charts = plotData.createChartObjects()
 
         $scope.toggleBadgeHelp = =>
             $scope.showBadgeHelp =
