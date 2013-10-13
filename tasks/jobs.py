@@ -128,7 +128,11 @@ def prepare_violations(task_id):
         violation.get('status') != const.STATUS_FAILED
         for violation in task['violations']
     ]) else const.STATUS_FAILED
-
+    success_percents = [
+        violation['success_percent'] for violation in task['violations']
+    ]
+    task['success_percent'] = sum(success_percents) / len(success_percents)\
+        if success_percents else 100
     Tasks.save(task)
 
     mark_commit_with_status.delay(task_id)

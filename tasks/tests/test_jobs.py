@@ -210,6 +210,40 @@ class PrepareViolationsJobCase(MongoFlushMixin, TestCase):
         task = models.Tasks.find_one(task_id)
         task['violations'][0]['success_percent'].should.be.equal(0)
 
+    def test_calculate_average_success_percent(self):
+        """Calculate average success percent"""
+        self._mock_violation_library()
+        jobs.violations.base.library.get\
+            .return_value.return_value = {
+                'status': const.STATUS_FAILED,
+                'success_percent': 5,
+            }
+        task = {
+            'violations': [
+                {'name': 'dummy'}
+            ],
+            'owner_id': 1,
+            'project': 'test',
+        }
+        task_id = models.Tasks.insert(task)
+        jobs.prepare_violations(task_id)
+        get_worker().work(burst=True)
+        task = models.Tasks.find_one(task_id)
+        task['success_percent'].should.be.equal(5)
+
+    def test_calculate_average_success_percent_without_violations(self):
+        """Calculate average success percent without violations"""
+        task = {
+            'violations': [],
+            'owner_id': 1,
+            'project': 'test',
+        }
+        task_id = models.Tasks.insert(task)
+        jobs.prepare_violations(task_id)
+        get_worker().work(burst=True)
+        task = models.Tasks.find_one(task_id)
+        task['success_percent'].should.be.equal(100)
+
 
 class CommentPullRequestJob(MongoFlushMixin, TestCase):
     """Comment pull request job case"""
