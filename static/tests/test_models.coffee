@@ -23,7 +23,7 @@ define [
             Tasks = models.getTaskModel {}
             tasks = new Tasks 5, true, false
             tasks.getUrl().should.be.equal \
-                '/api/v1/tasks/task/?with_violations=true&self=false&limit=5&offset=0'
+                '/api/v1/tasks/task/?limit=5&offset=0'
 
         it 'should not load more than can', =>
             http =

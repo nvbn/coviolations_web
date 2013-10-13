@@ -64,6 +64,6 @@ define [
                 success: (callback) ->
                     callback.call null, 'test'
         it 'should attach project', =>
-            scope = {}
+            scope = {'$watch': -> @}
             controllers.ProjectCtrl scope, http, {owner: 'test', name: 'test'}
             scope.project.should.be.equal 'test'

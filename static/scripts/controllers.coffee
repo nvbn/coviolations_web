@@ -83,8 +83,6 @@ define [
                 if $scope.showBadgeHelp then false else true
 
         $scope.domain = window.domain
-
-
     module.controller 'ProjectCtrl', [
         '$scope', '$http', '$routeParams', 'Tasks', ProjectCtrl,
     ]

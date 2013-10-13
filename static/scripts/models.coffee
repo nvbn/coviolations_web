@@ -7,7 +7,7 @@ define ['angular', 'underscore', 'underscoreString'], (angular, _, _s) ->
         class Tasks
             ### Tasks model ###
 
-            constructor: (@limit=20, @options) ->
+            constructor: (@limit=20, @options={}) ->
                 @items = []
                 @canLoad = true
                 @offset = 0
