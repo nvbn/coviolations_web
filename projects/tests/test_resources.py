@@ -36,8 +36,14 @@ class ProjectsResourceCase(MockGithubMixin, ResourceTestCase):
         response.status_code.should.be.equal(200)
 
     def test_read_other(self):
-        """Test read self"""
+        """Test read other"""
         project = factories.ProjectFactory.create()
+        response = self.api_client.get('{}{}/'.format(self.url, project.name))
+        response.status_code.should.be.equal(200)
+
+    def test_read_other_private(self):
+        """Test read other private project"""
+        project = factories.ProjectFactory.create(is_private=True)
         response = self.api_client.get('{}{}/'.format(self.url, project.name))
         response.status_code.should.be.equal(401)
 
@@ -97,10 +103,8 @@ class ProjectsResourceCase(MockGithubMixin, ResourceTestCase):
             self.url,
             project.name,
         ))
-        self.assertHttpOK(response)
-        self.assertEqual(
-            self.deserialize(response)['token'], project.token,
-        )
+        response.status_code.should.be.equal(200)
+        self.deserialize(response)['token'].should.be.equal(project.token)
 
     def test_blank_token_if_not_owner(self):
         """Test has blank token if owner"""
@@ -109,10 +113,8 @@ class ProjectsResourceCase(MockGithubMixin, ResourceTestCase):
             self.url,
             project.name,
         ))
-        self.assertHttpOK(response)
-        self.assertEqual(
-            self.deserialize(response)['token'], '',
-        )
+        response.status_code.should.be.equal(200)
+        self.deserialize(response)['token'].should.be.equal('')
 
     def test_regenerate_token(self):
         """Test regenerate token"""
@@ -122,6 +124,4 @@ class ProjectsResourceCase(MockGithubMixin, ResourceTestCase):
             project.name,
         ), data={'token': None})
         updated = models.Project.objects.get(id=project.id)
-        self.assertNotEqual(
-            updated.token, project.token,
-        )
+        updated.token.should_not.be.equal(project.token)

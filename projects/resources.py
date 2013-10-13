@@ -29,12 +29,7 @@ class ProjectsAuthorization(Authorization):
             return Project.objects.get_enabled_for_user(bundle.request.user)
 
     def read_detail(self, object_list, bundle):
-        if bundle.obj.owner != bundle.request.user:
-            return False
-        else:
-            return super(ProjectsAuthorization, self).read_detail(
-                object_list, bundle,
-            )
+        return bundle.obj.can_access(bundle.request.user)
 
     def update_list(self, object_list, bundle):
         return False
@@ -43,7 +38,7 @@ class ProjectsAuthorization(Authorization):
         sender.send(
             type='project', owner=bundle.request.user.id,
         )
-        return self.read_detail(object_list, bundle)
+        return bundle.obj.can_change(bundle.request.user)
 
 
 class ProjectsResource(ModelResource):
