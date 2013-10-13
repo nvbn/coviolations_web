@@ -125,3 +125,11 @@ class ProjectsResourceCase(MockGithubMixin, ResourceTestCase):
         ), data={'token': None})
         updated = models.Project.objects.get(id=project.id)
         updated.token.should_not.be.equal(project.token)
+
+    def test_attach_success_percent(self):
+        """Test attach success percent"""
+        project = factories.ProjectFactory(owner=self.user)
+        response = self.api_client.get(
+            '{}{}/?with_success_percent=true'.format(self.url, project.name),
+        )
+        self.deserialize(response)['success_percents'].should.be.equal([])

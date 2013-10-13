@@ -1,8 +1,10 @@
+from pymongo import DESCENDING
 from tastypie.resources import ModelResource
 from tastypie import fields
 from tastypie.authentication import Authentication
 from tastypie.authorization import Authorization
 from push.base import sender
+from tasks.models import Tasks
 from .models import Project
 
 
@@ -53,6 +55,7 @@ class ProjectsResource(ModelResource):
     owner_id = fields.CharField(attribute='owner_id', readonly=True)
     token = fields.CharField(attribute='token', blank=True, null=True)
     can_change = fields.BooleanField(default=False)
+    success_percents = fields.ListField(blank=True, null=True)
 
     class Meta:
         queryset = Project.objects.all()
@@ -75,4 +78,16 @@ class ProjectsResource(ModelResource):
             bundle.data['can_change'] = True
         else:
             bundle.data['token'] = ''
+        self._attach_success_percent(bundle)
         return bundle
+
+    def _attach_success_percent(self, bundle):
+        """Attach success percent"""
+        if bundle.request.GET.get('with_success_percent'):
+            bundle.data['success_percents'] = [
+                task.get('success_percent', 0) for task in Tasks.find({
+                    'project': bundle.obj.name,
+                }, sort=[('created', DESCENDING)], fields={
+                    'success_percent': True,
+                }, limit=100)
+            ]
