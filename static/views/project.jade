@@ -85,7 +85,7 @@ include top_menu.jade
             td
                 a(href='#/tasks/{{task.id}}/') {{task.commit.summary}}
             td
-                td {{task.success_percent}}%
+                td {{task.success_percent||0}}%
             td
                 span.pull-right {{task.created}}
         tr(ng-show='!tasks.items.length')
