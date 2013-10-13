@@ -11,7 +11,7 @@ include top_menu.jade
     table.table.table-hover
         tr(ng-repeat='commit in task.commit.inner')
             td
-                a(href='{{commit.href}}') {{commit.hash}}
+                a(href='{{commit.url}}') {{commit.hash}}
             td
                 a(href='{{commit.author.url}}')
                     img.project-icon(ng-src='{{commit.author.avatar}}')
