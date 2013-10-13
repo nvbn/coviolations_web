@@ -35,4 +35,5 @@ def coverage_violation(data):
     data['plot'] = {
         'cover': int(cover[:-1]),
     }
+    data['success_percent'] = int(cover[:-1])
     return data

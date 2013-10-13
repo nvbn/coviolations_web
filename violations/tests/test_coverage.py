@@ -14,6 +14,7 @@ class CoverageViolationCase(TestCase):
         result = coverage_violation(data)
         result['status'].should.be.equal(STATUS_SUCCESS)
         result['plot']['cover'].should.be.equal(86)
+        result['success_percent'].should.be.equal(86)
 
     def test_issue_1_out(self):
         """Test out of #1 issue"""
