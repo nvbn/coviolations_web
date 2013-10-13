@@ -28,7 +28,7 @@ include top_menu.jade
             td
                 a(href='#/projects/{{task.project}}/') {{task.project}}
                 | :&nbsp;
-                a(href='/tasks/{{task.id}}/').
+                a(href='#/tasks/{{task.id}}/').
                     {{task.commit.branch}}\#{{task.commit.range}}
             td
                 span.pull-right {{task.created}}

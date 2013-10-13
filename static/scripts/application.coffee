@@ -14,6 +14,9 @@ define ['angular', 'controllers'], (angular) ->
                 .when '/projects/:owner/:name/',
                     templateUrl: '/static/views/project.html'
                     controller: 'ProjectCtrl'
+                .when '/tasks/:pk/',
+                    templateUrl: '/static/views/task.html'
+                    controller: 'TaskCtrl'
                 .otherwise
                     redirectTo:
                         if window.isAuthenticated then '/dashboard/' else '/welcome/'

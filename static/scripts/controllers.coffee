@@ -119,8 +119,24 @@ define [
         , true
 
 
+    TaskCtrl = ($scope, $http, $routeParams) ->
+        ### Single task controller ###
+        taskUrl = _.sprintf '/api/v1/tasks/task/%s/', $routeParams['pk']
+
+        $http.get(taskUrl).success (data) =>
+            $scope.task = data
+
+            projectUrl = _.sprintf '/api/v1/projects/project/%s/', data['project']
+            $http.get(projectUrl).success (project) =>
+                $scope.project = project
+    module.controller 'TaskCtrl', [
+        '$scope', '$http', '$routeParams', TaskCtrl,
+    ]
+
+
     IndexCtrl: IndexCtrl
     DashboardCtrl: DashboardCtrl
     ManageCtrl: ManageCtrl
     ProjectCtrl: ProjectCtrl
     ProjectSettingsCtrl: ProjectSettingsCtrl
+    TaskCtrl: TaskCtrl

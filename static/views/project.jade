@@ -80,7 +80,7 @@ include top_menu.jade
             class='{{task.status == 1 && "success" || "failed"}}'
         )
             td
-                a(href='/tasks/{{task.id}}/').
+                a(href='#/tasks/{{task.id}}/').
                     {{task.commit.branch}}\#{{task.commit.range}}
             td {{task.commit.summary}}
             td
