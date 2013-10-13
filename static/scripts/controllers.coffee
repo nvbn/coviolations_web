@@ -8,6 +8,7 @@ define [
     'ngInfiniteScroll'
     'ngprogress'
     'models'
+    'services'
 ], (angular, _, _s, plottings) ->
     _.mixin _s.exports()
 
@@ -17,6 +18,7 @@ define [
         'infinite-scroll'
         'ngProgress'
         'coviolations.models'
+        'coviolations.services'
     ]
 
     IndexCtrl = ($scope) ->
@@ -129,20 +131,23 @@ define [
         , true
 
 
-    TaskCtrl = ($scope, $http, $routeParams, ngProgress) ->
+    TaskCtrl = ($scope, $http, $routeParams, ngProgress, favicoService) ->
         ### Single task controller ###
         ngProgress.start()
         taskUrl = _.sprintf '/api/v1/tasks/task/%s/', $routeParams['pk']
 
         $http.get(taskUrl).success (data) =>
             $scope.task = data
+            failed = (_.filter data.violations, (violation) -> violation.status == 2).length
+            favicoService.badge failed
 
             projectUrl = _.sprintf '/api/v1/projects/project/%s/', data['project']
             $http.get(projectUrl).success (project) =>
                 $scope.project = project
                 ngProgress.complete()
     module.controller 'TaskCtrl', [
-        '$scope', '$http', '$routeParams', 'ngProgress', TaskCtrl,
+        '$scope', '$http', '$routeParams', 'ngProgress',
+        'favicoService', TaskCtrl,
     ]
 
 

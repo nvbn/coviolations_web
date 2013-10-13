@@ -32,6 +32,8 @@ require.config
             exports: '_.str'
         chai:
             exports: ['chai']
+        favico:
+            exports: ['Favico']
     paths:
         angular: '../angular/angular.min'
         jquery: '../jquery/jquery.min'
@@ -45,6 +47,7 @@ require.config
         angularBootstrap: '../angular-bootstrap/ui-bootstrap-tpls.min'
         ngInfiniteScroll: '../ngInfiniteScroll/ng-infinite-scroll'
         underscoreString: '../underscore.string/dist/underscore.string.min'
+        favico: '../favico.js/favico-0.3.0.min'
         chai: '../chai/chai'
     urlArgs: "bust=" + (new Date()).getTime()
 

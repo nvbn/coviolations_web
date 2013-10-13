@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="ru"><head><title>coviolations.io</title><link rel="stylesheet" href="/static/bootstrap/dist/css/bootstrap.css"><link rel="stylesheet" href="/static/font-awesome/css/font-awesome.min.css"><link rel="stylesheet" href="/static/ngprogress/ngProgress.css"><link rel="stylesheet" href="/static/styles/main.css"><script type="text/javascript">var successTasks = {{ success }};
+<!DOCTYPE html><html lang="ru"><head><title>coviolations.io</title><link rel="icon" type="image/png" href="/static/img/favicon.png"><link rel="stylesheet" href="/static/bootstrap/dist/css/bootstrap.css"><link rel="stylesheet" href="/static/font-awesome/css/font-awesome.min.css"><link rel="stylesheet" href="/static/ngprogress/ngProgress.css"><link rel="stylesheet" href="/static/styles/main.css"><script type="text/javascript">var successTasks = {{ success }};
 var failedTasks = {{ failed }};
 var isAuthenticated = {% if user.is_authenticated %} true {% else %} false {% endif %};
 var domain = '{{ SITE.domain }}';</script></head><body><div ng-view class="container"></div></body><script data-main="/static/scripts/main" src="/static/requirejs/require.js"></script></html>
