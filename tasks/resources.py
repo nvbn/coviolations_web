@@ -149,6 +149,9 @@ class TaskResource(BaseTaskResource):
     commit = fields.DictField(attribute='commit', null=True)
     violations = fields.ListField(attribute='violations', null=True)
     id = fields.CharField(attribute='_id', null=True)
+    success_percent = fields.IntegerField(
+        attribute='success_percent', null=True,
+    )
 
     filters = FiltersAccumulator()
 
@@ -220,7 +223,7 @@ class TaskResource(BaseTaskResource):
         return {
             'fields': {name: True for name in (
                 'service', 'project', 'commit', 'plot',
-                'created', 'status',
+                'created', 'status', 'success_percent',
             )},
             'spec': {
                 'status': {'$in': [STATUS_SUCCESS, STATUS_FAILED]},
