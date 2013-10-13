@@ -5,7 +5,7 @@ define ['angular', 'underscore'], (angular, _) ->
         class Tasks
             ### Tasks model ###
 
-            constructor: (@limit=20, @withViolations=false, @self=true) ->
+            constructor: (@limit=20, @options) ->
                 @items = []
                 @canLoad = true
                 @offset = 0
@@ -16,11 +16,20 @@ define ['angular', 'underscore'], (angular, _) ->
                     @offset += @limit
 
             getUrl: ->
-                [
-                    '/api/v1/tasks/task/?with_violations=',
-                    @withViolations, '&self=', @self, '&limit=',
-                    @limit, '&offset=', @offset,
-                ].join('')
+                base = [
+                    '/api/v1/tasks/task/',
+                    '?limit=', @limit, '&offset=', @offset,
+                ]
+                if @options.withViolations
+                    base.push '&with_violations='
+                    base.push @options.withViolations
+                if @options.self
+                    base.push '&self='
+                    base.push @options.self
+                if @options.project
+                    base.push '&project='
+                    base.push @options.project
+                base.join('')
 
             onLoaded: (data) ->
                 _.each data.objects, (item) =>
@@ -31,7 +40,6 @@ define ['angular', 'underscore'], (angular, _) ->
             prepareItem: (item) ->
                 item.created = item.created.replace('T', ' ').slice(0, -7)
                 item
-
     module.factory 'Tasks', getTaskModel
 
     getTaskModel: getTaskModel

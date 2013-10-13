@@ -57,3 +57,13 @@ define [
                         callback.call null,
                             objects: 'test'
                         scope.loading.should.be.false
+
+    describe 'Single project controller', =>
+        http =
+            get: ->
+                success: (callback) ->
+                    callback.call null, 'test'
+        it 'should attach project', =>
+            scope = {}
+            controllers.ProjectCtrl scope, http, {owner: 'test', name: 'test'}
+            scope.project.should.be.equal 'test'

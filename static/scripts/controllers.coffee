@@ -1,11 +1,15 @@
 define [
     'angular'
     'underscore'
+    'underscoreString'
+    'plottings'
     'angles'
     'angularBootstrap'
     'ngInfiniteScroll'
     'models',
-], (angular, _) ->
+], (angular, _, _s, plottings) ->
+    _.mixin _s.exports()
+
     module = angular.module 'coviolations.controllers', [
         'angles'
         'ui.bootstrap'
@@ -37,7 +41,9 @@ define [
         $http.get('/api/v1/projects/project/?limit=0').success (data) =>
             $scope.projects = data.objects
 
-        $scope.tasks = new Tasks 20, true, true
+        $scope.tasks = new Tasks 20,
+            withViolations: true
+            self: true
         $scope.tasks.load()
     module.controller 'DashboardCtrl', [
         '$scope', '$http', 'Tasks', DashboardCtrl,
@@ -57,6 +63,28 @@ define [
         '$scope', '$http', ManageCtrl,
     ]
 
+    ProjectCtrl = ($scope, $http, $routeParams, Tasks) ->
+        projectName = _.sprintf '%s/%s', $routeParams['owner'], $routeParams['name']
+        projectUrl = _.sprintf '/api/v1/projects/project/%s/', projectName
+
+        $http.get(projectUrl).success (data) =>
+            $scope.project = data
+
+        $scope.toggleBadgeHelp = =>
+            $scope.showBadgeHelp =
+                if $scope.showBadgeHelp then false else true
+
+        $scope.domain = window.domain
+
+        $scope.tasks = new Tasks 20,
+            withViolations: true
+            project: projectName
+        $scope.tasks.load()
+    module.controller 'ProjectCtrl', [
+        '$scope', '$http', '$routeParams', 'Tasks', ProjectCtrl,
+    ]
+
     IndexCtrl: IndexCtrl
     DashboardCtrl: DashboardCtrl
     ManageCtrl: ManageCtrl
+    ProjectCtrl: ProjectCtrl

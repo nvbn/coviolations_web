@@ -13,7 +13,7 @@ include top_menu.jade
             td
                 img.project-icon(ng-src='{{project.icon}}')
                 i.icon-lock(ng-show="project.is_private")
-                a(href='/projects/{{project.name}}') {{project.name}}
+                a(href='#/projects/{{project.name}}') {{project.name}}
 
 .col-lg-12.row.last-tasks-row.dashboard-row
     h2 Last performed tasks
@@ -26,7 +26,7 @@ include top_menu.jade
             class='{{task.status == 1 && "success" || "failed"}}'
         )
             td
-                a(href='/projects/{{task.project}}/') {{task.project}}
+                a(href='#/projects/{{task.project}}/') {{task.project}}
                 | :&nbsp;
                 a(href='/tasks/{{task.id}}/').
                     {{task.commit.branch}}\#{{task.commit.range}}

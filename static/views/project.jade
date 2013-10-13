@@ -1,0 +1,44 @@
+include top_menu.jade
+
+.col-lg-12.row.top-row.project-info
+    h2
+        a(href='{{project.url}}')
+            i.icon-github
+            |  {{project.name}}
+    a(href='', ng-click="toggleBadgeHelp()")
+        i.icon-collapse
+        |  Get badge&nbsp;
+        img(ng-src='{{project.badge_url}}')
+    .col-lg-12.row(ng-show='showBadgeHelp')
+        .col-lg-4
+            strong Markdown
+            pre.prettyprint.
+                [![Violations]({{project.badge_url}})]
+                (https://{{domain}}/#/project/{{project.name}})
+        .col-lg-4
+            strong HTML
+            pre.prettyprint.
+                &lt;a href='https://{{domain}}/#/project/{{project.name}} %}'&gt;
+                    &lt;img src='{{project.badge_url}}' alt='Violations' /&gt;
+                &lt;/a&gt;
+        .col-lg-4
+            strong RST
+            pre.prettyprint.
+                .. image:: {{project.badge_url}}
+                :target: https://{{domain}}/#/project/{{project.name}}
+
+.col-lg-12.last-tasks-row.row
+    table.table.table-hover(
+        infinite-scroll='tasks.load()',
+        infinite-scroll-distance='2'
+    )
+        tr(
+            ng-repeat='task in tasks.items'
+            class='{{task.status == 1 && "success" || "failed"}}'
+        )
+            td
+                a(href='/tasks/{{task.id}}/').
+                    {{task.commit.branch}}\#{{task.commit.range}}
+            td {{task.commit.summary}}
+            td
+                span.pull-right {{task.created}}

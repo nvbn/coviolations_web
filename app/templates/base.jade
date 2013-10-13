@@ -8,7 +8,8 @@ html(lang='ru')
         script(type='text/javascript').
             var successTasks = {{ success }};
             var failedTasks = {{ failed }};
-            var isAuthenticated = {% if user.is_authenticated %} true {% else %} false {% endif %}
+            var isAuthenticated = {% if user.is_authenticated %} true {% else %} false {% endif %};
+            var domain = '{{ SITE.domain }}';
     body
         .container(ng-view)
     script(data-main='/static/scripts/main', src='/static/requirejs/require.js')
