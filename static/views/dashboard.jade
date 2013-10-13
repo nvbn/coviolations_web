@@ -19,6 +19,8 @@ include top_menu.jade
                     fullfill, linechart, options='project.chart.options',
                     data='project.chart.data', height=100
                 )
+        tr(ng-show='!projects.length')
+            td You don't have enabled projects.
 
 .col-lg-12.row.last-tasks-row.dashboard-row
     h2 Last performed tasks
