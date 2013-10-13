@@ -1,4 +1,4 @@
-require.config
+config =
     baseUrl: '/static/scripts/'
     shim:
         jquery:
@@ -49,7 +49,11 @@ require.config
         underscoreString: '../underscore.string/dist/underscore.string.min'
         favico: '../favico.js/favico-0.3.0.min'
         chai: '../chai/chai'
-    urlArgs: "bust=" + (new Date()).getTime()
+
+if window.debug
+    config.urlArgs = "bust=" + (new Date()).getTime()
+
+require.config config
 
 if not window.testSuite
     require ['angular', 'application'], ->
