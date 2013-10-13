@@ -77,9 +77,16 @@ class PrepareViolationsJobCase(MongoFlushMixin, TestCase):
         self._orig_comment_lines = jobs.comment_lines
         jobs.comment_lines = MagicMock()
 
+    def _mock_violation_library(self):
+        """Mock violation library"""
+        self._orig_library = jobs.violations.base.library
+        jobs.violations.base.library = MagicMock()
+
     def tearDown(self):
         jobs.mark_commit_with_status = self._orig_mark_commit
         jobs.comment_lines = self._orig_comment_lines
+        if hasattr(self, '_orig_library'):
+            jobs.violations.base.library = self._orig_library
 
     def test_prepare(self):
         """Test prepare"""
@@ -166,6 +173,42 @@ class PrepareViolationsJobCase(MongoFlushMixin, TestCase):
         jobs.prepare_violations(task_id)
         get_worker().work(burst=True)
         jobs.comment_lines.delay.call_count.should.be.equal(1)
+
+    def test_set_success_percent_if_success(self):
+        """Test set success percent if success"""
+        self._mock_violation_library()
+        jobs.violations.base.library.get\
+            .return_value.return_value = {'status': const.STATUS_SUCCESS}
+        task = {
+            'violations': [
+                {'name': 'dummy'}
+            ],
+            'owner_id': 1,
+            'project': 'test',
+        }
+        task_id = models.Tasks.insert(task)
+        jobs.prepare_violations(task_id)
+        get_worker().work(burst=True)
+        task = models.Tasks.find_one(task_id)
+        task['violations'][0]['success_percent'].should.be.equal(100)
+
+    def test_set_success_percent_if_fail(self):
+        """Test set success percent if fail"""
+        self._mock_violation_library()
+        jobs.violations.base.library.get\
+            .return_value.return_value = {'status': const.STATUS_FAILED}
+        task = {
+            'violations': [
+                {'name': 'dummy'}
+            ],
+            'owner_id': 1,
+            'project': 'test',
+        }
+        task_id = models.Tasks.insert(task)
+        jobs.prepare_violations(task_id)
+        get_worker().work(burst=True)
+        task = models.Tasks.find_one(task_id)
+        task['violations'][0]['success_percent'].should.be.equal(0)
 
 
 class CommentPullRequestJob(MongoFlushMixin, TestCase):

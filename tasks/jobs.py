@@ -113,6 +113,9 @@ def _prepare_violation(violation):
 
     if result.get('nofail', False):
         violation['status'] = const.STATUS_SUCCESS
+    if result.get('success_percent') is None:
+        result['success_percent'] =\
+            100 if result['status'] == const.STATUS_SUCCESS else 0
     return result
 
 
@@ -125,6 +128,7 @@ def prepare_violations(task_id):
         violation.get('status') != const.STATUS_FAILED
         for violation in task['violations']
     ]) else const.STATUS_FAILED
+
     Tasks.save(task)
 
     mark_commit_with_status.delay(task_id)
