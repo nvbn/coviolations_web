@@ -162,6 +162,10 @@ class Project(models.Model):
         else:
             return True
 
+    def can_change(self, user):
+        """Can change project"""
+        return self.can_access(user) and self.owner == user
+
     def get_allowed_users(self):
         """Get allowed users"""
         if self.organization:
