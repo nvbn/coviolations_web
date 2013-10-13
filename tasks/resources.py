@@ -1,5 +1,6 @@
 from datetime import datetime
 from copy import copy
+from bson.objectid import ObjectId
 from pymongo import DESCENDING
 from django.shortcuts import get_object_or_404
 from django.http import Http404
@@ -157,6 +158,32 @@ class TaskResource(BaseTaskResource):
         resource_name = 'tasks/task'
         detail_uri_name = 'pk'
         paginator_class = TaskPaginator
+
+    def obj_get(self, bundle, pk, **kwargs):
+        """Get single task"""
+        task = self._get_task(ObjectId(pk))
+        self._check_access(task, bundle.request.user)
+        return Document(task)
+
+    def _get_task(self, pk):
+        """Get task"""
+        task = Tasks.find_one(pk)
+        if task:
+            return task
+        else:
+            raise Http404()
+
+    def _check_access(self, task, user):
+        """Check access"""
+        try:
+            project = Project.objects.get(
+                name=task['project'],
+            )
+        except Project.DoesNotExist:
+            raise Http404()
+
+        if not project.can_access(user):
+            raise Http404()
 
     def get_list(self, request, **kwargs):
         """Get list without casting pymongo query to list"""
