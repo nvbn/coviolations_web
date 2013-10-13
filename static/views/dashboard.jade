@@ -40,3 +40,5 @@ include top_menu.jade
             td {{task.success_percent}}%
             td
                 span.pull-right {{task.created}}
+        tr(ng-show='!tasks.items.length')
+            td You don't have finished tasks.
