@@ -6,7 +6,8 @@ define [
     'angles'
     'angularBootstrap'
     'ngInfiniteScroll'
-    'models',
+    'ngprogress'
+    'models'
 ], (angular, _, _s, plottings) ->
     _.mixin _s.exports()
 
@@ -14,6 +15,7 @@ define [
         'angles'
         'ui.bootstrap'
         'infinite-scroll'
+        'ngProgress'
         'coviolations.models'
     ]
 
@@ -38,21 +40,24 @@ define [
         '$scope', IndexCtrl,
     ]
 
-    DashboardCtrl = ($scope, $http, Tasks) ->
+    DashboardCtrl = ($scope, $http, ngProgress, Tasks) ->
         ### Dashboard controller ###
+        ngProgress.start()
         $http.get('/api/v1/projects/project/?limit=0').success (data) =>
             $scope.projects = data.objects
+            ngProgress.complete()
 
         $scope.tasks = new Tasks 20,
             withViolations: true
             self: true
         $scope.tasks.load()
     module.controller 'DashboardCtrl', [
-        '$scope', '$http', 'Tasks', DashboardCtrl,
+        '$scope', '$http', 'ngProgress', 'Tasks', DashboardCtrl,
     ]
 
-    ManageCtrl = ($scope, $http) ->
+    ManageCtrl = ($scope, $http, ngProgress) ->
         ### Manage projects page controller ###
+        ngProgress.start()
         $scope.loading = true
         $http.get('/api/v1/projects/project/?fetch=true&limit=0').success (data) =>
             $scope.projects = data.objects
@@ -62,12 +67,15 @@ define [
                     if project.is_enabled != oldProjects[num].is_enabled
                         $http.put(project.resource_uri, project)
             , true
+
+            ngProgress.complete()
     module.controller 'ManageCtrl', [
-        '$scope', '$http', ManageCtrl,
+        '$scope', '$http', 'ngProgress', ManageCtrl,
     ]
 
-    ProjectCtrl = ($scope, $http, $routeParams, $modal, Tasks) ->
+    ProjectCtrl = ($scope, $http, $routeParams, $modal, ngProgress, Tasks) ->
         ### Single project page controller ###
+        ngProgress.start()
         projectName = _.sprintf '%s/%s', $routeParams['owner'], $routeParams['name']
         projectUrl = _.sprintf '/api/v1/projects/project/%s/', projectName
 
@@ -76,6 +84,7 @@ define [
                 $scope.project = data
                 if not $scope.branches
                     $scope.branches = data.branches
+                ngProgress.complete()
         loadProject()
 
         $scope.$watch 'branch', (branch) =>
@@ -107,7 +116,8 @@ define [
 
         $scope.domain = window.domain
     module.controller 'ProjectCtrl', [
-        '$scope', '$http', '$routeParams', '$modal', 'Tasks', ProjectCtrl,
+        '$scope', '$http', '$routeParams', '$modal', 'ngProgress',
+        'Tasks', ProjectCtrl,
     ]
 
     ProjectSettingsCtrl = ($scope, $modalInstance, $http, project) ->
@@ -119,8 +129,9 @@ define [
         , true
 
 
-    TaskCtrl = ($scope, $http, $routeParams) ->
+    TaskCtrl = ($scope, $http, $routeParams, ngProgress) ->
         ### Single task controller ###
+        ngProgress.start()
         taskUrl = _.sprintf '/api/v1/tasks/task/%s/', $routeParams['pk']
 
         $http.get(taskUrl).success (data) =>
@@ -129,8 +140,9 @@ define [
             projectUrl = _.sprintf '/api/v1/projects/project/%s/', data['project']
             $http.get(projectUrl).success (project) =>
                 $scope.project = project
+                ngProgress.complete()
     module.controller 'TaskCtrl', [
-        '$scope', '$http', '$routeParams', TaskCtrl,
+        '$scope', '$http', '$routeParams', 'ngProgress', TaskCtrl,
     ]
 
 

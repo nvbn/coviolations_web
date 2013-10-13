@@ -18,8 +18,8 @@ require.config
             exports: 'prettyPrint'
         sockjs:
             exports: 'SockJS'
-        nprogress:
-            exports: 'NProgress'
+        ngprogress:
+            deps: ['angular']
         angles:
             deps: ['angular', 'chartjs']
             exports: 'angles'
@@ -40,7 +40,7 @@ require.config
         chartjs: '../nnnick-chartjs/Chart.min'
         prettify: '../google-code-prettify/distrib/google-code-prettify/prettify'
         sockjs: '../sockjs-client/sockjs.min'
-        nprogress: '../nprogress/nprogress'
+        ngprogress: '../ngprogress/build/ngProgress.min'
         angles: '../angles/libs/angles'
         angularBootstrap: '../angular-bootstrap/ui-bootstrap-tpls.min'
         ngInfiniteScroll: '../ngInfiniteScroll/ng-infinite-scroll'

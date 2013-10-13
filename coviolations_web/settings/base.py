@@ -133,7 +133,6 @@ BOWER_INSTALLED_APPS = (
     'nnnick-chartjs',
     'google-code-prettify',
     'sockjs-client',
-    'nprogress',
     'favico.js',
     'jquery-waypoints',
     'angular',
@@ -144,6 +143,7 @@ BOWER_INSTALLED_APPS = (
     'underscore.string',
     'chai',
     'sinon',
+    'ngprogress',
 )
 
 TEST_RUNNER = 'discover_runner.DiscoverRunner'
