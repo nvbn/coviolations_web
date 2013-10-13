@@ -34,4 +34,4 @@ class ProjectBadge(RedirectView):
 
     def _get_badge_url(self, badge_type):
         """Get badge url"""
-        return static('img/badge_{}.png'.format(badge_type))
+        return static('images/badge_{}.png'.format(badge_type))
