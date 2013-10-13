@@ -38,7 +38,7 @@ MEDIA_URL = ''
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
+STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static_collected')
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
@@ -46,9 +46,7 @@ STATIC_URL = '/static/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
-    # Put strings here, like "/home/html/static" or "C:/www/django/static".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
+    os.path.join(PROJECT_ROOT, 'static'),
 )
 
 # List of finder classes that know how to find static files in
@@ -96,7 +94,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.tz",
     "django.contrib.messages.context_processors.messages",
     'push.context_processors.push_processor',
-    'app.context_processors.request_site',
 )
 
 
@@ -132,14 +129,20 @@ BOWER_INSTALLED_APPS = (
     'bootstrap',
     'font-awesome',
     'underscore',
-    'backbone',
-    'backbone-tastypie',
     'nnnick-chartjs',
     'google-code-prettify',
     'sockjs-client',
-    'nprogress',
     'favico.js',
     'jquery-waypoints',
+    'angular',
+    'requirejs',
+    'angles',
+    'angular-bootstrap',
+    'ngInfiniteScroll',
+    'underscore.string',
+    'chai',
+    'sinon',
+    'ngprogress',
 )
 
 TEST_RUNNER = 'discover_runner.DiscoverRunner'

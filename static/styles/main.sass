@@ -1,0 +1,133 @@
+$title-font: 20pt
+$main-font: 15pt
+$button-offset: 5pt
+$default-offset: 10pt
+$success-color: #dff0d8
+$fail-color: #f2dede
+$info-color: #f0f7fd
+$danger-color: #ac2925
+$neutral-color: #eeeeee
+$icon-size: 20pt
+$chart-background: #ffffff
+
+
+@mixin with-projects
+    .project-icon, .icon-lock
+        width: $icon-size
+        margin-right: $default-offset
+
+
+.plot-color-line
+    margin-left: $default-offset
+    line-height: $main-font
+    white-space: nowrap
+
+    .plot-color-row
+        display: inline-block
+        width: $icon-size
+        height: $icon-size
+        margin-bottom: -4pt
+
+
+.modal
+    display: block
+    height: 0
+    overflow: visible
+    .modal-dialog
+        width: 800pt
+
+
+.top-menu
+    background: $success-color
+
+    .navbar-documentation
+        margin-left: $default-offset
+
+.top-row
+    margin-top: -20pt
+
+
+.index-block
+    padding-bottom: $default-offset
+    font-size: $main-font
+
+    a.btn
+        margin-right: $button-offset
+        font-size: $main-font
+
+.index-odd-block
+    background: $success-color
+
+.index-even-block
+    background: $fail-color
+
+.index-top-block
+    padding-top: $default-offset
+
+
+.dashboard-row
+    font-size: $main-font
+
+.enabled-projects-row
+    background: $info-color
+    @include with-projects
+
+    .add-project-button
+        margin-left: $default-offset
+
+.last-tasks-row
+    background: $neutral-color
+    padding-top: $default-offset
+
+    .success
+        background: $success-color
+
+    .failed
+        background: $fail-color
+
+
+.manage-projects-row
+    background: $info-color
+    font-size: $main-font
+    @include with-projects
+
+
+.project-page-row
+    font-size: $main-font
+    padding-bottom: $default-offset
+
+.project-info
+    background: $info-color
+
+    .project-token
+        button
+            display: inline-block
+
+        .alert
+            position: absolute
+            z-index: 100
+            top: 0
+            border-color: $danger-color
+
+            button
+                margin-right: $button-offset
+
+.project-charts
+    background: $fail-color
+
+    .project-chart-row
+        margin-left: $default-offset
+
+        canvas
+            background: $chart-background
+
+
+.task-row
+    font-size: $main-font
+
+.task-summary-row
+    background: $info-color
+    @include with-projects
+
+.violation-row
+    background: $neutral-color

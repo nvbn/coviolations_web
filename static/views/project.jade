@@ -1,0 +1,87 @@
+include top_menu.jade
+
+.col-lg-12.row.top-row.project-info.project-page-row
+    h2
+        a(href='{{project.url}}')
+            i.icon-github
+            |  {{project.name}}&nbsp;
+        a(
+            href='', ng-click='$parent.showSettings()',
+            ng-show='project.can_change',
+            tooltip='Settings', tooltip-placement='right',
+        )
+            i.icon-wrench
+    .col-lg-12.row
+        .col-lg-3.row
+            a(href='', ng-click="toggleBadgeHelp()")
+                i.icon-collapse
+                |  Get badge&nbsp;
+                img(ng-src='{{project.badge_url}}')
+        .col-lg-3.row
+            select.form-control(
+                ng-model='branch', ng-options='branch for branch in branches'
+            )
+                option(value='') Show all
+        .col-lg-6.row.project-token.pull-right(ng-show='project.can_change')
+            | Token:&nbsp;
+            code {{project.token}}
+            button.btn.btn-danger.btn-xs(
+                type='button', tooltip='Regenerate', tooltip-placement='right',
+                ng-click='$parent.showConfirmRegenerateToken = true',
+            )
+                i.icon-repeat
+            .alert.alert-danger.col-lg-12(ng-show='showConfirmRegenerateToken')
+                h4 Are you sure wnat to regenerate token?
+                p It will break all applications depend on it.
+                p
+                    button.btn.btn-danger(
+                        ng-click='regenerateToken(); showConfirmRegenerateToken = false'
+                    ) Yes
+                    button.btn.btn-default(
+                        ng-click='showConfirmRegenerateToken = false'
+                    ) No
+    .col-lg-12.row(ng-show='showBadgeHelp')
+        .col-lg-4
+            strong Markdown
+            pre.prettyprint.
+                [![Violations]({{project.badge_url}})]
+                (https://{{domain}}/#/project/{{project.name}})
+        .col-lg-4
+            strong HTML
+            pre.prettyprint.
+                &lt;a href='https://{{domain}}/#/project/{{project.name}} %}'&gt;
+                    &lt;img src='{{project.badge_url}}' alt='Violations' /&gt;
+                &lt;/a&gt;
+        .col-lg-4
+            strong RST
+            pre.prettyprint.
+                .. image:: {{project.badge_url}}
+                :target: https://{{domain}}/#/project/{{project.name}}
+
+.col-lg-12.row.project-page-row.project-charts
+    .col-lg-4.row.project-chart-row(ng-repeat='chart in charts')
+        h2 {{chart.name}}
+        canvas(
+            linechart, options='chart.options', data='chart.data',
+            width=350, height=220
+        )
+        br
+        span.plot-color-line(ng-repeat='color in chart.colors')
+            span.plot-color-row(style="background-color: {{color.code}}")
+            |  {{color.name}}
+
+.col-lg-12.last-tasks-row.row.project-page-row
+    table.table.table-hover(
+        infinite-scroll='tasks.load()',
+        infinite-scroll-distance='2'
+    )
+        tr(
+            ng-repeat='task in tasks.items'
+            class='{{task.status == 1 && "success" || "failed"}}'
+        )
+            td
+                a(href='#/tasks/{{task.id}}/').
+                    {{task.commit.branch}}\#{{task.commit.range}}
+            td {{task.commit.summary}}
+            td
+                span.pull-right {{task.created}}

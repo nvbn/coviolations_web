@@ -5,6 +5,7 @@ def compile_assets():
     """Compile sass and coffee"""
     local('coffee -c . .')
     local('sass app/static/sass/style.sass app/static/sass/style.css')
+    local('jade . .')
 
 
 def install_assets():
@@ -88,3 +89,14 @@ def update_server(branch='master'):
         sudo('chown www-data puppet/manifests/private.pp')
         sudo('puppet apply puppet/manifests/site.pp'
              ' --modulepath=puppet/modules/')
+
+
+def test_client():
+    """Test client with testem"""
+    local('./manage.py collectstatic --noinput')
+    local('mkdir -p client_tests')
+    local('cp static_collected -a client_tests/static')
+    local('cp static/tests/testem.yml client_tests')
+    with lcd('client_tests'):
+        local('testem')
+        local('rm -rf *')

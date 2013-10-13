@@ -158,10 +158,7 @@ def comment_pull_request(task_id):
         'tasks/pull_request_comment.html', {
             'badge': project.get_badge_url(commit=task['commit']['hash']),
             'task': task,
-            'url': 'http://{}{}'.format(
-                Site.objects.get_current().domain,
-                reverse('tasks_detail', args=(str(task['_id']),)),
-            ),
+            'url': make_https('/#/tasks/{}/'.format(task['_id'])),
         }
     )
     pull_request.create_issue_comment(
@@ -177,7 +174,7 @@ def mark_commit_with_status(task_id):
     commit = project.repo.get_commit(task['commit']['hash'])
     commit.create_status(
         const.GITHUB_STATES.get(task['status'], 'error'),
-        make_https(reverse('tasks_detail', args=(str(task['_id']),))),
+        make_https('/#/tasks/{}/'.format(task['_id'])),
         (
             const.GITHUB_DESCRIPTION_OK
             if task['status'] == const.STATUS_SUCCESS else

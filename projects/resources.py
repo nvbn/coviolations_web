@@ -29,12 +29,7 @@ class ProjectsAuthorization(Authorization):
             return Project.objects.get_enabled_for_user(bundle.request.user)
 
     def read_detail(self, object_list, bundle):
-        if bundle.obj.owner != bundle.request.user:
-            return False
-        else:
-            return super(ProjectsAuthorization, self).read_detail(
-                object_list, bundle,
-            )
+        return bundle.obj.can_access(bundle.request.user)
 
     def update_list(self, object_list, bundle):
         return False
@@ -43,7 +38,7 @@ class ProjectsAuthorization(Authorization):
         sender.send(
             type='project', owner=bundle.request.user.id,
         )
-        return self.read_detail(object_list, bundle)
+        return bundle.obj.can_change(bundle.request.user)
 
 
 class ProjectsResource(ModelResource):
@@ -54,14 +49,30 @@ class ProjectsResource(ModelResource):
     is_private = fields.BooleanField(attribute='is_private', readonly=True)
     branches = fields.ListField(attribute='branches', readonly=True)
     icon = fields.CharField(attribute='icon', readonly=True, null=True)
+    badge_url = fields.CharField(attribute='get_badge_url', readonly=True)
+    owner_id = fields.CharField(attribute='owner_id', readonly=True)
+    token = fields.CharField(attribute='token', blank=True, null=True)
+    can_change = fields.BooleanField(default=False)
 
     class Meta:
         queryset = Project.objects.all()
         authentication = Authentication()
         authorization = ProjectsAuthorization()
         resource_name = 'projects/project'
+        detail_uri_name = 'name'
         fields = (
             'name', 'is_enabled', 'id',
             'is_private', 'icon',
             'comment_from_owner_account',
         )
+
+    def dehydrate(self, bundle):
+        """Attach token to bundle if owner"""
+        if (
+            bundle.request.user.is_authenticated()
+            and bundle.obj.can_change(bundle.request.user)
+        ):
+            bundle.data['can_change'] = True
+        else:
+            bundle.data['token'] = ''
+        return bundle

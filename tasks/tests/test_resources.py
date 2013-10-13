@@ -15,7 +15,7 @@ class BaseTaskResourceCase(MongoFlushMixin, ResourceTestCase):
         MongoFlushMixin.setUp(self)
         ResourceTestCase.setUp(self)
 
-        ProjectFactory(name='test', is_enabled=True)
+        self.project = ProjectFactory(name='test', is_enabled=True)
 
 
 class RawTaskResourceCase(BaseTaskResourceCase):
@@ -87,27 +87,35 @@ class TaskResourceCase(BaseTaskResourceCase):
         super(TaskResourceCase, self).setUp()
         self.url = '/api/v1/tasks/task/'
 
+    def _create_task(self, project='test', seed=0, **kwargs):
+        """Create single task"""
+        return models.Tasks.save(
+            dict(
+                service={
+                    'name': 'dummy',
+                },
+                project=project,
+                status=STATUS_SUCCESS,
+                commit={
+                    'branch': 'develop',
+                    'commit': 'asdfg',
+                    'author': 'nvbn',
+                },
+                violations=[{
+                    'name': 'dummy',
+                    'raw': '1',
+                    'status': 1,
+                    'prepared': '123{}'.format(seed),
+                }],
+                **kwargs
+            )
+        )
+
     def _create_tasks(self, project='test', count=20, **kwargs):
         """Create tasks"""
-        models.Tasks.insert([dict(
-            service={
-                'name': 'dummy',
-            },
-            project=project,
-            status=STATUS_SUCCESS,
-            commit={
-                'branch': 'develop',
-                'commit': 'asdfg',
-                'author': 'nvbn',
-            },
-            violations=[{
-                'name': 'dummy',
-                'raw': '1',
-                'status': 1,
-                'prepared': '123{}'.format(n),
-            }],
-            **kwargs
-        ) for n in range(count)])
+        return [
+            self._create_task(project, n, **kwargs) for n in range(count)
+        ]
 
     def _create_user(self):
         """Create user"""
@@ -185,3 +193,23 @@ class TaskResourceCase(BaseTaskResourceCase):
         response = self.api_client.get(self.url)
         data = self.deserialize(response)
         data['meta']['total_count'].should.be.equal(0)
+
+    def test_get_single_task(self):
+        """Test get single task"""
+        task = self._create_task()
+        response = self.api_client.get('{}{}/'.format(self.url, task))
+        response.status_code.should.be.equal(200)
+
+    def test_404_when_task_without_project(self):
+        """Test 404 when task without project"""
+        task = self._create_task('not exists')
+        response = self.api_client.get('{}{}/'.format(self.url, task))
+        response.status_code.should.be.equal(404)
+
+    def test_404_if_not_accessible(self):
+        """Test 404 if not accessible"""
+        self.project.is_private = True
+        self.project.save()
+        task = self._create_task()
+        response = self.api_client.get('{}{}/'.format(self.url, task))
+        response.status_code.should.be.equal(404)

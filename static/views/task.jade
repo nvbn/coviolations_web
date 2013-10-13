@@ -1,0 +1,28 @@
+include top_menu.jade
+
+.col-lg-12.row.top-row.task-row.task-summary-row
+    h2
+        a(href='{{project.url}}')
+            i.icon-github
+            | &nbsp;
+        a(href='#/projects/{{project.name}}/') {{project.name}}
+        | : {{task.commit.range}}
+    a(href='{{task.commit.url}}') {{task.commit.summary}}
+    table.table.table-hover
+        tr(ng-repeat='commit in task.commit.inner')
+            td
+                a(href='{{commit.href}}') {{commit.hash}}
+            td
+                a(href='{{commit.author.url}}')
+                    img.project-icon(ng-src='{{commit.author.avatar}}')
+                    | {{commit.author.name}}
+            td {{commit.message}}
+
+.col-lg-12.row.violation-row.task-row(ng-repeat='violation in task.violations')
+    h2
+        | {{violation.name}}&nbsp;
+        a.btn.btn-default(
+            href='/tasks/{{$parent.task.id}}/raw/{{$index}}/',
+            target='_blank'
+        ) Show raw
+    .col-lg-12.row(ng-bind-html-unsafe='violation.prepared')

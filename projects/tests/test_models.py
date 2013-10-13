@@ -110,6 +110,17 @@ class ProjectModelCase(MongoFlushMixin, TestCase):
             set([project.owner] + list(project.organization.users.all())),
         )
 
+    def test_owner_can_change(self):
+        """Test owner can change project"""
+        project = factories.ProjectFactory()
+        project.can_change(project.owner).should.be.true
+
+    def test_third_user_cant_change(self):
+        """Test third user can't change project"""
+        project = factories.ProjectFactory()
+        user = UserFactory()
+        project.can_change(user).should.be.false
+
 
 class OrganizationManagerCase(TestCase):
     """Organization manager case"""
