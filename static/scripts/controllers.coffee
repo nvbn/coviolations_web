@@ -46,6 +46,10 @@ define [
 
     DashboardCtrl = ($scope, $http, ngProgress, Tasks) ->
         ### Dashboard controller ###
+        $scope.isAuthenticated = window.isAuthenticated
+        if not window.isAuthenticated
+            window.location = '#'
+
         ngProgress.start()
         $http.get(
             '/api/v1/projects/project/?limit=0&with_success_percent=true'
@@ -66,6 +70,10 @@ define [
 
     ManageCtrl = ($scope, $http, ngProgress) ->
         ### Manage projects page controller ###
+        $scope.isAuthenticated = window.isAuthenticated
+        if not window.isAuthenticated
+            window.location = '#'
+
         ngProgress.start()
         $scope.loading = true
         $http.get('/api/v1/projects/project/?fetch=true&limit=0').success (data) =>
