@@ -11,20 +11,19 @@ include top_menu.jade
                 i.icon-collapse
                 |  Get badge&nbsp;
                 img(ng-src='{{project.badge_url}}')
-        .col-lg-2.row
+        .col-lg-3.row
             select.form-control(
                 ng-model='branch', ng-options='branch for branch in branches'
             )
                 option(value='') Show all
-        .col-lg-6.row.col-lg-offset-1.project-token(ng-show='project.can_change')
-            .pull-right
-                | Token:&nbsp;
-                code {{project.token}}
-                button.btn.btn-danger.btn-xs(
-                    type='button', ng-click='showConfirmRegenerateToken = true'
-                )
-                    i.icon-repeat
-            .alert.alert-danger(ng-show='showConfirmRegenerateToken')
+        .col-lg-6.row.project-token.pull-right(ng-show='project.can_change')
+            | Token:&nbsp;
+            code {{project.token}}
+            button.btn.btn-danger.btn-xs(
+                type='button', ng-click='showConfirmRegenerateToken = true'
+            )
+                i.icon-repeat
+            .alert.alert-danger.col-lg-12(ng-show='showConfirmRegenerateToken')
                 h4 Are you sure wnat to regenerate token?
                 p It will break all applications depend on it.
                 p
@@ -52,8 +51,8 @@ include top_menu.jade
                 .. image:: {{project.badge_url}}
                 :target: https://{{domain}}/#/project/{{project.name}}
 
-.col-lg-12.row
-    .col-lg-4.row(ng-repeat='chart in charts')
+.col-lg-12.row.project-page-row.project-charts
+    .col-lg-4.row.project-chart-row(ng-repeat='chart in charts')
         h2 {{chart.name}}
         canvas(
             linechart, options='chart.options', data='chart.data',
