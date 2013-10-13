@@ -52,6 +52,7 @@ class ProjectsResource(ModelResource):
     badge_url = fields.CharField(attribute='get_badge_url', readonly=True)
     owner_id = fields.CharField(attribute='owner_id', readonly=True)
     token = fields.CharField(attribute='token', blank=True, null=True)
+    can_change = fields.BooleanField(default=False)
 
     class Meta:
         queryset = Project.objects.all()
@@ -67,9 +68,11 @@ class ProjectsResource(ModelResource):
 
     def dehydrate(self, bundle):
         """Attach token to bundle if owner"""
-        if not (
-            bundle.request.user.is_authenticated() and
-            bundle.obj.owner == bundle.request.user
+        if (
+            bundle.request.user.is_authenticated()
+            and bundle.obj.can_change(bundle.request.user)
         ):
+            bundle.data['can_change'] = True
+        else:
             bundle.data['token'] = ''
         return bundle
