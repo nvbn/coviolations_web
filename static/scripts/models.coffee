@@ -1,4 +1,6 @@
-define ['angular', 'underscore'], (angular, _) ->
+define ['angular', 'underscore', 'underscoreString'], (angular, _, _s) ->
+    _.mixin _s.exports()
+
     module = angular.module 'coviolations.models', []
 
     getTaskModel = ($http) ->
@@ -20,16 +22,16 @@ define ['angular', 'underscore'], (angular, _) ->
                     '/api/v1/tasks/task/',
                     '?limit=', @limit, '&offset=', @offset,
                 ]
-                if @options.withViolations
-                    base.push '&with_violations='
-                    base.push @options.withViolations
-                if @options.self
-                    base.push '&self='
-                    base.push @options.self
-                if @options.project
-                    base.push '&project='
-                    base.push @options.project
+                @addOption base, 'withViolations', 'with_violations'
+                @addOption base, 'self'
+                @addOption base, 'project'
+                @addOption base, 'branch'
                 base.join('')
+
+            addOption: (base, option, uriName=option) ->
+                if @options[option]
+                    base.push _.sprintf '&%s=', uriName
+                    base.push @options[option]
 
             onLoaded: (data) ->
                 _.each data.objects, (item) =>

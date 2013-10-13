@@ -69,6 +69,14 @@ define [
 
         $http.get(projectUrl).success (data) =>
             $scope.project = data
+            $scope.branches = data.branches
+
+        $scope.$watch 'branch', (branch) =>
+            $scope.tasks = new Tasks 20,
+                withViolations: true
+                project: projectName
+                branch: branch
+            $scope.tasks.load()
 
         $scope.toggleBadgeHelp = =>
             $scope.showBadgeHelp =
@@ -76,10 +84,7 @@ define [
 
         $scope.domain = window.domain
 
-        $scope.tasks = new Tasks 20,
-            withViolations: true
-            project: projectName
-        $scope.tasks.load()
+
     module.controller 'ProjectCtrl', [
         '$scope', '$http', '$routeParams', 'Tasks', ProjectCtrl,
     ]

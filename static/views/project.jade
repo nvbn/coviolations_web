@@ -26,6 +26,8 @@ include top_menu.jade
             pre.prettyprint.
                 .. image:: {{project.badge_url}}
                 :target: https://{{domain}}/#/project/{{project.name}}
+    select(ng-model='branch', ng-options='branch for branch in branches')
+        option(value='') Show all
 
 .col-lg-12.last-tasks-row.row
     table.table.table-hover(
