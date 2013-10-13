@@ -7,8 +7,8 @@ admin.autodiscover()
 
 urlpatterns = patterns(
     '',
-    url(r'^_projects/', include('projects.urls')),
-    url(r'^_tasks/', include('tasks.urls')),
+    url(r'^projects/', include('projects.urls')),
+    url(r'^tasks/', include('tasks.urls')),
     url(r'^api/', include(v1_api.urls)),
     url(r'^', include('social_auth.urls')),
     url(r'^admin/', include(admin.site.urls)),
