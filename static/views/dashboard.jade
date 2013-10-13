@@ -35,5 +35,6 @@ include top_menu.jade
                 | :&nbsp;
                 a(href='#/tasks/{{task.id}}/').
                     {{task.commit.branch}}\#{{task.commit.range}}
+            td {{task.success_percent}}%
             td
                 span.pull-right {{task.created}}
