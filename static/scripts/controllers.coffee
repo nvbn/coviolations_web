@@ -66,7 +66,7 @@ define [
         '$scope', '$http', ManageCtrl,
     ]
 
-    ProjectCtrl = ($scope, $http, $routeParams, Tasks) ->
+    ProjectCtrl = ($scope, $http, $routeParams, $modal, Tasks) ->
         ### Single project page controller ###
         projectName = _.sprintf '%s/%s', $routeParams['owner'], $routeParams['name']
         projectUrl = _.sprintf '/api/v1/projects/project/%s/', projectName
@@ -77,6 +77,7 @@ define [
                 if not $scope.branches
                     $scope.branches = data.branches
         loadProject()
+
         $scope.$watch 'branch', (branch) =>
             $scope.tasks = new Tasks 20,
                 withViolations: true
@@ -96,12 +97,30 @@ define [
             $http.put(projectUrl, $scope.project).success =>
                 loadProject()
 
+        $scope.showSettings = =>
+            $modal.open
+                templateUrl: '/static/views/project_settings.html'
+                controller: ProjectSettingsCtrl
+                resolve:
+                    $http: => $http
+                    project: => $scope.project
+
         $scope.domain = window.domain
     module.controller 'ProjectCtrl', [
-        '$scope', '$http', '$routeParams', 'Tasks', ProjectCtrl,
+        '$scope', '$http', '$routeParams', '$modal', 'Tasks', ProjectCtrl,
     ]
+
+    ProjectSettingsCtrl = ($scope, $modalInstance, $http, project) ->
+        $scope.project = project
+        $scope.close = =>
+            $modalInstance.close()
+        $scope.$watch 'project', =>
+            $http.put($scope.project.resource_uri, $scope.project)
+        , true
+
 
     IndexCtrl: IndexCtrl
     DashboardCtrl: DashboardCtrl
     ManageCtrl: ManageCtrl
     ProjectCtrl: ProjectCtrl
+    ProjectSettingsCtrl: ProjectSettingsCtrl

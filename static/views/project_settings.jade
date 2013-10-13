@@ -1,0 +1,33 @@
+.modal-dialog
+    .modal-content.col-lg-12
+        .modal-header
+            button.close(
+                type='button', ng-click='close()', aria-hidden='true'
+            ) &times;
+            h3 Settings
+        .modal-body
+            table.table.table-hover
+                tr
+                    td Enabled
+                    td
+                        .btn-group.pull-right
+                            button.btn.btn-default(
+                                type='button', ng-model='project.is_enabled',
+                                btn-radio='true'
+                            ) Yes
+                            button.btn.btn-default(
+                                type='button', ng-model='project.is_enabled',
+                                btn-radio='false'
+                            ) No
+                tr
+                    td Comment pull requests from owner account (only for private repos)
+                    td
+                        .btn-group.pull-right
+                            button.btn.btn-default(
+                                type='button', ng-model='project.comment_from_owner_account',
+                                btn-radio='true'
+                            ) Yes
+                            button.btn.btn-default(
+                                type='button', ng-model='project.comment_from_owner_account',
+                                btn-radio='false'
+                            ) No

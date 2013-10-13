@@ -4,7 +4,13 @@ include top_menu.jade
     h2
         a(href='{{project.url}}')
             i.icon-github
-            |  {{project.name}}
+            |  {{project.name}}&nbsp;
+        a(
+            href='', ng-click='$parent.showSettings()',
+            ng-show='project.can_change',
+            tooltip='Settings', tooltip-placement='right',
+        )
+            i.icon-wrench
     .col-lg-12.row
         .col-lg-3.row
             a(href='', ng-click="toggleBadgeHelp()")
@@ -20,7 +26,8 @@ include top_menu.jade
             | Token:&nbsp;
             code {{project.token}}
             button.btn.btn-danger.btn-xs(
-                type='button', ng-click='showConfirmRegenerateToken = true'
+                type='button', tooltip='Regenerate', tooltip-placement='right',
+                ng-click='$parent.showConfirmRegenerateToken = true',
             )
                 i.icon-repeat
             .alert.alert-danger.col-lg-12(ng-show='showConfirmRegenerateToken')
