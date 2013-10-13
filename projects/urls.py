@@ -5,10 +5,6 @@ from . import views
 urlpatterns = patterns(
     '',
     url(
-        r'^manage/$', views.ManageProjectsView.as_view(),
-        name='projects_manage',
-    ),
-    url(
         r'^regenerate/$', views.RegenerateTokenView.as_view(),
         name='projects_regenerate',
     ),

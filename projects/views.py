@@ -3,7 +3,6 @@ from django.contrib.messages import add_message, INFO
 from django.utils.translation import ugettext_lazy as _
 from django.templatetags.static import static
 from django.views.generic import (
-    TemplateView,
     DetailView,
     RedirectView,
     FormView,
@@ -14,11 +13,6 @@ from tasks.exceptions import TaskDoesNotExists
 from .models import Project
 from .forms import RegenerateTokenForm, FindTaskForBadgeForm
 from .utils import logger, ProjectAccessMixin
-
-
-class ManageProjectsView(LoginRequiredMixin, TemplateView):
-    """Manage projects view"""
-    template_name = 'projects/manage.html'
 
 
 class ProjectView(ProjectAccessMixin, DetailView):

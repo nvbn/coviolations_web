@@ -12,23 +12,6 @@ from ..models import Project
 from . import factories
 
 
-class ManageProjectViewCase(TestCase):
-    """Manage project view case"""
-
-    def setUp(self):
-        self.url = reverse('projects_manage')
-
-    def test_authorised_ok(self):
-        """Test status=200"""
-        User.objects.create_user('test', 'test@test.test', 'test')
-        self.client.login(
-            username='test',
-            password='test',
-        )
-        response = self.client.get(self.url)
-        response.status_code.should.be.equal(200)
-
-
 class ProjectViewCase(MockGithubMixin, TestCase):
     """Project view case"""
 
