@@ -12,13 +12,14 @@ define ['underscore'], (_) ->
                     _.isObject violation
 
                 _.each taskViolations, (violation) =>
-                     _.each _.pairs(violation.plot), (pair) =>
-                        @push(
-                            violation.name,
-                            pair[0],
-                            pair[1],
-                            task.resource_uri
-                        )
+                    if violation.plot
+                         _.each _.pairs(violation.plot), (pair) =>
+                            @push(
+                                violation.name,
+                                pair[0],
+                                pair[1],
+                                task.resource_uri
+                            )
 
         push: (violationName, plotName, plotValue, id) ->
             ### Push new violation ###
