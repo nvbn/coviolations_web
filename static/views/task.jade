@@ -19,5 +19,10 @@ include top_menu.jade
             td {{commit.message}}
 
 .col-lg-12.row.violation-row.task-row(ng-repeat='violation in task.violations')
-    h2 {{violation.name}}
+    h2
+        | {{violation.name}}&nbsp;
+        a.btn.btn-default(
+            href='/tasks/{{$parent.task.id}}/raw/{{$index}}/',
+            target='_blank'
+        ) Show raw
     .col-lg-12.row(ng-bind-html-unsafe='violation.prepared')
