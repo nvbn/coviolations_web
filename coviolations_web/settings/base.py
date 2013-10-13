@@ -94,7 +94,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.tz",
     "django.contrib.messages.context_processors.messages",
     'push.context_processors.push_processor',
-    'app.context_processors.request_site',
 )
 
 
