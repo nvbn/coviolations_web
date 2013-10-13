@@ -1,14 +1,39 @@
 include top_menu.jade
 
-.col-lg-12.row.top-row.project-info
+.col-lg-12.row.top-row.project-info.project-page-row
     h2
         a(href='{{project.url}}')
             i.icon-github
             |  {{project.name}}
-    a(href='', ng-click="toggleBadgeHelp()")
-        i.icon-collapse
-        |  Get badge&nbsp;
-        img(ng-src='{{project.badge_url}}')
+    .col-lg-12.row
+        .col-lg-3.row
+            a(href='', ng-click="toggleBadgeHelp()")
+                i.icon-collapse
+                |  Get badge&nbsp;
+                img(ng-src='{{project.badge_url}}')
+        .col-lg-2.row
+            select.form-control(
+                ng-model='branch', ng-options='branch for branch in branches'
+            )
+                option(value='') Show all
+        .col-lg-6.row.col-lg-offset-1.project-token(ng-show='project.can_change')
+            .pull-right
+                | Token:&nbsp;
+                code {{project.token}}
+                button.btn.btn-danger.btn-xs(
+                    type='button', ng-click='showConfirmRegenerateToken = true'
+                )
+                    i.icon-repeat
+            .alert.alert-danger(ng-show='showConfirmRegenerateToken')
+                h4 Are you sure wnat to regenerate token?
+                p It will break all applications depend on it.
+                p
+                    button.btn.btn-danger(
+                        ng-click='regenerateToken(); showConfirmRegenerateToken = false'
+                    ) Yes
+                    button.btn.btn-default(
+                        ng-click='showConfirmRegenerateToken = false'
+                    ) No
     .col-lg-12.row(ng-show='showBadgeHelp')
         .col-lg-4
             strong Markdown
@@ -26,10 +51,8 @@ include top_menu.jade
             pre.prettyprint.
                 .. image:: {{project.badge_url}}
                 :target: https://{{domain}}/#/project/{{project.name}}
-    select(ng-model='branch', ng-options='branch for branch in branches')
-        option(value='') Show all
 
-.col-lg-12.last-tasks-row.row
+.col-lg-12.last-tasks-row.row.project-page-row
     table.table.table-hover(
         infinite-scroll='tasks.load()',
         infinite-scroll-distance='2'

@@ -67,9 +67,12 @@ define [
         projectName = _.sprintf '%s/%s', $routeParams['owner'], $routeParams['name']
         projectUrl = _.sprintf '/api/v1/projects/project/%s/', projectName
 
-        $http.get(projectUrl).success (data) =>
-            $scope.project = data
-            $scope.branches = data.branches
+        loadProject = =>
+            $http.get(projectUrl).success (data) =>
+                $scope.project = data
+                if not $scope.branches
+                    $scope.branches = data.branches
+        loadProject()
 
         $scope.$watch 'branch', (branch) =>
             $scope.tasks = new Tasks 20,
@@ -81,6 +84,11 @@ define [
         $scope.toggleBadgeHelp = =>
             $scope.showBadgeHelp =
                 if $scope.showBadgeHelp then false else true
+
+        $scope.regenerateToken = =>
+            $scope.project.token = ''
+            $http.put(projectUrl, $scope.project).success =>
+                loadProject()
 
         $scope.domain = window.domain
     module.controller 'ProjectCtrl', [
