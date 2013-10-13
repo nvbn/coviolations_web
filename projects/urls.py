@@ -12,8 +12,4 @@ urlpatterns = patterns(
         r'^(?P<slug>.*)/badge/$', views.ProjectBadge.as_view(),
         name='projects_badge',
     ),
-    url(
-        r'^(?P<slug>.*)/$', views.ProjectView.as_view(),
-        name='projects_project',
-    ),
 )

@@ -5,61 +5,10 @@ from django.test import TestCase
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from tools.mongo import MongoFlushMixin
-from tools.tests import MockGithubMixin
 from tasks.models import Tasks
 from tasks import const
 from ..models import Project
 from . import factories
-
-
-class ProjectViewCase(MockGithubMixin, TestCase):
-    """Project view case"""
-
-    def setUp(self):
-        project = factories.ProjectFactory.create()
-        self.url = reverse('projects_project', args=(project.name,))
-        self.user = User.objects.create_user('test', 'test@test.test', 'test')
-        super(ProjectViewCase, self).setUp()
-
-    def test_ok(self):
-        """Test status=200"""
-        response = self.client.get(self.url)
-        response.status_code.should.be.equal(200)
-
-    def test_404_for_private_and_not_authenticated(self):
-        """Test 404 for private and not authenticated"""
-        project = factories.ProjectFactory(is_private=True)
-        response = self.client.get(
-            reverse('projects_project', args=(project.name,)),
-        )
-        response.status_code.should.be.equal(302)
-
-    def test_404_for_private_and_not_owner(self):
-        """Test 404 for private and not owner"""
-        self.client.login(
-            username='test',
-            password='test',
-        )
-        project = factories.ProjectFactory(is_private=True)
-        response = self.client.get(
-            reverse('projects_project', args=(project.name,)),
-        )
-        response.status_code.should.be.equal(403)
-
-    def test_ok_for_private_and_owner(self):
-        """Test 200 for private and owner"""
-        self.client.login(
-            username='test',
-            password='test',
-        )
-        project = factories.ProjectFactory(
-            is_private=True,
-            owner=self.user,
-        )
-        response = self.client.get(
-            reverse('projects_project', args=(project.name,)),
-        )
-        response.status_code.should.be.equal(200)
 
 
 class ProjectBadgeViewCase(MongoFlushMixin, TestCase):
