@@ -58,4 +58,5 @@ def testem_violation(data):
         'pass': pass_,
         'fail': fail,
     }
+    data['success_percent'] = (pass_ * 100) / tests if tests else 100
     return data

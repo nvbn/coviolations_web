@@ -18,6 +18,7 @@ class TestemViolationCase(TestCase):
         result['plot']['tests'].should.be.equal(34)
         result['plot']['pass'].should.be.equal(34)
         result['plot']['fail'].should.be.equal(0)
+        result['success_percent'].should.be.equal(100)
 
     def test_fail(self):
         data = {
@@ -28,3 +29,4 @@ class TestemViolationCase(TestCase):
         result['plot']['tests'].should.be.equal(35)
         result['plot']['pass'].should.be.equal(34)
         result['plot']['fail'].should.be.equal(1)
+        result['success_percent'].should.be.equal(97)
