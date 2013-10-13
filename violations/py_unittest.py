@@ -56,21 +56,28 @@ def py_unittest_violation(data):
 
     plot = {'failures': 0, 'errors': 0}
     fail_match = re.match(r'.*failures=(\d*).*', status)
+    failed_percent = 0
     if fail_match:
         plot['failures'] = int(fail_match.groups()[0])
         prepared_data['failures'] = int(fail_match.groups()[0])
+        failed_percent += int(fail_match.groups()[0])
     error_match = re.match(r'.*errors=(\d*).*', status)
     if error_match:
         plot['errors'] = int(error_match.groups()[0])
         prepared_data['errors'] = int(error_match.groups()[0])
+        failed_percent += int(error_match.groups()[0])
     total_match = re.match(r'Ran (\d*) tests .*', summary)
     if total_match:
-        plot['test_count'] = int(total_match.groups()[0])
-        prepared_data['total'] = int(total_match.groups()[0])
+        total = int(total_match.groups()[0])
+        plot['test_count'] = total
+        prepared_data['total'] = total
+        failed_percent = (failed_percent * 100) / total \
+            if total else 0
 
     data['prepared'] = render_to_string(
         'violations/py_tests/prepared.html', prepared_data,
     )
 
     data['plot'] = plot
+    data['success_percent'] = 100 - failed_percent
     return data
