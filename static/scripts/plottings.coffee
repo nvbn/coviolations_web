@@ -64,10 +64,10 @@ define ['underscore'], (_) ->
 
         createChartObjects: ->
             ### Create objects for angles ###
-            _.reduce _.keys(@violations), (acc, name) =>
+            _.reduce @violations, (acc, value, name) =>
                 colorer = new PlotColorer
                 colors = []
-                datasets = _.map @violations[name].plots, (plot, plotName) =>
+                datasets = _.map value.plots, (plot, plotName) =>
                     color = colorer.getColor()
                     colors.push
                         name: plotName
