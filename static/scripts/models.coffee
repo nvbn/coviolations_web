@@ -11,12 +11,18 @@ define ['angular', 'underscore', 'underscoreString'], (angular, _, _s) ->
                 @items = []
                 @canLoad = true
                 @offset = 0
+                @loadLock = false
 
             load: (callback=->@) ->
                 if @canLoad
-                    $http.get(@getUrl()).success (data) =>
-                        @onLoaded(data, callback)
-                    @offset += @limit
+                    if @loadLock
+                        setTimeout 100, => @load(callback)
+                    else
+                        @loadLock = true
+                        $http.get(@getUrl()).success (data) =>
+                            @onLoaded(data, callback)
+                            @loadLock = false
+                        @offset += @limit
 
             getUrl: ->
                 base = [
