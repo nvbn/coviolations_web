@@ -1,5 +1,6 @@
 $title-font: 20pt
 $main-font: 15pt
+$description-size: 11pt
 $button-offset: 5pt
 $default-offset: 10pt
 $success-color: #dff0d8
@@ -9,6 +10,7 @@ $danger-color: #ac2925
 $neutral-color: #eeeeee
 $icon-size: 20pt
 $chart-background: #ffffff
+$description-color: #3b3b3b
 
 
 @mixin block($color)
@@ -20,6 +22,48 @@ $chart-background: #ffffff
     .project-icon, .icon-lock
         width: $icon-size
         margin-right: $default-offset
+
+
+@mixin as-description
+    color: $description-color
+    font-size: $description-size
+
+
+@mixin with-tasks
+    .task-line
+        padding-top: $default-offset
+        padding-bottom: $default-offset
+        border: 3px solid $info-color
+        border-top: none
+
+        .pusher-icon
+            width: $description-size
+
+        .task-options
+            border-right: 1px solid $info-color
+            font-size: $description-size
+
+        .commit-info
+            .preview-commit
+                @include as-description
+
+            .commit-hash
+                width: 40pt
+                display: inline-block
+
+        .description
+            @include as-description
+            padding-right: $default-offset
+            display: inline-block
+            width: 50pt
+
+        .percent-badge
+            @include as-description
+            position: absolute
+            background: $info-color
+            top: 0
+            right: 0
+            padding: 3pt
 
 
 .plot-color-line
@@ -38,6 +82,7 @@ $chart-background: #ffffff
     display: block
     height: 0
     overflow: visible
+
     .modal-dialog
         width: 800pt
 
@@ -83,13 +128,17 @@ $chart-background: #ffffff
 
 .last-tasks-row
     @include block($neutral-color)
+    @include with-tasks
     padding-top: $default-offset
 
-    .success
-        background: $success-color
+    .holder
+        padding-right: 0
 
-    .failed
-        background: $fail-color
+        .success
+            background: $success-color
+
+        .failed
+            background: $fail-color
 
 
 .manage-projects-row

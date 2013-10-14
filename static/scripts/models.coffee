@@ -49,7 +49,19 @@ define ['angular', 'underscore', 'underscoreString'], (angular, _, _s) ->
 
             prepareItem: (item) ->
                 item.created = item.created.replace('T', ' ').slice(0, -7)
-                item
+                if item.commit.inner
+                    item.lastCommit = _.last item.commit.inner
+                    if item.commit.inner.length > 3
+                        item.lastCommits = _.last item.commit.inner, 3
+                        item.commitsToExpand = item.commit.inner.length - 3
+                    else
+                        item.lastCommits = item.commit.inner
+                        item.commitsToExpand = 0
+                else
+                    item.lastCommit = item.commit
+                    item.lastCommits = []
+                    item.commitsToExpand = 0
+                return item
     module.factory 'Tasks', getTaskModel
 
     getTaskModel: getTaskModel

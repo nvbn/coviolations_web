@@ -24,21 +24,39 @@ include top_menu.jade
 
 .col-lg-12.row.last-tasks-row.dashboard-row
     h2 Last performed tasks
-    table.table.table-hover(
+    .col-lg-12.holder(
         infinite-scroll='tasks.load()',
         infinite-scroll-distance='2'
     )
-        tr(
+        .col-lg-12.row.task-line(
             ng-repeat='task in tasks.items'
             class='{{task.status == 1 && "success" || "failed"}}'
         )
-            td
-                a(href='#/projects/{{task.project}}/') {{task.project}}
-                | :&nbsp;
-                a(href='#/tasks/{{task.id}}/').
-                    {{task.commit.branch}}\#{{task.commit.range}}
-            td {{task.success_percent||0}}%
-            td
-                span.pull-right {{task.created}}
-        tr(ng-show='!tasks.items.length')
-            td You don't have finished tasks.
+            .col-lg-4.task-options
+                .col-lg-12.row
+                    span.description project:
+                    a(href='#/projects/{{task.project}}/') {{task.project}}
+                .col-lg-12.row
+                    span.description commits:
+                    a(href='#/tasks/{{task.id}}/').
+                        {{task.commit.branch}}\#{{task.commit.range}}
+                .col-lg-12.row
+                    span.description pusher:
+                    a(href='{{task.lastCommit.author.url}}')
+                        img.pusher-icon(ng-src='{{task.lastCommit.author.avatar}}')
+                        |  {{task.commit.author}}
+                .col-lg-12.row
+                    span.description created:
+                    span {{task.created}}
+            .col-lg-8.commit-info
+                p {{task.commit.summary}}
+                p.preview-commit(ng-repeat='commit in task.lastCommits')
+                    a.commit-hash(href='{{commit.url}}') {{commit.hash}}&nbsp;
+                    a(href='{{commit.author.url}}')
+                        img.pusher-icon(ng-src='{{commit.author.avatar}}')
+                        |  {{commit.author.name}}
+                    | : {{commit.message}}
+                p.preview-commit(ng-show='task.commitsToExpand')
+                    a(href='#/tasks/{{task.id}}/') And {{task.commitsToExpand}} more commits.
+            .percent-badge {{task.success_percent||0}}%
+        .col-lg-12(ng-show='!tasks.items.length') You don't have finished tasks.
