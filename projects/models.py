@@ -127,6 +127,10 @@ class Project(models.Model):
     comment_from_owner_account = models.BooleanField(
         default=False, verbose_name=_('comment from owner account'),
     )
+    default_branch = models.CharField(
+        max_length=300, blank=True, null=True,
+        verbose_name=_('default branch'),
+    )
 
     objects = ProjectManager()
 
