@@ -131,6 +131,10 @@ class Project(models.Model):
         max_length=300, blank=True, null=True,
         verbose_name=_('default branch'),
     )
+    dashboard_branch = models.CharField(
+        max_length=300, blank=True, null=True,
+        verbose_name=_('dashboard branch'),
+    )
 
     objects = ProjectManager()
 
