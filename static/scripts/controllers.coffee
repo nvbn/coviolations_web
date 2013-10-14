@@ -102,6 +102,7 @@ define [
                 $scope.project = data
                 if not $scope.branches
                     $scope.branches = data.branches
+                $scope.branch = $scope.project.default_branch
                 ngProgress.complete()
         loadProject()
 
