@@ -9,7 +9,7 @@ include top_menu.jade
         | : {{task.commit.range}}
     a(href='{{task.commit.url}}') {{task.commit.summary}}
     table.table.table-hover
-        tr(ng-repeat='commit in task.commit.inner')
+        tr.task-commit(ng-repeat='commit in task.commit.inner')
             td
                 a(href='{{commit.url}}') {{commit.hash}}
             td
@@ -25,4 +25,4 @@ include top_menu.jade
             href='/tasks/{{$parent.task.id}}/raw/{{$index}}/',
             target='_blank'
         ) Show raw
-    .col-lg-12.row(ng-bind-html-unsafe='violation.prepared')
+    .col-lg-12.row.violation-content(ng-bind-html-unsafe='violation.prepared')
