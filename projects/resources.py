@@ -92,12 +92,18 @@ class ProjectsResource(ModelResource):
     def _attach_success_percent(self, bundle):
         """Attach success percent"""
         if bundle.request.GET.get('with_success_percent'):
+            spec = {
+                'project': bundle.obj.name,
+            }
+
+            if bundle.obj.dashboard_branch:
+                spec['branch'] = bundle.obj.dashboard_branch
+
             bundle.data['success_percents'] = [
-                task.get('success_percent', 0) for task in Tasks.find({
-                    'project': bundle.obj.name,
-                }, sort=[('created', DESCENDING)], fields={
-                    'success_percent': True,
-                }, limit=100)
+                task.get('success_percent', 0) for task in Tasks.find(
+                    spec, sort=[('created', DESCENDING)], fields={
+                        'success_percent': True,
+                    }, limit=100)
             ]
 
     def _attach_last_task(self, bundle):

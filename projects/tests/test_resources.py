@@ -1,4 +1,5 @@
 import sure
+from datetime import datetime
 from mock import MagicMock
 from django.contrib.auth.models import User
 from tastypie.test import ResourceTestCase
@@ -145,6 +146,27 @@ class ProjectsResourceCase(MockGithubMixin, ResourceTestCase):
             '{}{}/?with_success_percent=true'.format(self.url, project.name),
         )
         self.deserialize(response)['success_percents'].should.be.equal([])
+
+    def test_attach_success_percent_only_with_dashboard_branch(self):
+        """Test attach success percent only with dashboard branch"""
+        project = factories.ProjectFactory(
+            owner=self.user, dashboard_branch='branch',
+        )
+        Tasks.insert([{
+            'project': project.name,
+            'branch': 'branch',
+            'created': datetime(2005, 5, 5),
+            'success_percent': 12,
+        }, {
+            'project': project.name,
+            'branch': 'test',
+            'created': datetime(2006, 5, 5),
+            'success_percent': 92,
+        }])
+        response = self.api_client.get(
+            '{}{}/?with_success_percent=true'.format(self.url, project.name),
+        )
+        self.deserialize(response)['success_percents'].should.be.equal([12])
 
     def test_attach_last_task(self):
         """Test attach last task"""
