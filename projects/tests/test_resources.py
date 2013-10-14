@@ -157,3 +157,11 @@ class ProjectsResourceCase(MockGithubMixin, ResourceTestCase):
         )
         self.deserialize(response)['last_task']['_id'].should.be\
             .equal(str(task_id))
+
+    def test_attach_last_task_without_tasks(self):
+        """Test attach last task without tasks"""
+        project = factories.ProjectFactory(owner=self.user)
+        response = self.api_client.get(
+            '{}{}/?with_last_task=true'.format(self.url, project.name),
+        )
+        self.deserialize(response)['last_task'].should.be.none
