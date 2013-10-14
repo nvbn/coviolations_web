@@ -52,7 +52,7 @@ define [
 
         ngProgress.start()
         $http.get(
-            '/api/v1/projects/project/?limit=0&with_success_percent=true'
+            '/api/v1/projects/project/?limit=0&with_success_percent=true&with_last_task=true'
         ).success (data) =>
             $scope.projects = data.objects
             _.each $scope.projects, (project) =>
