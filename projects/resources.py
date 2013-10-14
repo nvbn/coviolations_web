@@ -54,6 +54,12 @@ class ProjectsResource(ModelResource):
     badge_url = fields.CharField(attribute='get_badge_url', readonly=True)
     owner_id = fields.CharField(attribute='owner_id', readonly=True)
     token = fields.CharField(attribute='token', blank=True, null=True)
+    default_branch = fields.CharField(
+        attribute='default_branch', blank=True, null=True,
+    )
+    dashboard_branch = fields.CharField(
+        attribute='dashboard_branch', blank=True, null=True,
+    )
     can_change = fields.BooleanField(default=False)
     success_percents = fields.ListField(blank=True, null=True)
     last_task = fields.DictField(blank=True, null=True)
