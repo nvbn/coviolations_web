@@ -73,14 +73,14 @@ class ProjectManager(models.Manager):
         try:
             project = Project.objects.get(
                 name=repo.full_name,
-                url=repo.url,
+                url=repo.html_url,
                 is_private=repo.private,
             )
         except Project.DoesNotExist:
             project = Project(
                 owner=user,
                 name=repo.full_name,
-                url=repo.url,
+                url=repo.html_url,
                 is_private=repo.private,
             )
         project.organization = organization
