@@ -56,6 +56,7 @@ class ProjectsResource(ModelResource):
     token = fields.CharField(attribute='token', blank=True, null=True)
     can_change = fields.BooleanField(default=False)
     success_percents = fields.ListField(blank=True, null=True)
+    last_task = fields.DictField(blank=True, null=True)
 
     class Meta:
         queryset = Project.objects.all()
@@ -79,6 +80,7 @@ class ProjectsResource(ModelResource):
         else:
             bundle.data['token'] = ''
         self._attach_success_percent(bundle)
+        self._attach_last_task(bundle)
         return bundle
 
     def _attach_success_percent(self, bundle):
@@ -91,3 +93,17 @@ class ProjectsResource(ModelResource):
                     'success_percent': True,
                 }, limit=100)
             ]
+
+    def _attach_last_task(self, bundle):
+        """Attach last task to project"""
+        if bundle.request.GET.get('with_last_task'):
+            bundle.data['last_task'] = Tasks.find_one({
+                'project': bundle.obj.name,
+            }, sort=[('created', DESCENDING)], fields={
+                name: True for name in (
+                    'service', 'project', 'commit', 'plot',
+                    'created', 'status', 'success_percent',
+                )
+            })
+        else:
+            bundle.data['last_task'] = None

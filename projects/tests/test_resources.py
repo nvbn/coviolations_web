@@ -2,6 +2,7 @@ import sure
 from django.contrib.auth.models import User
 from tastypie.test import ResourceTestCase
 from tools.tests import MockGithubMixin
+from tasks.models import Tasks
 from .. import models
 from . import factories
 
@@ -133,3 +134,15 @@ class ProjectsResourceCase(MockGithubMixin, ResourceTestCase):
             '{}{}/?with_success_percent=true'.format(self.url, project.name),
         )
         self.deserialize(response)['success_percents'].should.be.equal([])
+
+    def test_attach_last_task(self):
+        """Test attach last task"""
+        project = factories.ProjectFactory(owner=self.user)
+        task_id = Tasks.save({
+            'project': project.name,
+        })
+        response = self.api_client.get(
+            '{}{}/?with_last_task=true'.format(self.url, project.name),
+        )
+        self.deserialize(response)['last_task']['_id'].should.be\
+            .equal(str(task_id))
