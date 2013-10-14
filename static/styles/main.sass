@@ -11,6 +11,11 @@ $icon-size: 20pt
 $chart-background: #ffffff
 
 
+@mixin block($color)
+    border: 2px solid $color
+    border-top: none
+
+
 @mixin with-projects
     .project-icon, .icon-lock
         width: $icon-size
@@ -56,10 +61,10 @@ $chart-background: #ffffff
         font-size: $main-font
 
 .index-odd-block
-    background: $success-color
+    @include block($success-color)
 
 .index-even-block
-    background: $fail-color
+    @include block($fail-color)
 
 .index-top-block
     padding-top: $default-offset
@@ -69,14 +74,14 @@ $chart-background: #ffffff
     font-size: $main-font
 
 .enabled-projects-row
-    background: $info-color
+    @include block($info-color)
     @include with-projects
 
     .add-project-button
         margin-left: $default-offset
 
 .last-tasks-row
-    background: $neutral-color
+    @include block($neutral-color)
     padding-top: $default-offset
 
     .success
@@ -87,7 +92,7 @@ $chart-background: #ffffff
 
 
 .manage-projects-row
-    background: $info-color
+    @include block($info-color)
     font-size: $main-font
     @include with-projects
 
@@ -97,7 +102,7 @@ $chart-background: #ffffff
     padding-bottom: $default-offset
 
 .project-info
-    background: $info-color
+    @include block($info-color)
 
     .project-token
         button
@@ -113,7 +118,7 @@ $chart-background: #ffffff
                 margin-right: $button-offset
 
 .project-charts
-    background: $fail-color
+    @include block($fail-color)
 
     .project-chart-row
         margin-left: $default-offset
@@ -126,8 +131,8 @@ $chart-background: #ffffff
     font-size: $main-font
 
 .task-summary-row
-    background: $info-color
+    @include block($info-color)
     @include with-projects
 
 .violation-row
-    background: $neutral-color
+    @include block($neutral-color)
