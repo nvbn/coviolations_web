@@ -39,3 +39,11 @@
                             ng-options='branch for branch in project.branches'
                         )
                             option(value='') Show all
+                tr
+                    td Branch for dashboard page chart
+                    td
+                        select.form-control(
+                            ng-model='project.dashboard_branch',
+                            ng-options='branch for branch in project.branches'
+                        )
+                            option(value='') Show all

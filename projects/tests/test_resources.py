@@ -154,12 +154,12 @@ class ProjectsResourceCase(MockGithubMixin, ResourceTestCase):
         )
         Tasks.insert([{
             'project': project.name,
-            'branch': 'branch',
+            'commit': {'branch': 'branch'},
             'created': datetime(2005, 5, 5),
             'success_percent': 12,
         }, {
             'project': project.name,
-            'branch': 'test',
+            'commit': {'branch': 'test'},
             'created': datetime(2006, 5, 5),
             'success_percent': 92,
         }])

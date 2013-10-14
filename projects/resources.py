@@ -97,7 +97,7 @@ class ProjectsResource(ModelResource):
             }
 
             if bundle.obj.dashboard_branch:
-                spec['branch'] = bundle.obj.dashboard_branch
+                spec['commit.branch'] = bundle.obj.dashboard_branch
 
             bundle.data['success_percents'] = [
                 task.get('success_percent', 0) for task in Tasks.find(
