@@ -1,4 +1,5 @@
 import sure
+from mock import MagicMock
 from django.contrib.auth.models import User
 from tastypie.test import ResourceTestCase
 from tools.tests import MockGithubMixin
@@ -13,6 +14,7 @@ class ProjectsResourceCase(MockGithubMixin, ResourceTestCase):
     def setUp(self):
         MockGithubMixin.setUp(self)
         ResourceTestCase.setUp(self)
+        self._mock_make_https()
         self.user = User.objects.create_user(
             'test', 'test@test.test', 'test',
         )
@@ -21,6 +23,15 @@ class ProjectsResourceCase(MockGithubMixin, ResourceTestCase):
             password='test',
         )
         self.url = '/api/v1/projects/project/'
+
+    def _mock_make_https(self):
+        """Mock make_https"""
+        self._orig_make_https = models.make_https
+        models.make_https = MagicMock(return_value='')
+
+    def tearDown(self):
+        super(ProjectsResourceCase, self).tearDown()
+        models.make_https = self._orig_make_https
 
     def test_read_list(self):
         """Test read list"""
