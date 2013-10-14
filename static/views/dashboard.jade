@@ -22,10 +22,11 @@ include top_menu.jade
         br
         canvas(
             fullfill, linechart, options='project.chart.options',
-            data='project.chart.data', height=100
+            data='project.chart.data', height=100, ng-show='$parent.project.last_task'
         )
+        .last-commit.failed(ng-hide='project.last_task') Not tasks performed
     .col-lg-12.project-line(ng-show='!projects.length')
-        You don't have enabled projects.
+        | You don't have enabled projects.
 
 .col-lg-12.row.last-tasks-row.dashboard-row
     h2 Last performed tasks
