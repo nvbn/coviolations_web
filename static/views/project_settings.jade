@@ -4,7 +4,7 @@
             button.close(
                 type='button', ng-click='close()', aria-hidden='true'
             ) &times;
-            h3 Settings
+            h3 Project settings
         .modal-body
             table.table.table-hover
                 tr
@@ -19,8 +19,8 @@
                                 type='button', ng-model='project.is_enabled',
                                 btn-radio='false'
                             ) No
-                tr
-                    td Comment pull requests from owner account (only for private repos)
+                tr(ng-show='project.is_private')
+                    td Comment pull requests from owner account
                     td
                         .btn-group.pull-right
                             button.btn.btn-default(
