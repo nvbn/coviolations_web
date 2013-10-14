@@ -125,10 +125,25 @@ $description-color: #3b3b3b
 .enabled-projects-row
     @include block($info-color)
     @include with-projects
-    overflow-x: hidden
+    padding-bottom: $default-offset
 
     .add-project-button
         margin-left: $default-offset
+
+    .project-line
+        border: 3px solid $info-color
+        border-top: none
+        padding-top: $default-offset
+
+        canvas
+            margin-left: -10px
+
+    .project-line:first-of-type
+        border-top: 3px solid $info-color
+
+    .project-line:hover
+        background: $hover-color
+
 
 .last-tasks-row
     @include block($neutral-color)

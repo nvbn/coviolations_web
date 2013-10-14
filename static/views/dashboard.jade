@@ -8,19 +8,17 @@ include top_menu.jade
             tooltip-placement='right'
         )
             i.icon-plus
-    table.table.table-hover.col-lg-12row
-        tr(ng-repeat="project in projects")
-            td
-                img.project-icon(ng-src='{{project.icon}}')
-                i.icon-lock(ng-show="project.is_private")
-                a(href='#/projects/{{project.name}}') {{project.name}}
-                br
-                canvas(
-                    fullfill, linechart, options='project.chart.options',
-                    data='project.chart.data', height=100
-                )
-        tr(ng-show='!projects.length')
-            td You don't have enabled projects.
+    .col-lg-12.project-line(ng-repeat="project in projects")
+        img.project-icon(ng-src='{{project.icon}}')
+        i.icon-lock(ng-show="project.is_private")
+        a(href='#/projects/{{project.name}}') {{project.name}}
+        br
+        canvas(
+            fullfill, linechart, options='project.chart.options',
+            data='project.chart.data', height=100
+        )
+    .col-lg-12.project-line(ng-show='!projects.length')
+        You don't have enabled projects.
 
 .col-lg-12.row.last-tasks-row.dashboard-row
     h2 Last performed tasks

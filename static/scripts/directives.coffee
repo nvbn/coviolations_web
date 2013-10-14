@@ -3,4 +3,4 @@ define ['angular', 'jquery'], (angular, $) ->
     module.directive 'fullfill', ->
         (scope, element) ->
             $el = $(element)
-            $el.attr 'width', $el.parent().width() + 10
+            $el.attr 'width', $el.parent().width() + 21
