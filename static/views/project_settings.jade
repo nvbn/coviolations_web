@@ -31,3 +31,11 @@
                                 type='button', ng-model='project.comment_from_owner_account',
                                 btn-radio='false'
                             ) No
+                tr
+                    td Default branch for project page
+                    td
+                        select.form-control(
+                            ng-model='project.default_branch',
+                            ng-options='branch for branch in project.branches'
+                        )
+                            option(value='') Show all
