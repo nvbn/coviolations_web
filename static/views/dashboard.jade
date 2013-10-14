@@ -8,7 +8,7 @@ include top_menu.jade
             tooltip-placement='right'
         )
             i.icon-plus
-    table.table.table-hover
+    table.table.table-hover.col-lg-12row
         tr(ng-repeat="project in projects")
             td
                 img.project-icon(ng-src='{{project.icon}}')
