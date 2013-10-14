@@ -30,6 +30,13 @@ $description-color: #3b3b3b
     font-size: $description-size
 
 
+@mixin as-right-badge
+    position: absolute
+    top: 0
+    right: 0
+    padding: 3pt
+
+
 @mixin with-tasks
     .task-line
         padding-top: $default-offset
@@ -60,14 +67,19 @@ $description-color: #3b3b3b
 
         .percent-badge
             @include as-description
-            position: absolute
+            @include as-right-badge
             background: $info-color
-            top: 0
-            right: 0
-            padding: 3pt
 
     .task-line:hover
         background: $hover-color !important
+
+
+@mixin with-types
+    .success
+        background: $success-color
+
+    .failed
+        background: $fail-color
 
 
 .plot-color-line
@@ -131,12 +143,17 @@ $description-color: #3b3b3b
         margin-left: $default-offset
 
     .project-line
+        @include with-types
         border: 3px solid $info-color
         border-top: none
         padding-top: $default-offset
 
         canvas
             margin-left: -10px
+
+        .last-commit
+            @include as-description
+            @include as-right-badge
 
     .project-line:first-of-type
         border-top: 3px solid $info-color
@@ -151,13 +168,8 @@ $description-color: #3b3b3b
     padding-top: $default-offset
 
     .holder
+        @include with-types
         padding-right: 0
-
-        .success
-            background: $success-color
-
-        .failed
-            background: $fail-color
 
 
 .manage-projects-row

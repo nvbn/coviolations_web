@@ -12,6 +12,13 @@ include top_menu.jade
         img.project-icon(ng-src='{{project.icon}}')
         i.icon-lock(ng-show="project.is_private")
         a(href='#/projects/{{project.name}}') {{project.name}}
+        .last-commit(
+            ng-show='project.last_task',
+            class='{{project.last_task.status == 1 && "success" || "failed"}}'
+        )
+            | Last task:&nbsp;
+            a(href='#/tasks/{{project.last_task._id}}/')
+                | {{project.last_task.commit.author}}@{{project.last_task.commit.branch}}\#{{project.last_task.commit.range}}
         br
         canvas(
             fullfill, linechart, options='project.chart.options',
