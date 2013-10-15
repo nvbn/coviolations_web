@@ -11,6 +11,7 @@ from tools.short import make_https
 from tools.mongo import db
 from tasks.models import Tasks
 from tasks.exceptions import TaskDoesNotExists
+from tasks.const import STATUS_SUCCESS
 from . import const
 
 
@@ -248,27 +249,44 @@ class Project(models.Model):
         else:
             return 0
 
-    def update_week_statistic(self):
-        """Update week statistic"""
-        days = {day: {
-            'count': 0,
-            'sum_percent': 0,
-        } for day in range(0, 7)}
+    def _fill_statistic_days(self, days):
+        """Fill statistic days"""
         for task in Tasks.find({
             'project': self.name,
             'created': {'$exists': True},
             'success_percent': {'$exists': True},
         }):
             if type(task['created']) is datetime:
-                days[task['created'].weekday()]['count'] += 1
-                days[task['created'].weekday()]['sum_percent'] +=\
+                day = task['created'].weekday()
+                days[day]['count'] += 1
+                days[day]['sum_percent'] +=\
                     task['success_percent']
+                days[day][
+                    'success' if task['status'] == STATUS_SUCCESS else 'failed'
+                ] += 1
+
+    def _calculate_statistic_percent(self, days):
+        """Calculate statistic percent"""
+        for day in days.keys():
+            days[day]['percent'] =\
+                days[day]['sum_percent'] / days[day]['count']\
+                if days[day]['count'] else 0
+
+    def update_week_statistic(self):
+        """Update week statistic"""
+        days = {day: {
+            'count': 0,
+            'sum_percent': 0,
+            'success': 0,
+            'failed': 0,
+        } for day in range(0, 7)}
+        self._fill_statistic_days(days)
+        self._calculate_statistic_percent(days)
         WeekStatistic.remove({'project': self.name})
         WeekStatistic.save({
             'project': self.name,
             'days': {
-                str(day): values['sum_percent'] / values['count']
-                for day, values in days.items() if values['count']
+                str(day): values for day, values in days.items()
             },
         })
 
