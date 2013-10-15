@@ -142,6 +142,7 @@ def prepare_violations(task_id):
 
     project = Project.objects.get(name=task['project'])
     project.update_week_statistic()
+    project.update_day_time_statistic()
 
     sender.send(
         type='task', owner=task['owner_id'],
