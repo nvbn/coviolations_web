@@ -1,3 +1,4 @@
+from pymongo import DESCENDING
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models import Q
@@ -193,3 +194,19 @@ class Project(models.Model):
         if not hasattr(self, '_repo'):
             self._repo = self.owner.github.get_repo(self.name)
         return self._repo
+
+    def get_success_percents(self, count, branch=None):
+        """Get project last success percents"""
+        if branch is None:
+            branch = self.dashboard_branch
+        spec = {
+            'project': self.name,
+        }
+        if branch:
+            spec['commit.branch'] = branch
+        return [
+            task.get('success_percent', 0) for task in Tasks.find(
+                spec, sort=[('created', DESCENDING)], fields={
+                    'success_percent': True,
+                }, limit=count)
+        ]

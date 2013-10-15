@@ -121,6 +121,16 @@ class ProjectModelCase(MongoFlushMixin, TestCase):
         user = UserFactory()
         project.can_change(user).should.be.false
 
+    def test_get_success_percents(self):
+        """Test get success percents"""
+        project = factories.ProjectFactory()
+        Tasks.insert([{
+            'project': project.name,
+            'commit': {'branch': 'branch'},
+            'success_percent': 92,
+        }])
+        project.get_success_percents(10).should.be.equal([92])
+
 
 class OrganizationManagerCase(TestCase):
     """Organization manager case"""
