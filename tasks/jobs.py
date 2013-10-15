@@ -140,6 +140,9 @@ def prepare_violations(task_id):
         comment_pull_request.delay(task_id)
     comment_lines.delay(task_id)
 
+    project = Project.objects.get(name=task['project'])
+    project.update_week_statistic()
+
     sender.send(
         type='task', owner=task['owner_id'],
         task=str(task_id), project=task['project'],

@@ -64,6 +64,9 @@ class ProjectsResource(ModelResource):
     success_percents = fields.ListField(blank=True, null=True)
     last_task = fields.DictField(blank=True, null=True)
     trend = fields.FloatField(blank=True, null=True)
+    week_statistic = fields.DictField(
+        attribute='week_statistic', blank=True, null=True, readonly=True,
+    )
 
     class Meta:
         queryset = Project.objects.all()

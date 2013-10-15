@@ -1,3 +1,4 @@
+from datetime import datetime
 from pymongo import DESCENDING
 import numpy as np
 from django.core.urlresolvers import reverse
@@ -7,9 +8,13 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 from django_extensions.db.fields import UUIDField
 from tools.short import make_https
+from tools.mongo import db
 from tasks.models import Tasks
 from tasks.exceptions import TaskDoesNotExists
 from . import const
+
+
+WeekStatistic = db.week_statistic
 
 
 class OrganizationManager(models.Manager):
@@ -242,3 +247,36 @@ class Project(models.Model):
             )[0, 0]
         else:
             return 0
+
+    def update_week_statistic(self):
+        """Update week statistic"""
+        days = {day: {
+            'count': 0,
+            'sum_percent': 0,
+        } for day in range(0, 7)}
+        for task in Tasks.find({
+            'project': self.name,
+            'created': {'$exists': True},
+            'success_percent': {'$exists': True},
+        }):
+            if type(task['created']) is datetime:
+                days[task['created'].weekday()]['count'] += 1
+                days[task['created'].weekday()]['sum_percent'] +=\
+                    task['success_percent']
+        WeekStatistic.remove({'project': self.name})
+        WeekStatistic.save({
+            'project': self.name,
+            'days': {
+                str(day): values['sum_percent'] / values['count']
+                for day, values in days.items() if values['count']
+            },
+        })
+
+    @property
+    def week_statistic(self):
+        """Get week statistic"""
+        statistic = WeekStatistic.find_one({'project': self.name})
+        if statistic:
+            return statistic
+        else:
+            return {}

@@ -180,6 +180,12 @@ class ProjectModelCase(MongoFlushMixin, TestCase):
         })
         project.get_trend().should.be.equal(0)
 
+    def test_update_week_statistic(self):
+        """Test update week statistic"""
+        project = factories.ProjectFactory()
+        project.update_week_statistic()
+        project.week_statistic.should.be.a(dict)
+
 
 class OrganizationManagerCase(TestCase):
     """Organization manager case"""
