@@ -1,3 +1,4 @@
+from functools import wraps
 from itertools import ifilter
 from django.db import models
 
@@ -15,4 +16,16 @@ def extend(model, no_meta=False):
             else:
                 setattr(model, attr, val)
         return None
+    return decorator
+
+
+def attach_field(checker, field):
+    """Attach field to resource"""
+    def decorator(fnc):
+        @wraps(fnc)
+        def wrapper(self, bundle, *args, **kwargs):
+            if bundle.request.GET.get(checker):
+                bundle.data[field] = fnc(self, bundle, *args, **kwargs)
+
+        return wrapper
     return decorator

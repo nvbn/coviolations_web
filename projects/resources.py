@@ -2,6 +2,7 @@ from tastypie.resources import ModelResource
 from tastypie import fields
 from tastypie.authentication import Authentication
 from tastypie.authorization import Authorization
+from tools.decorators import attach_field
 from push.base import sender
 from tasks.exceptions import TaskDoesNotExists
 from .models import Project
@@ -90,24 +91,22 @@ class ProjectsResource(ModelResource):
         self._attach_trend(bundle)
         return bundle
 
+    @attach_field('with_success_percent', 'success_percents')
     def _attach_success_percent(self, bundle):
         """Attach success percent"""
-        if bundle.request.GET.get('with_success_percent'):
-            bundle.data['success_percents'] = bundle.obj.get_success_percents(
-                100, bundle.request.GET.get('branch'),
-            )
+        return bundle.obj.get_success_percents(
+            100, bundle.request.GET.get('branch'),
+        )
 
+    @attach_field('with_last_task', 'last_task')
     def _attach_last_task(self, bundle):
         """Attach last task to project"""
-        if bundle.request.GET.get('with_last_task'):
-            try:
-                bundle.data['last_task'] = bundle.obj.get_last_task()
-            except TaskDoesNotExists:
-                bundle.data['last_task'] = None
+        try:
+            return bundle.obj.get_last_task()
+        except TaskDoesNotExists:
+            return None
 
+    @attach_field('with_trend', 'trend')
     def _attach_trend(self, bundle):
         """Attach trend to project"""
-        if bundle.request.GET.get('with_trend'):
-            bundle.data['trend'] = bundle.obj.get_trend(
-                bundle.request.GET.get('branch'),
-            )
+        return bundle.obj.get_trend(bundle.request.GET.get('branch'))
