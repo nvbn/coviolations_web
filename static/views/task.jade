@@ -20,7 +20,7 @@ include top_menu.jade
                     | {{commit.author.name}}
             td {{commit.message}}
 
-.col-lg-12.row(class='{{menuFixed && "menu-fixed" || "menu"}}')
+.col-lg-12.row(class='{{menuFixed && "menu-fixed" || "menu-hidden"}}')
     .container.col-lg-12.row
         ul.nav.nav-pills.col-lg-12.row
             li
@@ -31,7 +31,8 @@ include top_menu.jade
                 class='{{violation.active && "active" || ""}}'
             )
                 a(href='', ng-click='$parent.scrollTo(violation)')
-                    | {{violation.name}}
+                    | {{violation.name}}&nbsp;
+                    i.icon-warning-sign(ng-show='violation.status == 2')
 
 .col-lg-12.row.violation-row.task-row(
     ng-repeat='violation in task.violations',
