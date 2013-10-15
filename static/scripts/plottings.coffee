@@ -130,6 +130,25 @@ define ['underscore'], (_) ->
             , @options
 
 
+    class WeekChart
+        ### Week bar chart ###
+        constructor: (data, @color='#d9534f') ->
+            @data = _.map _.range(7), (day) =>
+                data.days[day] or 0
+
+        createChartObject: ->
+            data:
+                labels: [
+                    'Mon', 'Tue', 'Wed', 'Thu',
+                    'Fri', 'Sat', 'Sun'
+                ]
+                datasets: [
+                    data: @data
+                    fillColor: @color
+                ]
+
+
     PlotData: PlotData
     PlotColorer: PlotColorer
     SuccessPercentPlot: SuccessPercentPlot
+    WeekChart: WeekChart

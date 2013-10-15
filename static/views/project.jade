@@ -70,6 +70,13 @@ include top_menu.jade
         span.plot-color-line(ng-repeat='color in chart.colors')
             span.plot-color-row(style="background-color: {{color.code}}")
             |  {{color.name}}
+    h2 Depend on time
+    .col-lg-4.row.project-chart-row
+        h3 week day success percent
+        canvas(
+            barchart, options='weekChart.options', data='weekChart.data',
+            width=350, height=220
+        )
 
 .col-lg-12.last-tasks-row.row.project-page-row
     .col-lg-12.holder(

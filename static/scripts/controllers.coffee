@@ -150,6 +150,8 @@ define [
                         ]
                         name: 'project quality'
                     $scope.charts = _.union [chart], charts
+                    weekChart = new plottings.WeekChart data.week_statistic
+                    $scope.weekChart = weekChart.createChartObject()
 
         $scope.toggleBadgeHelp = =>
             $scope.showBadgeHelp =
