@@ -151,9 +151,11 @@ define [
                         name: 'project quality'
                     $scope.charts = _.union [chart], charts
                     $scope.dateCharts = _.map [
-                        [data.week_statistic, "#5bc0de"]
-                    ], (pair) =>
-                        (new plottings.WeekChart pair[0], pair[1]).createChartObject()
+                        [data.week_statistic, 'percent', "#5bc0de", 'week day success percent']
+                        [data.week_statistic, 'success', "#5cb85c", 'week day success tasks']
+                        [data.week_statistic, 'failed', "#d9534f", 'week day failed tasks']
+                    ], (args) =>
+                        (new plottings.WeekChart args).createChartObject()
 
         $scope.toggleBadgeHelp = =>
             $scope.showBadgeHelp =

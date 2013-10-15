@@ -132,9 +132,15 @@ define ['underscore'], (_) ->
 
     class WeekChart
         ### Week bar chart ###
-        constructor: (data, @color='#d9534f') ->
+        constructor: (params) ->
+            @initialize.apply @, params
+
+        initialize: (data, @field, @color, @name) ->
             @data = _.map _.range(7), (day) =>
-                data.days[day] or 0
+                if data.days[day] and data.days[day][@field]
+                    data.days[day][@field]
+                else
+                    0
 
         createChartObject: ->
             data:
@@ -146,6 +152,7 @@ define ['underscore'], (_) ->
                     data: @data
                     fillColor: @color
                 ]
+            name: @name
 
 
     PlotData: PlotData

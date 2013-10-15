@@ -72,7 +72,7 @@ include top_menu.jade
             |  {{color.name}}
     h2 Depend on time
     .col-lg-4.row.project-chart-row(ng-repeat='chart in dateCharts')
-        h3 week day success percent
+        h3 {{chart.name}}
         canvas(
             barchart, options='chart.options', data='chart.data',
             width=350, height=220
