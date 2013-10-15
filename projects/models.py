@@ -16,6 +16,7 @@ from . import const
 
 
 WeekStatistic = db.week_statistic
+DayTimeStatistic = db.day_time_statistic
 
 
 class OrganizationManager(models.Manager):
@@ -249,52 +250,80 @@ class Project(models.Model):
         else:
             return 0
 
-    def _fill_statistic_days(self, days):
-        """Fill statistic days"""
+    def _fill_statistic_parts(self, parts, grouper):
+        """Fill statistic parts"""
         for task in Tasks.find({
             'project': self.name,
             'created': {'$exists': True},
             'success_percent': {'$exists': True},
         }):
             if type(task['created']) is datetime:
-                day = task['created'].weekday()
-                days[day]['count'] += 1
-                days[day]['sum_percent'] +=\
+                group = grouper(task)
+                parts[group]['count'] += 1
+                parts[group]['sum_percent'] +=\
                     task['success_percent']
-                days[day][
+                parts[group][
                     'success' if task['status'] == STATUS_SUCCESS else 'failed'
                 ] += 1
 
-    def _calculate_statistic_percent(self, days):
+    def _calculate_statistic_percent(self, parts):
         """Calculate statistic percent"""
-        for day in days.keys():
-            days[day]['percent'] =\
-                days[day]['sum_percent'] / days[day]['count']\
-                if days[day]['count'] else 0
+        for part in parts.keys():
+            parts[part]['percent'] =\
+                parts[part]['sum_percent'] / parts[part]['count']\
+                if parts[part]['count'] else 0
 
-    def update_week_statistic(self):
-        """Update week statistic"""
-        days = {day: {
+    def _get_initial_statistic(self):
+        """Get initial statistic"""
+        return {
             'count': 0,
             'sum_percent': 0,
             'success': 0,
             'failed': 0,
-        } for day in range(0, 7)}
-        self._fill_statistic_days(days)
-        self._calculate_statistic_percent(days)
-        WeekStatistic.remove({'project': self.name})
-        WeekStatistic.save({
+        }
+
+    def _recreate_statistic_obj(self, collection, field, parts):
+        """Recreate statistic obj"""
+        collection.remove({'project': self.name})
+        collection.save({
             'project': self.name,
-            'days': {
-                str(day): values for day, values in days.items()
+            field: {
+                str(part): values for part, values in parts.items()
             },
         })
 
-    @property
-    def week_statistic(self):
-        """Get week statistic"""
-        statistic = WeekStatistic.find_one({'project': self.name})
+    def update_week_statistic(self):
+        """Update week statistic"""
+        days = {day: self._get_initial_statistic() for day in range(0, 7)}
+        self._fill_statistic_parts(
+            days, lambda task: task['created'].weekday(),
+        )
+        self._calculate_statistic_percent(days)
+        self._recreate_statistic_obj(WeekStatistic, 'days', days)
+
+    def _get_statistic(self, collection):
+        """Get statistic"""
+        statistic = collection.find_one({'project': self.name})
         if statistic:
             return statistic
         else:
             return {}
+
+    @property
+    def week_statistic(self):
+        """Get week statistic"""
+        return self._get_statistic(WeekStatistic)
+
+    def update_day_time_statistic(self):
+        """Update day time statistic"""
+        parts = {part: self._get_initial_statistic() for part in range(6)}
+        self._fill_statistic_parts(
+            parts, lambda task: task['created'].hour / 4,
+        )
+        self._calculate_statistic_percent(parts)
+        self._recreate_statistic_obj(DayTimeStatistic, 'parts', parts)
+
+    @property
+    def day_time_statistic(self):
+        """Get day time statistic"""
+        return self._get_statistic(DayTimeStatistic)

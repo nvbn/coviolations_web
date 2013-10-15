@@ -1,4 +1,5 @@
 import sure
+from datetime import timedelta, datetime
 from django.test import TestCase
 from django.contrib.auth.models import User
 from accounts.tests.factories import UserFactory
@@ -6,6 +7,7 @@ from tools.mongo import MongoFlushMixin
 from tools.tests import MockGithubMixin
 from tasks.models import Tasks
 from tasks.exceptions import TaskDoesNotExists
+from tasks.const import STATUS_SUCCESS
 from .. import models
 from . import factories
 
@@ -63,7 +65,7 @@ class ProjectManagerCase(MockGithubMixin, TestCase):
 
 class ProjectModelCase(MongoFlushMixin, TestCase):
     """Project model case"""
-    mongo_flush = ['tasks']
+    mongo_flush = ['tasks', 'week_statistic', 'day_time_statistic']
 
     def test_project_branches(self):
         """Test getting project branches"""
@@ -180,11 +182,57 @@ class ProjectModelCase(MongoFlushMixin, TestCase):
         })
         project.get_trend().should.be.equal(0)
 
+    def test_update_week_statistic_without_tasks(self):
+        """Test update week statistic without tasks"""
+        project = factories.ProjectFactory()
+        project.update_week_statistic()
+        project.week_statistic['days'].should.be.equal({
+            unicode(n): {
+                u'count': 0,
+                u'sum_percent': 0,
+                u'success': 0,
+                u'failed': 0,
+                u'percent': 0,
+            } for n in range(7)
+        })
+
     def test_update_week_statistic(self):
         """Test update week statistic"""
         project = factories.ProjectFactory()
+        Tasks.insert([{
+            'project': project.name,
+            'success_percent': 10,
+            'status': STATUS_SUCCESS,
+            'created': datetime.now() + timedelta(days=day),
+        } for day in range(7)])
         project.update_week_statistic()
-        project.week_statistic.should.be.a(dict)
+        len(project.week_statistic).should.be.ok
+
+    def test_update_day_time_statistic_without_tasks(self):
+        """Test update day time statistic without tasks"""
+        project = factories.ProjectFactory()
+        project.update_day_time_statistic()
+        project.day_time_statistic['parts'].should.be.equal({
+            unicode(n): {
+                u'count': 0,
+                u'sum_percent': 0,
+                u'success': 0,
+                u'failed': 0,
+                u'percent': 0,
+            } for n in range(6)
+        })
+
+    def test_update_day_time_statistic(self):
+        """Test update day time statistic"""
+        project = factories.ProjectFactory()
+        Tasks.insert([{
+            'project': project.name,
+            'success_percent': 10,
+            'status': STATUS_SUCCESS,
+            'created': datetime.now() + timedelta(hours=4 * part),
+        } for part in range(6)])
+        project.update_day_time_statistic()
+        len(project.day_time_statistic).should.be.ok
 
 
 class OrganizationManagerCase(TestCase):
