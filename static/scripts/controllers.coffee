@@ -65,8 +65,8 @@ define [
                 plot = new plottings.SuccessPercentPlot project
                 project.chart = plot.createChartObject()
                 project.prettyTrend = _.sprintf '%.2f', project.trend if project.trend
-                project.trendClass = if project.trend > 0 then 'success' else
-                    if project.trend < 0 then 'failed' else 'neutral'
+                project.trendClass = if project.trend >= 0.01 then 'success' else
+                    if project.trend <= -0.99 then 'failed' else 'neutral'
                 if project.last_task and project.last_task.status == 2
                     failedTasks += 1
             favicoService.badge(failedTasks)
