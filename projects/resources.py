@@ -67,6 +67,9 @@ class ProjectsResource(ModelResource):
     week_statistic = fields.DictField(
         attribute='week_statistic', blank=True, null=True, readonly=True,
     )
+    day_time_statistic = fields.DictField(
+        attribute='day_time_statistic', blank=True, null=True, readonly=True,
+    )
 
     class Meta:
         queryset = Project.objects.all()
