@@ -187,3 +187,11 @@ class ProjectsResourceCase(MockGithubMixin, ResourceTestCase):
             '{}{}/?with_last_task=true'.format(self.url, project.name),
         )
         self.deserialize(response)['last_task'].should.be.none
+
+    def test_attach_trend(self):
+        """Test attach trend"""
+        project = factories.ProjectFactory(owner=self.user)
+        response = self.api_client.get(
+            '{}{}/?with_trend=true'.format(self.url, project.name),
+        )
+        self.deserialize(response)['trend'].should.be.equal(0)

@@ -62,6 +62,7 @@ class ProjectsResource(ModelResource):
     can_change = fields.BooleanField(default=False)
     success_percents = fields.ListField(blank=True, null=True)
     last_task = fields.DictField(blank=True, null=True)
+    trend = fields.FloatField(blank=True, null=True)
 
     class Meta:
         queryset = Project.objects.all()
@@ -86,6 +87,7 @@ class ProjectsResource(ModelResource):
             bundle.data['token'] = ''
         self._attach_success_percent(bundle)
         self._attach_last_task(bundle)
+        self._attach_trend(bundle)
         return bundle
 
     def _attach_success_percent(self, bundle):
@@ -102,3 +104,10 @@ class ProjectsResource(ModelResource):
                 bundle.data['last_task'] = bundle.obj.get_last_task()
             except TaskDoesNotExists:
                 bundle.data['last_task'] = None
+
+    def _attach_trend(self, bundle):
+        """Attach trend to project"""
+        if bundle.request.GET.get('with_trend'):
+            bundle.data['trend'] = bundle.obj.get_trend(
+                bundle.request.GET.get('branch'),
+            )
