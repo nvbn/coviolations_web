@@ -231,7 +231,7 @@ class Project(models.Model):
 
     def get_trend(self, branch=None):
         """Get project trend"""
-        percents = self.get_success_percents(const.TREND_CHUNK, branch)
+        percents = self.get_success_percents(const.TREND_CHUNK, branch)[::-1]
         if len(percents) > 1:
             times = range(len(percents))
             percents_matrix = np.matrix(percents).T

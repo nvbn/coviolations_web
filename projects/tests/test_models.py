@@ -155,7 +155,8 @@ class ProjectModelCase(MongoFlushMixin, TestCase):
             'project': project.name,
             'commit': {'branch': 'branch'},
             'success_percent': n,
-        } for n in range(1, 5)])
+            'created': num,
+        } for num, n in enumerate(range(1, 5))])
         project.get_trend().should.be.greater_than(0)
 
     def test_get_negative_trend(self):
@@ -165,7 +166,8 @@ class ProjectModelCase(MongoFlushMixin, TestCase):
             'project': project.name,
             'commit': {'branch': 'branch'},
             'success_percent': n,
-        } for n in range(5, 1, -1)])
+            'created': num,
+        } for num, n in enumerate(range(5, 1, -1))])
         project.get_trend().should.be.lower_than(0)
 
     def test_get_neutral_trend(self):
