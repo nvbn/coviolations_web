@@ -58,7 +58,7 @@ include top_menu.jade
                 .. image:: {{project.badge_url}}
                 :target: https://{{domain}}/#/project/{{project.name}}
 
-.col-lg-12.row.project-page-row.project-charts(ng-show='charts.length')
+.col-lg-12.row.project-page-row.project-charts
     .col-lg-4.row.project-chart-row(ng-repeat='chart in charts')
         h2 {{chart.name}}
         canvas(

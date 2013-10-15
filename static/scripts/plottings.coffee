@@ -106,7 +106,7 @@ define ['underscore'], (_) ->
     class SuccessPercentPlot
         ### Success percent plot ###
 
-        constructor: (@project, @limit=100) ->
+        constructor: (@project, @limit=100, @options={}, @color="#5bc0de") ->
             @prepareData()
 
         prepareData: ->
@@ -119,14 +119,15 @@ define ['underscore'], (_) ->
             data:
                 labels: _.map(_.range(@limit), (-> ''))
                 datasets: [
-                    fillColor: "#5bc0de"
-                    strokeColor: "#5bc0de"
+                    fillColor: @color
+                    strokeColor: @color
                     data: @data
                 ]
-            options:
+            options: _.extend
                 pointDot: false
                 animation: false
                 scaleShowLabels: false
+            , @options
 
 
     PlotData: PlotData

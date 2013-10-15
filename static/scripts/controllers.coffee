@@ -107,26 +107,44 @@ define [
         favicoService.badge(0)
         ngProgress.start()
         projectName = _.sprintf '%s/%s', $routeParams['owner'], $routeParams['name']
-        projectUrl = _.sprintf '/api/v1/projects/project/%s/', projectName
 
-        loadProject = =>
-            $http.get(projectUrl).success (data) =>
-                $scope.project = data
-                if not $scope.branches
-                    $scope.branches = data.branches
-                $scope.branch = $scope.project.default_branch
-                ngProgress.complete()
-        loadProject()
+        getProjectUrl = =>
+            projectUrl = _.sprintf '/api/v1/projects/project/%s/?with_success_percent=true', projectName
+            if $scope.branch
+                projectUrl = _.sprintf '%s&branch=%s', projectUrl, $scope.branch
+            return projectUrl
+
+        loadProject = (callback) =>
+            $http.get(getProjectUrl()).success _.bind callback, @
+
+        loadProject (data) =>
+            $scope.project = data
+            $scope.branches = data.branches
+            $scope.branch = $scope.project.default_branch
+            ngProgress.complete()
 
         $scope.$watch 'branch', (branch) =>
-            $scope.tasks = new Tasks 20,
+            $scope.tasks = new Tasks 30,
                 withViolations: true
                 project: projectName
                 branch: branch
             $scope.tasks.load =>
                 plotData = new plottings.PlotData $scope.tasks.items
                 plotData.normalise()
-                $scope.charts = plotData.createChartObjects()
+                charts = plotData.createChartObjects()
+
+                loadProject (data) =>
+                    successPlot = new plottings.SuccessPercentPlot data, 30,
+                        datasetFill: false
+                        scaleShowLabels: true
+                    , "#5cb85c"
+                    chart = _.extend successPlot.createChartObject(),
+                        colors: [
+                            code: "#5cb85c"
+                            name: 'Success rate'
+                        ]
+                        name: 'Project quality'
+                    $scope.charts = _.union [chart], charts
 
         $scope.toggleBadgeHelp = =>
             $scope.showBadgeHelp =
@@ -134,8 +152,9 @@ define [
 
         $scope.regenerateToken = =>
             $scope.project.token = ''
-            $http.put(projectUrl, $scope.project).success =>
-                loadProject()
+            $http.put(getProjectUrl(), $scope.project).success =>
+                loadProject (data) =>
+                    $scope.project.token = data.token
 
         $scope.showSettings = =>
             $modal.open
