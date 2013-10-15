@@ -52,15 +52,18 @@ define [
         if not window.isAuthenticated
             window.location = '#'
 
-        favicoService.badge(0)
         ngProgress.start()
         $http.get(
             '/api/v1/projects/project/?limit=0&with_success_percent=true&with_last_task=true'
         ).success (data) =>
             $scope.projects = data.objects
+            failedTasks = 0
             _.each $scope.projects, (project) =>
                 plot = new plottings.SuccessPercentPlot project
                 project.chart = plot.createChartObject()
+                if project.last_task and project.last_task.status == 2
+                    failedTasks += 1
+            favicoService.badge(failedTasks)
             ngProgress.complete()
 
         $scope.tasks = new Tasks 20,
