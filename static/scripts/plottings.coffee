@@ -2,7 +2,7 @@ define ['underscore'], (_) ->
     class PlotData
         ### Plot data organizer ###
 
-        constructor: (tasks) ->
+        constructor: (tasks, @limit=30) ->
             @violations = {}
             @fill tasks
 
@@ -45,17 +45,17 @@ define ['underscore'], (_) ->
                                 0
 
         _preparePlot: (plot) ->
-            prepared = _.flatten [_.map(_.range(30), -> 0), [plot.reverse()]]
-            _.last prepared, 30
+            prepared = _.flatten [_.map(_.range(@limit), -> 0), [plot.reverse()]]
+            _.last prepared, @limit
 
         _checkDatasets: (datasets) ->
-            datasets.length and (_.any datasets, (item) ->
+            datasets.length and (_.any datasets, (@item) ->
                 _.any item.data)
 
         _createChartObject: (name, datasets, colors) ->
             name: name
             data:
-                labels: _.map(_.range(30), (-> ''))
+                labels: _.map(_.range(@limit), (-> ''))
                 datasets: datasets
             options:
                 pointDot: false
@@ -106,18 +106,18 @@ define ['underscore'], (_) ->
     class SuccessPercentPlot
         ### Success percent plot ###
 
-        constructor: (@project) ->
+        constructor: (@project, @limit=100) ->
             @prepareData()
 
         prepareData: ->
-            prepared = _.flatten [_.map(_.range(100), -> 0), [
+            prepared = _.flatten [_.map(_.range(@limit), -> 0), [
                 @project.success_percents.reverse()
             ]]
-            @data = _.last prepared, 100
+            @data = _.last prepared, @limit
 
         createChartObject: ->
             data:
-                labels: _.map(_.range(100), (-> ''))
+                labels: _.map(_.range(@limit), (-> ''))
                 datasets: [
                     fillColor: "#5bc0de"
                     strokeColor: "#5bc0de"
