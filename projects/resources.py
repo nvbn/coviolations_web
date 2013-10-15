@@ -1,10 +1,9 @@
-from pymongo import DESCENDING
 from tastypie.resources import ModelResource
 from tastypie import fields
 from tastypie.authentication import Authentication
 from tastypie.authorization import Authorization
 from push.base import sender
-from tasks.models import Tasks
+from tasks.exceptions import TaskDoesNotExists
 from .models import Project
 
 
@@ -99,13 +98,7 @@ class ProjectsResource(ModelResource):
     def _attach_last_task(self, bundle):
         """Attach last task to project"""
         if bundle.request.GET.get('with_last_task'):
-            bundle.data['last_task'] = Tasks.find_one({
-                'project': bundle.obj.name,
-            }, sort=[('created', DESCENDING)], fields={
-                name: True for name in (
-                    'service', 'project', 'commit', 'plot',
-                    'created', 'status', 'success_percent',
-                )
-            })
-        else:
-            bundle.data['last_task'] = None
+            try:
+                bundle.data['last_task'] = bundle.obj.get_last_task()
+            except TaskDoesNotExists:
+                bundle.data['last_task'] = None

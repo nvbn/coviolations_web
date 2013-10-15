@@ -5,6 +5,7 @@ from accounts.tests.factories import UserFactory
 from tools.mongo import MongoFlushMixin
 from tools.tests import MockGithubMixin
 from tasks.models import Tasks
+from tasks.exceptions import TaskDoesNotExists
 from .. import models
 from . import factories
 
@@ -124,12 +125,28 @@ class ProjectModelCase(MongoFlushMixin, TestCase):
     def test_get_success_percents(self):
         """Test get success percents"""
         project = factories.ProjectFactory()
-        Tasks.insert([{
+        Tasks.save({
             'project': project.name,
             'commit': {'branch': 'branch'},
             'success_percent': 92,
-        }])
+        })
         project.get_success_percents(10).should.be.equal([92])
+
+    def test_get_last_task(self):
+        """Test get last task"""
+        project = factories.ProjectFactory()
+        task_id = Tasks.save({
+            'project': project.name,
+            'commit': {'branch': 'branch'},
+        })
+        project.get_last_task()['_id'].should.be.equal(task_id)
+
+    def test_last_task_not_exists(self):
+        """Test last task not exists"""
+        project = factories.ProjectFactory()
+        project.get_last_task.when.called_with().should.throw(
+            TaskDoesNotExists,
+        )
 
 
 class OrganizationManagerCase(TestCase):

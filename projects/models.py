@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 from django_extensions.db.fields import UUIDField
 from tools.short import make_https
 from tasks.models import Tasks
+from tasks.exceptions import TaskDoesNotExists
 
 
 class OrganizationManager(models.Manager):
@@ -210,3 +211,18 @@ class Project(models.Model):
                     'success_percent': True,
                 }, limit=count)
         ]
+
+    def get_last_task(self):
+        """Get last task"""
+        task = Tasks.find_one({
+            'project': self.name,
+        }, sort=[('created', DESCENDING)], fields={
+            name: True for name in (
+                'service', 'project', 'commit', 'plot',
+                'created', 'status', 'success_percent',
+            )
+        })
+        if task:
+            return task
+        else:
+            raise TaskDoesNotExists()
