@@ -80,9 +80,7 @@ ROOT_URLCONF = 'coviolations_web.urls'
 WSGI_APPLICATION = 'coviolations_web.wsgi.application'
 
 TEMPLATE_DIRS = (
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
+    os.path.join(PROJECT_ROOT, 'coviolations_web', 'templates'),
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -114,7 +112,6 @@ INSTALLED_APPS = (
     'tastypie',
 
     'accounts',
-    'app',
     'projects',
     'tasks',
     'violations',

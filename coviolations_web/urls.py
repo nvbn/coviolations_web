@@ -1,13 +1,14 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from .api import v1_api
+from .views import IndexView
 
 
 admin.autodiscover()
 
 urlpatterns = patterns(
     '',
-    url(r'^', include('app.urls')),
+    url(r'^$', IndexView.as_view(), name='home'),
     url(r'^', include('accounts.urls')),
     url(r'^projects/', include('projects.urls')),
     url(r'^tasks/', include('tasks.urls')),
