@@ -81,6 +81,9 @@ $description-color: #3b3b3b
     .failed
         background: $fail-color
 
+    .neutral
+        background: $neutral-color
+
 
 .plot-color-line
     margin-left: $default-offset
@@ -179,6 +182,13 @@ $description-color: #3b3b3b
         .last-commit
             @include as-description
             @include as-right-badge
+
+            span
+                padding: 2px
+                display: inline-block
+
+        .trend
+            margin-left: 2px
 
     .project-line:first-of-type
         border-top: 3px solid $info-color

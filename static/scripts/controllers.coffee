@@ -57,13 +57,16 @@ define [
 
         ngProgress.start()
         $http.get(
-            '/api/v1/projects/project/?limit=0&with_success_percent=true&with_last_task=true'
+            '/api/v1/projects/project/?limit=0&with_success_percent=true&with_last_task=true&with_trend=true'
         ).success (data) =>
             $scope.projects = data.objects
             failedTasks = 0
             _.each $scope.projects, (project) =>
                 plot = new plottings.SuccessPercentPlot project
                 project.chart = plot.createChartObject()
+                project.prettyTrend = _.sprintf '%.2f', project.trend if project.trend
+                project.trendClass = if project.trend > 0 then 'success' else
+                    if project.trend < 0 then 'failed' else 'neutral'
                 if project.last_task and project.last_task.status == 2
                     failedTasks += 1
             favicoService.badge(failedTasks)
