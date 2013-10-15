@@ -7,6 +7,8 @@ define [
     'angularBootstrap'
     'ngInfiniteScroll'
     'ngprogress'
+    'waypoints'
+    'angularUiJq'
     'models'
     'services'
     'directives'
@@ -16,6 +18,7 @@ define [
     module = angular.module 'coviolations.controllers', [
         'angles'
         'ui.bootstrap'
+        'ui.jq'
         'infinite-scroll'
         'ngProgress'
         'coviolations.models'
@@ -156,7 +159,10 @@ define [
             $http.put($scope.project.resource_uri, $scope.project)
         , true
 
-    TaskCtrl = ($scope, $http, $routeParams, ngProgress, favicoService) ->
+    TaskCtrl = (
+        $scope, $http, $routeParams, $location, $anchorScroll,
+        ngProgress, favicoService
+    ) ->
         ### Single task controller ###
         ngProgress.start()
         taskUrl = _.sprintf '/api/v1/tasks/task/%s/', $routeParams['pk']
@@ -170,9 +176,35 @@ define [
             $http.get(projectUrl).success (project) =>
                 $scope.project = project
                 ngProgress.complete()
+
+        $scope.taskScrolled = (violation) => (to) =>
+            getActive = =>
+                if to == 'down'
+                    violation
+                else
+                    index = _.indexOf $scope.task.violations, violation
+                    if index >= 1 then $scope.task.violations[index - 1] else null
+            active = getActive()
+
+            _.each $scope.task.violations, (item) =>
+                if active
+                    item.active = item.name == active.name
+                else
+                    item.active = false
+            $scope.$apply()
+
+        $scope.menuScrolled = (to) =>
+            $scope.menuFixed = to == 'down'
+            $scope.$apply()
+
+        $scope.scrollTo = (violation) =>
+            oldHash = $location.hash()
+            $location.hash if violation then violation.name else 'top'
+            $anchorScroll()
+            $location.hash oldHash
     module.controller 'TaskCtrl', [
-        '$scope', '$http', '$routeParams', 'ngProgress',
-        'favicoService', TaskCtrl,
+        '$scope', '$http', '$routeParams', '$location', '$anchorScroll',
+        'ngProgress', 'favicoService', TaskCtrl,
     ]
 
 

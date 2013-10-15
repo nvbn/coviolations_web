@@ -1,12 +1,14 @@
 include top_menu.jade
 
 .col-lg-12.row.top-row.task-row.task-summary-row
-    h2
-        a(href='{{project.url}}')
-            i.icon-github
-            | &nbsp;
-        a(href='#/projects/{{project.name}}/') {{project.name}}
-        | : {{task.commit.range}}
+    .col-lg-12.row.a-top-of-menu
+        h2
+            a(href='{{project.url}}')
+                i.icon-github
+                | &nbsp;
+            a(href='#/projects/{{project.name}}/') {{project.name}}
+            | : {{task.commit.range}}
+    .waypoint-hook(ui-jq="waypoint", ui-options='menuScrolled')
     a(href='{{task.commit.url}}') {{task.commit.summary}}
     table.table.table-hover
         tr.task-commit(ng-repeat='commit in task.commit.inner')
@@ -18,8 +20,24 @@ include top_menu.jade
                     | {{commit.author.name}}
             td {{commit.message}}
 
-.col-lg-12.row.violation-row.task-row(ng-repeat='violation in task.violations')
-    h2
+.col-lg-12.row(class='{{menuFixed && "menu-fixed" || "menu"}}')
+    .container.col-lg-12.row
+        ul.nav.nav-pills.col-lg-12.row
+            li
+                a(href='', ng-click='scrollTo()')
+                    i.icon-long-arrow-up
+            li(
+                ng-repeat='violation in task.violations',
+                class='{{violation.active && "active" || ""}}'
+            )
+                a(href='', ng-click='$parent.scrollTo(violation)')
+                    | {{violation.name}}
+
+.col-lg-12.row.violation-row.task-row(
+    ng-repeat='violation in task.violations',
+    ui-jq="waypoint", ui-options='taskScrolled(violation), {offset: 80}'
+)
+    h2(id='{{violation.name}}')
         | {{violation.name}}&nbsp;
         a.btn.btn-default(
             href='/tasks/{{$parent.task.id}}/raw/{{$index}}/',

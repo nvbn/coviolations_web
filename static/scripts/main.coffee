@@ -34,6 +34,10 @@ config =
             exports: ['chai']
         favico:
             exports: ['Favico']
+        angularUiJq:
+            deps: ['angular', 'jquery']
+        waypoints:
+            deps: ['jquery']
     paths:
         angular: '../angular/angular.min'
         jquery: '../jquery/jquery.min'
@@ -48,6 +52,8 @@ config =
         ngInfiniteScroll: '../ngInfiniteScroll/ng-infinite-scroll'
         underscoreString: '../underscore.string/dist/underscore.string.min'
         favico: '../favico.js/favico-0.3.0.min'
+        angularUiJq: '../angular-ui-utils/modules/jq/jq'
+        waypoints: '../jquery-waypoints/waypoints.min'
         chai: '../chai/chai'
 
 if window.debug

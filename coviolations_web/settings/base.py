@@ -140,6 +140,7 @@ BOWER_INSTALLED_APPS = (
     'chai',
     'sinon',
     'ngprogress',
+    'angular-ui-utils',
 )
 
 TEST_RUNNER = 'discover_runner.DiscoverRunner'
