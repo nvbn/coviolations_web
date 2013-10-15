@@ -148,6 +148,36 @@ class ProjectModelCase(MongoFlushMixin, TestCase):
             TaskDoesNotExists,
         )
 
+    def test_get_positive_trend(self):
+        """Test get positive trend"""
+        project = factories.ProjectFactory()
+        Tasks.insert([{
+            'project': project.name,
+            'commit': {'branch': 'branch'},
+            'success_percent': n,
+        } for n in range(1, 5)])
+        project.get_trend().should.be.greater_than(0)
+
+    def test_get_negative_trend(self):
+        """Test get negative trend"""
+        project = factories.ProjectFactory()
+        Tasks.insert([{
+            'project': project.name,
+            'commit': {'branch': 'branch'},
+            'success_percent': n,
+        } for n in range(5, 1, -1)])
+        project.get_trend().should.be.lower_than(0)
+
+    def test_get_neutral_trend(self):
+        """Test get neutral trend"""
+        project = factories.ProjectFactory()
+        Tasks.save({
+            'project': project.name,
+            'commit': {'branch': 'branch'},
+            'success_percent': 0,
+        })
+        project.get_trend().should.be.equal(0)
+
 
 class OrganizationManagerCase(TestCase):
     """Organization manager case"""

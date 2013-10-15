@@ -1,4 +1,5 @@
 from pymongo import DESCENDING
+import numpy as np
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models import Q
@@ -8,6 +9,7 @@ from django_extensions.db.fields import UUIDField
 from tools.short import make_https
 from tasks.models import Tasks
 from tasks.exceptions import TaskDoesNotExists
+from . import const
 
 
 class OrganizationManager(models.Manager):
@@ -226,3 +228,17 @@ class Project(models.Model):
             return task
         else:
             raise TaskDoesNotExists()
+
+    def get_trend(self, branch=None):
+        """Get project trend"""
+        percents = self.get_success_percents(const.TREND_CHUNK, branch)
+        if len(percents) > 1:
+            times = range(len(percents))
+            percents_matrix = np.matrix(percents).T
+            times_matrix = np.matrix([times, [1 for _ in times]]).T
+            return (
+                (times_matrix.T * times_matrix).I
+                * times_matrix.T * percents_matrix
+            )[0, 0]
+        else:
+            return 0

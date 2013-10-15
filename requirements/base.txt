@@ -19,3 +19,4 @@ tornado-redis
 requests
 fabric
 html2text
+numpy
