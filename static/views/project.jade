@@ -59,24 +59,25 @@ include top_menu.jade
                 :target: https://{{domain}}/#/project/{{project.name}}
 
 .col-lg-12.row.project-page-row.project-charts
-    h2 Metric charts
-    .col-lg-4.row.project-chart-row(ng-repeat='chart in charts')
-        h3 {{chart.name}}
-        canvas(
-            linechart, options='chart.options', data='chart.data',
-            width=350, height=220
-        )
-        br
-        span.plot-color-line(ng-repeat='color in chart.colors')
-            span.plot-color-row(style="background-color: {{color.code}}")
-            |  {{color.name}}
-    h2 Depend on time
-    .col-lg-4.row.project-chart-row(ng-repeat='chart in dateCharts')
-        h3 {{chart.name}}
-        canvas(
-            barchart, options='chart.options', data='chart.data',
-            width=350, height=220
-        )
+    tabset
+        tab(heading='Metric charts')
+            .col-lg-4.row.project-chart-row(ng-repeat='chart in charts')
+                h3 {{chart.name}}
+                canvas(
+                    linechart, options='chart.options', data='chart.data',
+                    width=350, height=220
+                )
+                br
+                span.plot-color-line(ng-repeat='color in chart.colors')
+                    span.plot-color-row(style="background-color: {{color.code}}")
+                    |  {{color.name}}
+        tab(heading='Depend on time')
+            .col-lg-4.row.project-chart-row(ng-repeat='chart in dateCharts')
+                h3 {{chart.name}}
+                canvas(
+                    barchart, options='chart.options', data='chart.data',
+                    width=350, height=220
+                )
 
 .col-lg-12.last-tasks-row.row.project-page-row
     .col-lg-12.holder(
