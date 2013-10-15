@@ -59,8 +59,9 @@ include top_menu.jade
                 :target: https://{{domain}}/#/project/{{project.name}}
 
 .col-lg-12.row.project-page-row.project-charts
+    h2 Metric charts
     .col-lg-4.row.project-chart-row(ng-repeat='chart in charts')
-        h2 {{chart.name}}
+        h3 {{chart.name}}
         canvas(
             linechart, options='chart.options', data='chart.data',
             width=350, height=220

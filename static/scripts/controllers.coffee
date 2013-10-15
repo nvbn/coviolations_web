@@ -127,6 +127,8 @@ define [
             ngProgress.complete()
 
         $scope.$watch 'branch', (branch) =>
+            if _.isUndefined branch
+                return
             $scope.tasks = new Tasks 30,
                 withViolations: true
                 project: projectName
@@ -144,9 +146,9 @@ define [
                     chart = _.extend successPlot.createChartObject(),
                         colors: [
                             code: "#5cb85c"
-                            name: 'Success rate'
+                            name: 'success rate'
                         ]
-                        name: 'Project quality'
+                        name: 'project quality'
                     $scope.charts = _.union [chart], charts
 
         $scope.toggleBadgeHelp = =>
