@@ -150,12 +150,18 @@ define [
                         ]
                         name: 'project quality'
                     $scope.charts = _.union [chart], charts
-                    $scope.dateCharts = _.map [
-                        [data.week_statistic, 'percent', "#5bc0de", 'week day success percent']
-                        [data.week_statistic, 'success', "#5cb85c", 'week day success tasks']
-                        [data.week_statistic, 'failed', "#d9534f", 'week day failed tasks']
+
+                    createCharts = (cls, field, name) => _.map [
+                        [data[field], 'percent', "#5bc0de", _.sprintf('%s success percent', name)]
+                        [data[field], 'success', "#5cb85c", _.sprintf('%s success tasks', name)]
+                        [data[field], 'failed', "#d9534f", _.sprintf('%s failed', name)]
                     ], (args) =>
-                        (new plottings.WeekChart args).createChartObject()
+                        (new cls args).createChartObject()
+                    $scope.dateCharts = _.union createCharts(
+                        plottings.WeekChart, 'week_statistic', 'week day'
+                    ), createCharts(
+                        plottings.DayTimeChart, 'day_time_statistic', 'day time'
+                    )
 
         $scope.toggleBadgeHelp = =>
             $scope.showBadgeHelp =

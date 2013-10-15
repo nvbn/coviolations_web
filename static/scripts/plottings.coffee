@@ -130,24 +130,22 @@ define ['underscore'], (_) ->
             , @options
 
 
-    class WeekChart
-        ### Week bar chart ###
+    class BaseByDateChart
+        ### Base by date chart ###
+
         constructor: (params) ->
             @initialize.apply @, params
 
         initialize: (data, @field, @color, @name) ->
-            @data = _.map _.range(7), (day) =>
-                if data.days[day] and data.days[day][@field]
-                    data.days[day][@field]
+            @data = _.map _.range(@counter), (part) =>
+                if data[@attr][part] and data[@attr][part][@field]
+                    data[@attr][part][@field]
                 else
                     0
 
         createChartObject: ->
             data:
-                labels: [
-                    'Mon', 'Tue', 'Wed', 'Thu',
-                    'Fri', 'Sat', 'Sun'
-                ]
+                labels: @labels
                 datasets: [
                     data: @data
                     fillColor: @color
@@ -155,7 +153,27 @@ define ['underscore'], (_) ->
             name: @name
 
 
+    class WeekChart extends BaseByDateChart
+        ### Week bar chart ###
+        attr: 'days'
+        counter: 7
+        labels: [
+            'Mon', 'Tue', 'Wed', 'Thu',
+            'Fri', 'Sat', 'Sun'
+        ]
+
+
+    class DayTimeChart extends BaseByDateChart
+        ### Day time chart ###
+        attr: 'parts'
+        counter: 6
+        labels: [
+            '00-04', '04-08', '08-12', '12-16', '16-20', '20-00'
+        ]
+
+
     PlotData: PlotData
     PlotColorer: PlotColorer
     SuccessPercentPlot: SuccessPercentPlot
     WeekChart: WeekChart
+    DayTimeChart: DayTimeChart
