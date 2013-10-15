@@ -25,7 +25,9 @@ define [
 
     IndexCtrl = ($scope) ->
         ### Index page controller ###
-        $scope.isAuthenticated = window.isAuthenticated
+        if window.isAuthenticated
+            window.location = '#'
+
         $scope.successColor = "#5cb85c"
         $scope.failedColor = "#d9534f"
         $scope.chartData =
@@ -46,7 +48,6 @@ define [
 
     DashboardCtrl = ($scope, $http, ngProgress, Tasks) ->
         ### Dashboard controller ###
-        $scope.isAuthenticated = window.isAuthenticated
         if not window.isAuthenticated
             window.location = '#'
 
@@ -70,7 +71,6 @@ define [
 
     ManageCtrl = ($scope, $http, ngProgress) ->
         ### Manage projects page controller ###
-        $scope.isAuthenticated = window.isAuthenticated
         if not window.isAuthenticated
             window.location = '#'
 
@@ -93,7 +93,6 @@ define [
     ProjectCtrl = ($scope, $http, $routeParams, $modal, ngProgress, Tasks) ->
         ### Single project page controller ###
         ngProgress.start()
-        $scope.isAuthenticated = window.isAuthenticated
         projectName = _.sprintf '%s/%s', $routeParams['owner'], $routeParams['name']
         projectUrl = _.sprintf '/api/v1/projects/project/%s/', projectName
 
