@@ -23,11 +23,12 @@ define [
         'coviolations.directives'
     ]
 
-    IndexCtrl = ($scope) ->
+    IndexCtrl = ($scope, favicoService) ->
         ### Index page controller ###
         if window.isAuthenticated
             window.location = '#'
 
+        favicoService.badge(0)
         $scope.successColor = "#5cb85c"
         $scope.failedColor = "#d9534f"
         $scope.chartData =
@@ -43,14 +44,15 @@ define [
         $scope.successPercent = window.successTasks
         $scope.failedPercent = window.failedTasks
     module.controller 'IndexCtrl', [
-        '$scope', IndexCtrl,
+        '$scope', 'favicoService', IndexCtrl,
     ]
 
-    DashboardCtrl = ($scope, $http, ngProgress, Tasks) ->
+    DashboardCtrl = ($scope, $http, ngProgress, favicoService, Tasks) ->
         ### Dashboard controller ###
         if not window.isAuthenticated
             window.location = '#'
 
+        favicoService.badge(0)
         ngProgress.start()
         $http.get(
             '/api/v1/projects/project/?limit=0&with_success_percent=true&with_last_task=true'
@@ -66,14 +68,15 @@ define [
             self: true
         $scope.tasks.load()
     module.controller 'DashboardCtrl', [
-        '$scope', '$http', 'ngProgress', 'Tasks', DashboardCtrl,
+        '$scope', '$http', 'ngProgress', 'favicoService', 'Tasks', DashboardCtrl,
     ]
 
-    ManageCtrl = ($scope, $http, ngProgress) ->
+    ManageCtrl = ($scope, $http, ngProgress, favicoService) ->
         ### Manage projects page controller ###
         if not window.isAuthenticated
             window.location = '#'
 
+        favicoService.badge(0)
         ngProgress.start()
         $scope.loading = true
         $http.get('/api/v1/projects/project/?fetch=true&limit=0').success (data) =>
@@ -87,11 +90,15 @@ define [
 
             ngProgress.complete()
     module.controller 'ManageCtrl', [
-        '$scope', '$http', 'ngProgress', ManageCtrl,
+        '$scope', '$http', 'ngProgress', 'favicoService', ManageCtrl,
     ]
 
-    ProjectCtrl = ($scope, $http, $routeParams, $modal, ngProgress, Tasks) ->
+    ProjectCtrl = (
+            $scope, $http, $routeParams, $modal,
+            ngProgress, favicoService, Tasks
+    ) ->
         ### Single project page controller ###
+        favicoService.badge(0)
         ngProgress.start()
         projectName = _.sprintf '%s/%s', $routeParams['owner'], $routeParams['name']
         projectUrl = _.sprintf '/api/v1/projects/project/%s/', projectName
@@ -135,7 +142,7 @@ define [
         $scope.domain = window.domain
     module.controller 'ProjectCtrl', [
         '$scope', '$http', '$routeParams', '$modal', 'ngProgress',
-        'Tasks', ProjectCtrl,
+        'favicoService', 'Tasks', ProjectCtrl,
     ]
 
     ProjectSettingsCtrl = ($scope, $modalInstance, $http, project) ->
@@ -146,11 +153,9 @@ define [
             $http.put($scope.project.resource_uri, $scope.project)
         , true
 
-
     TaskCtrl = ($scope, $http, $routeParams, ngProgress, favicoService) ->
         ### Single task controller ###
         ngProgress.start()
-        $scope.isAuthenticated = window.isAuthenticated
         taskUrl = _.sprintf '/api/v1/tasks/task/%s/', $routeParams['pk']
 
         $http.get(taskUrl).success (data) =>
