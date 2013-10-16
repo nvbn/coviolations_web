@@ -46,7 +46,6 @@ class CreateTaskJobCase(MongoFlushMixin, TestCase):
             ]
         }
         jobs.create_task(models.Tasks.save(data))
-        get_worker().work(burst=True)
 
     def test_create(self):
         """Test create"""
@@ -66,6 +65,7 @@ class PrepareViolationsJobCase(MongoFlushMixin, TestCase):
         super(PrepareViolationsJobCase, self).setUp()
         self._mock_mark_commit()
         self._mock_comment_lines()
+        ProjectFactory(name='test')
 
     def _mock_mark_commit(self):
         """Mock mark_commit_with_status job"""
@@ -100,11 +100,9 @@ class PrepareViolationsJobCase(MongoFlushMixin, TestCase):
             'owner_id': 1,
             'project': 'test',
         } for n in range(10)]
-
         for task in tasks:
             task_id = models.Tasks.save(task)
             jobs.prepare_violations(task_id)
-        get_worker().work(burst=True)
         sum(
             [len(task['violations']) for task in models.Tasks.find()]
         ).should.be.equal(10)
@@ -122,8 +120,6 @@ class PrepareViolationsJobCase(MongoFlushMixin, TestCase):
         }
         task_id = models.Tasks.insert(task)
         jobs.prepare_violations(task_id)
-        get_worker().work(burst=True)
-
         task = models.Tasks.find_one(task_id)
         [
             violation for violation in task['violations']
@@ -145,8 +141,6 @@ class PrepareViolationsJobCase(MongoFlushMixin, TestCase):
         }
         task_id = models.Tasks.insert(task)
         jobs.prepare_violations(task_id)
-        get_worker().work(burst=True)
-
         task = models.Tasks.find_one(task_id)
         task['violations'][0]['status'].should.be.equal(const.STATUS_SUCCESS)
 
@@ -159,7 +153,6 @@ class PrepareViolationsJobCase(MongoFlushMixin, TestCase):
         }
         task_id = models.Tasks.insert(task)
         jobs.prepare_violations(task_id)
-        get_worker().work(burst=True)
         jobs.mark_commit_with_status.delay.call_count.should.be.equal(1)
 
     def test_comment_lines_called(self):
@@ -171,7 +164,6 @@ class PrepareViolationsJobCase(MongoFlushMixin, TestCase):
         }
         task_id = models.Tasks.insert(task)
         jobs.prepare_violations(task_id)
-        get_worker().work(burst=True)
         jobs.comment_lines.delay.call_count.should.be.equal(1)
 
     def test_set_success_percent_if_success(self):
@@ -188,7 +180,6 @@ class PrepareViolationsJobCase(MongoFlushMixin, TestCase):
         }
         task_id = models.Tasks.insert(task)
         jobs.prepare_violations(task_id)
-        get_worker().work(burst=True)
         task = models.Tasks.find_one(task_id)
         task['violations'][0]['success_percent'].should.be.equal(100)
 
@@ -206,7 +197,6 @@ class PrepareViolationsJobCase(MongoFlushMixin, TestCase):
         }
         task_id = models.Tasks.insert(task)
         jobs.prepare_violations(task_id)
-        get_worker().work(burst=True)
         task = models.Tasks.find_one(task_id)
         task['violations'][0]['success_percent'].should.be.equal(0)
 
@@ -227,7 +217,6 @@ class PrepareViolationsJobCase(MongoFlushMixin, TestCase):
         }
         task_id = models.Tasks.insert(task)
         jobs.prepare_violations(task_id)
-        get_worker().work(burst=True)
         task = models.Tasks.find_one(task_id)
         task['success_percent'].should.be.equal(5)
 
@@ -240,7 +229,6 @@ class PrepareViolationsJobCase(MongoFlushMixin, TestCase):
         }
         task_id = models.Tasks.insert(task)
         jobs.prepare_violations(task_id)
-        get_worker().work(burst=True)
         task = models.Tasks.find_one(task_id)
         task['success_percent'].should.be.equal(100)
 
