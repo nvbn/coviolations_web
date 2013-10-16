@@ -3,8 +3,9 @@
         .col-lg-5.row
             h1 coviolations.io
             p.
-                With coviolations checking your code with pep8, coverage and many
-                 other tools automaticaly after each push to source code repository.
+                With coviolations you can check your code with pep8, coverage
+                and many other tools automatically after each push to source
+                code repository.
             a.btn.btn-default(href='/login/github/')
                 i.icon-github
                 |  Sign in with github
@@ -14,29 +15,18 @@
         img.col-lg-7.row(src='/static/images/how.svg')
 
 .col-lg-12.row.index-block.index-even-block
-    h2 Controll code quality and detect "smell"
+    h2 Track code quality and detect "smell"
     .col-lg-12.row
-        .col-lg-6.row
-            p Supported metrics
-            ul
-                li
-                    code pep8
-                li
-                    code sloccount
-                li
-                    code python unittest
-                li
-                    code pip-review
-                li
-                    code testem
-                li
-                    code coverage
-                li
-                    code jslint
-        .col-lg-6.row
+        img.col-lg-6.img-rounded(src='/static/images/metrics.png')
+        .col-lg-6
             p.
-                You can detect code "smell", monitoring code quality and
-                 see trands with available code metrics.
+                You can detect code "smell", track source code quality and
+                see trends with available code metrics.
+            p.
+                Currently supported metrics:
+                <code>pep8</code>, <code>sloccount</code>, <code>python unittest</code>,
+                <code>pip-review</code>, <code>testem</code>, <code>coverage</code>
+                and<code>jslint</code>
             p.
                 If you not found needed metric, you could easily write it
                  and we will add it to project.
@@ -55,9 +45,8 @@
                 a(href='https://drone.io/')  drone.io
                 |  and
                 a(href='http://jenkins-ci.org/')  jenkins-ci
-                |. And it will create fancy represntation with trend graphics,
-                |  code examples and many more.
-            p You can saw total success/failed tasks chart here.
+                |. And it will create convenient represntation with trend graphics, code examples and many more.
+            p You can see total success/failed tasks charts here.
             a.btn.btn-default(href='#/projects/nvbn/coviolations_web/')
                 i.icon-bar-chart
                 |  Show for this project
@@ -70,6 +59,32 @@
             span.plot-color-line
                 span.plot-color-row(style="background-color: {{failedColor}}")
                 |  failed {{failedPercent}}%
+
+.col-lg-12.row.index-block.index-even-block
+    h2 Find best and worst time of day and week
+    .col-lg-12.row
+        img.col-lg-6.img-rounded(src='/static/images/by_date.png')
+        .col-lg-5.pull-right
+            p.
+                Coviolations will calculate success percent, failed and success tasks
+                per week day and day part.
+            p With this metrics you can find your best time to writting code.
+            a.btn.btn-default(href='#/projects/nvbn/coviolations_web/')
+                i.icon-bar-chart
+                |  Show for this project
+
+
+.col-lg-12.row.index-block.index-odd-block
+    h2 Monitoring projects lifetime
+    .col-lg-12.row
+        .col-lg-5
+            p You can follow the ups and downs of the quality of the project code.
+            p Also, we expect the trend of the project over the past 100 pushes.
+            p You need sign in for using dashboard:
+            a.btn.btn-default(href='/login/github/')
+                i.icon-github
+                |  Sign in with github
+        img.col-lg-6.row.img-rounded.pull-right(src='/static/images/export.png')
 
 .col-lg-12.row.index-block.index-even-block
     h2 Perfect integration with github
@@ -85,3 +100,14 @@
         a.btn.btn-default(href='https://github.com/nvbn/coviolations_web/commit/ac7f633f01bc2ea59bc7b19d362fceb1ec07893e#commitcomment-4281977')
             i.icon-external-link
             |  Example
+
+.col-lg-12.row.index-block.index-odd-block
+    br
+    span Coviolations is an open-source software, you can obtain source code on github:&nbsp;
+    a.btn.btn-default(href='/login/github/')
+        i.icon-github
+        |  Server code
+    a.btn.btn-default(href='https://coviolationsio.readthedocs.org/en/latest/')
+        i.icon-github
+        |  Client code
+
