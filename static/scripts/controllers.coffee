@@ -119,9 +119,11 @@ define [
 
         loadProject = (callback) =>
             $http.get(getProjectUrl()).success(_.bind callback, @).error (data, status) =>
+                ngProgress.complete()
                 if status == 404
-                    ngProgress.complete()
                     $location.path '/not_found/'
+                else if status == 401
+                    $location.path _.sprintf '/access/%s/', projectName
 
         loadProject (data) =>
             $scope.project = data
@@ -216,8 +218,8 @@ define [
                 $scope.project = project
                 ngProgress.complete()
         .error (data, status) =>
+            ngProgress.complete()
             if status == 404
-                ngProgress.complete()
                 $location.path '/not_found/'
 
         $scope.taskScrolled = (violation) => (to) =>
@@ -250,6 +252,22 @@ define [
         'ngProgress', 'favicoService', TaskCtrl,
     ]
 
+    AccessCtrl = ($scope, $http, $routeParams, $location) ->
+        if $routeParams['name']
+            isProject = true
+            $scope.target = _.sprintf "%s/%s", $routeParams['owner'], $routeParams['name']
+        else
+            isProject = false
+
+        $scope.tryAgain = =>
+            $scope.trying = true
+            $http.get('/api/v1/projects/project/?fetch=true&limit=0').success =>
+                if isProject
+                    $location.path _.sprintf '/projects/%s/',  $scope.target
+    module.controller 'AccessCtrl', [
+        '$scope', '$http', '$routeParams', '$location',
+        AccessCtrl,
+    ]
 
     IndexCtrl: IndexCtrl
     DashboardCtrl: DashboardCtrl
@@ -257,3 +275,4 @@ define [
     ProjectCtrl: ProjectCtrl
     ProjectSettingsCtrl: ProjectSettingsCtrl
     TaskCtrl: TaskCtrl
+    AccessCtrl: AccessCtrl
