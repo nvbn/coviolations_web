@@ -252,7 +252,6 @@ define [
     ]
 
     AccessCtrl = ($scope, $http, $routeParams, $location) ->
-        console.log $routeParams
         if $routeParams['name']
             isProject = true
             $scope.target = _.sprintf "%s/%s", $routeParams['owner'], $routeParams['name']
