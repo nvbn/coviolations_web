@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, RedirectView
 from django.contrib.sites.models import Site
 from django.conf import settings
 from tasks.const import STATUS_FAILED, STATUS_SUCCESS
@@ -31,3 +31,11 @@ class IndexView(TemplateView):
             'debug': settings.DEBUG,
             'site': Site.objects.get_current(),
         }
+
+
+class RedirectToHashView(RedirectView):
+    """Redirect to url with hash"""
+
+    def get_redirect_url(self, **kwargs):
+        """Return url with hash"""
+        return '/#{}'.format(self.request.path)
