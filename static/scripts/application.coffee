@@ -17,6 +17,8 @@ define ['angular', 'controllers'], (angular) ->
                 .when '/tasks/:pk/',
                     templateUrl: '/static/views/task.html'
                     controller: 'TaskCtrl'
+                .when '/not_found/',
+                    templateUrl: '/static/views/not_found.html'
                 .otherwise
                     redirectTo:
                         if window.isAuthenticated then '/dashboard/' else '/welcome/'
