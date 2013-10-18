@@ -2,6 +2,9 @@ define ['angular', 'controllers'], (angular) ->
     angular.module('coviolations', ['coviolations.controllers'])
         .config ['$routeProvider', '$locationProvider', ($routeProvider, $locationProvider) ->
             $routeProvider
+                .when '/',
+                    redirectTo:
+                        if window.isAuthenticated then '/dashboard/' else '/welcome/'
                 .when '/welcome/',
                     templateUrl: '/static/views/index.html'
                     controller: 'IndexCtrl'
@@ -20,6 +23,5 @@ define ['angular', 'controllers'], (angular) ->
                 .when '/not_found/',
                     templateUrl: '/static/views/not_found.html'
                 .otherwise
-                    redirectTo:
-                        if window.isAuthenticated then '/dashboard/' else '/welcome/'
+                    redirectTo: '/not_found/'
         ]

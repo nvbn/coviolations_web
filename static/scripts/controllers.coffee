@@ -103,7 +103,7 @@ define [
     ]
 
     ProjectCtrl = (
-            $scope, $http, $routeParams, $modal,
+            $scope, $http, $routeParams, $location, $modal,
             ngProgress, favicoService, Tasks
     ) ->
         ### Single project page controller ###
@@ -118,7 +118,10 @@ define [
             return projectUrl
 
         loadProject = (callback) =>
-            $http.get(getProjectUrl()).success _.bind callback, @
+            $http.get(getProjectUrl()).success(_.bind callback, @).error (data, status) =>
+                if status == 404
+                    ngProgress.complete()
+                    $location.path '/not_found/'
 
         loadProject (data) =>
             $scope.project = data
@@ -183,7 +186,7 @@ define [
 
         $scope.domain = window.domain
     module.controller 'ProjectCtrl', [
-        '$scope', '$http', '$routeParams', '$modal', 'ngProgress',
+        '$scope', '$http', '$routeParams', '$location', '$modal', 'ngProgress',
         'favicoService', 'Tasks', ProjectCtrl,
     ]
 
@@ -212,6 +215,10 @@ define [
             $http.get(projectUrl).success (project) =>
                 $scope.project = project
                 ngProgress.complete()
+        .error (data, status) =>
+            if status == 404
+                ngProgress.complete()
+                $location.path '/not_found/'
 
         $scope.taskScrolled = (violation) => (to) =>
             getActive = =>
