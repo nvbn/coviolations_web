@@ -22,6 +22,9 @@ define ['angular', 'controllers'], (angular) ->
                     controller: 'TaskCtrl'
                 .when '/not_found/',
                     templateUrl: '/static/views/not_found.html'
+                .when '/access/:task/',
+                    templateUrl: '/static/views/access.html'
+                    controller: 'AccessCtrl'
                 .when '/access/:owner/:name/',
                     templateUrl: '/static/views/access.html'
                     controller: 'AccessCtrl'

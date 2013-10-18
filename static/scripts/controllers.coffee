@@ -220,7 +220,7 @@ define [
         .error (data, status) =>
             ngProgress.complete()
             if status == 404
-                $location.path '/not_found/'
+                $location.path _.sprintf '/access/%s/', $routeParams['pk']
 
         $scope.taskScrolled = (violation) => (to) =>
             getActive = =>
@@ -253,10 +253,12 @@ define [
     ]
 
     AccessCtrl = ($scope, $http, $routeParams, $location) ->
+        console.log $routeParams
         if $routeParams['name']
             isProject = true
             $scope.target = _.sprintf "%s/%s", $routeParams['owner'], $routeParams['name']
         else
+            $scope.target = $routeParams['task']
             isProject = false
 
         $scope.tryAgain = =>
@@ -264,6 +266,8 @@ define [
             $http.get('/api/v1/projects/project/?fetch=true&limit=0').success =>
                 if isProject
                     $location.path _.sprintf '/projects/%s/',  $scope.target
+                else
+                    $location.path _.sprintf '/tasks/%s/',  $scope.target
     module.controller 'AccessCtrl', [
         '$scope', '$http', '$routeParams', '$location',
         AccessCtrl,
