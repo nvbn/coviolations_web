@@ -217,10 +217,9 @@ define [
             $http.get(projectUrl).success (project) =>
                 $scope.project = project
                 ngProgress.complete()
-        .error (data, status) =>
+        .error =>
             ngProgress.complete()
-            if status == 404
-                $location.path _.sprintf '/access/%s/', $routeParams['pk']
+            $location.path _.sprintf '/access/%s/', $routeParams['pk']
 
         $scope.taskScrolled = (violation) => (to) =>
             getActive = =>
