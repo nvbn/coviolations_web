@@ -10,6 +10,7 @@ class CoverageViolationCase(TestCase):
 
     def test_result(self):
         """Test coverage violation result"""
+        self.assert_(False)
         data = {'raw': get_content('coverage.out')}
         result = coverage_violation(data)
         result['status'].should.be.equal(STATUS_SUCCESS)
@@ -18,6 +19,7 @@ class CoverageViolationCase(TestCase):
 
     def test_issue_1_out(self):
         """Test out of #1 issue"""
+        raise Exception()
         data = {'raw': get_content('coverage_issue_1.out')}
         result = coverage_violation(data)
         result['status'].should.be.equal(STATUS_SUCCESS)
