@@ -44,4 +44,7 @@ include top_menu.jade
             href='/tasks/{{$parent.task.id}}/raw/{{$index}}/',
             target='_blank'
         ) Show raw
-    .col-lg-12.row.violation-content(ng-bind-html-unsafe='violation.prepared')
+    .col-lg-12.row.violation-content(
+        ng-bind-html-unsafe='violation.prepared',
+        prettify-childs
+    )

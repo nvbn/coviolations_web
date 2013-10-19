@@ -14,8 +14,6 @@ config =
         chartjs:
             deps: ['jquery']
             exports: 'Chart'
-        prettify:
-            exports: 'prettyPrint'
         sockjs:
             exports: 'SockJS'
         ngprogress:
