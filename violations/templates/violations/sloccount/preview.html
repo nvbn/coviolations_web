@@ -1,8 +1,1 @@
-<table class='table table-striped'>
-    {% for rank, value in totals %}
-        <tr>
-            <th>{{ rank }}</th>
-            <td>{{ value }}</td>
-        </tr>
-    {% endfor %}
-</table>
+{% for rank, value in totals %}{{ rank }}={{ value }}{% if not forloop.last %}, {% endif %}{% endfor %}
