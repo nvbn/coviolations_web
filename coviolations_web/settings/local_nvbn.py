@@ -36,6 +36,7 @@ VIOLATIONS = (
     'violations.testem',
     'violations.coverage',
     'violations.jslint',
+    'violations.xunit',
 )
 
 SERVICES = (

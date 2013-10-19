@@ -20,3 +20,4 @@ requests
 fabric
 html2text
 numpy
+BeautifulSoup

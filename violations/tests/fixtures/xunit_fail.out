@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?><testsuite name="nosetests" tests="11" errors="1" failures="2" skip="0"><testcase classname="tests.test_base.MethodRegistrationCase" name="test_not_collapse" time="0.000"></testcase><testcase classname="tests.test_base.MethodRegistrationCase" name="test_register" time="0.000"></testcase><testcase classname="tests.test_handler.ConnectionHandlerCase" name="test_authorize" time="0.001"></testcase><testcase classname="tests.test_handler.ConnectionHandlerCase" name="test_error_processing" time="0.001"><failure type="exceptions.AssertionError" message="False is not true"><![CDATA[Traceback (most recent call last):
+  File "/usr/lib/python2.7/unittest/case.py", line 331, in run
+    testMethod()
+  File "/home/nvbn/.virtualenvs/chronotrack2/local/lib/python2.7/site-packages/tornado-3.1-py2.7.egg/tornado/testing.py", line 427, in wrapper
+    functools.partial(f, self), timeout=timeout)
+  File "/home/nvbn/.virtualenvs/chronotrack2/local/lib/python2.7/site-packages/tornado-3.1-py2.7.egg/tornado/ioloop.py", line 370, in run_sync
+    return future_cell[0].result()
+  File "/home/nvbn/.virtualenvs/chronotrack2/local/lib/python2.7/site-packages/tornado-3.1-py2.7.egg/tornado/concurrent.py", line 129, in result
+    raise_exc_info(self.__exc_info)
+  File "/home/nvbn/.virtualenvs/chronotrack2/local/lib/python2.7/site-packages/tornado-3.1-py2.7.egg/tornado/gen.py", line 221, in wrapper
+    runner.run()
+  File "/home/nvbn/.virtualenvs/chronotrack2/local/lib/python2.7/site-packages/tornado-3.1-py2.7.egg/tornado/gen.py", line 507, in run
+    yielded = self.gen.send(next)
+  File "/home/nvbn/work/chronotrack/tests/test_handler.py", line 71, in test_error_processing
+    self.assert_(False)
+  File "/usr/lib/python2.7/unittest/case.py", line 424, in assertTrue
+    raise self.failureException(msg)
+AssertionError: False is not true
+]]></failure></testcase><testcase classname="tests.test_handler.ConnectionHandlerCase" name="test_guntime" time="0.010"></testcase><testcase classname="tests.test_handler.ConnectionHandlerCase" name="test_initialisation" time="0.001"><failure type="exceptions.AssertionError" message="False is not true"><![CDATA[Traceback (most recent call last):
+  File "/usr/lib/python2.7/unittest/case.py", line 331, in run
+    testMethod()
+  File "/home/nvbn/.virtualenvs/chronotrack2/local/lib/python2.7/site-packages/tornado-3.1-py2.7.egg/tornado/testing.py", line 427, in wrapper
+    functools.partial(f, self), timeout=timeout)
+  File "/home/nvbn/.virtualenvs/chronotrack2/local/lib/python2.7/site-packages/tornado-3.1-py2.7.egg/tornado/ioloop.py", line 370, in run_sync
+    return future_cell[0].result()
+  File "/home/nvbn/.virtualenvs/chronotrack2/local/lib/python2.7/site-packages/tornado-3.1-py2.7.egg/tornado/concurrent.py", line 129, in result
+    raise_exc_info(self.__exc_info)
+  File "/home/nvbn/.virtualenvs/chronotrack2/local/lib/python2.7/site-packages/tornado-3.1-py2.7.egg/tornado/gen.py", line 221, in wrapper
+    runner.run()
+  File "/home/nvbn/.virtualenvs/chronotrack2/local/lib/python2.7/site-packages/tornado-3.1-py2.7.egg/tornado/gen.py", line 507, in run
+    yielded = self.gen.send(next)
+  File "/home/nvbn/work/chronotrack/tests/test_handler.py", line 59, in test_initialisation
+    self.assert_(False)
+  File "/usr/lib/python2.7/unittest/case.py", line 424, in assertTrue
+    raise self.failureException(msg)
+AssertionError: False is not true
+]]></failure></testcase><testcase classname="tests.test_handler.ConnectionHandlerCase" name="test_new_location" time="0.001"></testcase><testcase classname="tests.test_handler.ConnectionHandlerCase" name="test_observation" time="0.002"></testcase><testcase classname="tests.test_handler.ConnectionHandlerCase" name="test_read" time="0.001"><error type="exceptions.Exception" message=""><![CDATA[Traceback (most recent call last):
+  File "/usr/lib/python2.7/unittest/case.py", line 331, in run
+    testMethod()
+  File "/home/nvbn/.virtualenvs/chronotrack2/local/lib/python2.7/site-packages/tornado-3.1-py2.7.egg/tornado/testing.py", line 427, in wrapper
+    functools.partial(f, self), timeout=timeout)
+  File "/home/nvbn/.virtualenvs/chronotrack2/local/lib/python2.7/site-packages/tornado-3.1-py2.7.egg/tornado/ioloop.py", line 370, in run_sync
+    return future_cell[0].result()
+  File "/home/nvbn/.virtualenvs/chronotrack2/local/lib/python2.7/site-packages/tornado-3.1-py2.7.egg/tornado/concurrent.py", line 129, in result
+    raise_exc_info(self.__exc_info)
+  File "/home/nvbn/.virtualenvs/chronotrack2/local/lib/python2.7/site-packages/tornado-3.1-py2.7.egg/tornado/gen.py", line 221, in wrapper
+    runner.run()
+  File "/home/nvbn/.virtualenvs/chronotrack2/local/lib/python2.7/site-packages/tornado-3.1-py2.7.egg/tornado/gen.py", line 507, in run
+    yielded = self.gen.send(next)
+  File "/home/nvbn/work/chronotrack/tests/test_handler.py", line 51, in test_read
+    raise Exception()
+Exception
+]]></error></testcase><testcase classname="tests.test_publisher.CeleryPublisherCase" name="test_publish" time="0.001"></testcase><testcase classname="tests.test_publisher.LoggingPublisherCase" name="test_publish" time="0.000"></testcase></testsuite>
