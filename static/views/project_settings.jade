@@ -13,11 +13,13 @@
                         .btn-group.pull-right
                             button.btn.btn-default(
                                 type='button', ng-model='project.is_enabled',
-                                btn-radio='true'
+                                btn-radio='true',
+                                class='{{ project.is_enabled && "btn-success" || "btn-default" }}'
                             ) Yes
                             button.btn.btn-default(
                                 type='button', ng-model='project.is_enabled',
-                                btn-radio='false'
+                                btn-radio='false',
+                                class='{{ project.is_enabled && "btn-default" || "btn-danger" }}'
                             ) No
                 tr(ng-show='project.is_private')
                     td Comment pull requests from owner account
@@ -25,11 +27,13 @@
                         .btn-group.pull-right
                             button.btn.btn-default(
                                 type='button', ng-model='project.comment_from_owner_account',
-                                btn-radio='true'
+                                btn-radio='true',
+                                class='{{ project.comment_from_owner_account && "btn-success" || "btn-default" }}'
                             ) Yes
                             button.btn.btn-default(
                                 type='button', ng-model='project.comment_from_owner_account',
-                                btn-radio='false'
+                                btn-radio='false',
+                                class='{{ project.comment_from_owner_account && "btn-default" || "btn-danger" }}'
                             ) No
                 tr
                     td Default branch for project page
