@@ -21,5 +21,7 @@ class TestRedirectToHashView(TestCase):
     def test_redirect_to_hash(self):
         """Test redirect to hash"""
         response = self.client.get('/not_found-url/')
-        response.status_code.should.be.equal(302)
-        response['Location'].should.be.equal('/#/not_found-url/')
+        response.status_code.should.be.equal(301)
+        response['Location'].should.be.equal(
+            'http://testserver/#/not_found-url/',
+        )
