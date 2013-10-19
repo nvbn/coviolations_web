@@ -32,7 +32,6 @@ class ProjectBadge(RedirectView):
             }[last_task['status']]
         return 'unknown'
 
-
     def _get_badge_url(self, badge_type):
         """Get badge url"""
         return static('images/badge_{}.png'.format(badge_type))
