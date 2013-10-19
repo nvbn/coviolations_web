@@ -14,9 +14,11 @@ include top_menu.jade
                 .btn-group.pull-right
                     button.btn.btn-default(
                         type='button', ng-model='project.is_enabled',
-                        btn-radio='true'
+                        btn-radio='true',
+                        class='{{ project.is_enabled && "btn-success" || "btn-default" }}'
                     ) Yes
                     button.btn.btn-default(
                         type='button', ng-model='project.is_enabled',
-                        btn-radio='false'
+                        btn-radio='false',
+                        class='{{ project.is_enabled && "btn-default" || "btn-danger" }}'
                     ) No
