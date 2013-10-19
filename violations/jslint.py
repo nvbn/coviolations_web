@@ -1,3 +1,4 @@
+import re
 from django.template.loader import render_to_string
 from tasks.const import STATUS_SUCCESS, STATUS_FAILED
 from .base import library
@@ -20,6 +21,7 @@ def jslint_violation(data):
     data['preview'] = render_to_string('violations/jslint/preview.html', {
         'count': count,
     })
+    data['lines'] = []
 
     files = []
     for line in stripped:
@@ -32,6 +34,19 @@ def jslint_violation(data):
             files[-1][2].append([line, []])
         elif line.find('    ') == 0:
             files[-1][2][-1][1].append(line.strip())
+
+        line_match = re.match(r'.*\/\/ Line (\d+), Pos (\d+)', line)
+        if line_match:
+            line, position = line_match.groups()
+            error_title = re.match(
+                r'#\d+ (.*)', files[-1][2][-1][0],
+            ).groups()[0]
+            data['lines'].append({
+                'body': error_title,
+                'line': int(line),
+                'path': files[-1][0],
+                'position': int(position),
+            })
 
     data['prepared'] = render_to_string('violations/jslint/prepared.html', {
         'violations': files,
