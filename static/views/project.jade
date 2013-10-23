@@ -112,4 +112,4 @@ include top_menu.jade
                 p.preview-commit(ng-show='task.commitsToExpand')
                     a(href='#/tasks/{{task.id}}/') And {{task.commitsToExpand}} more commits.
             .percent-badge {{task.success_percent||0}}%
-        .col-lg-12(ng-show='!tasks.items.length') This project don't have finished tasks.
+        .col-lg-12(ng-show='!tasks.items.length && loaded') This project don't have finished tasks.

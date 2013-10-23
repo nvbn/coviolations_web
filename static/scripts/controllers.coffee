@@ -139,6 +139,7 @@ define [
                 project: projectName
                 branch: branch
             $scope.tasks.load =>
+                $scope.loaded = true
                 plotData = new plottings.PlotData $scope.tasks.items
                 plotData.normalise()
                 charts = plotData.createChartObjects()
