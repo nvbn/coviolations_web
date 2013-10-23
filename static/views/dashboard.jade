@@ -8,7 +8,10 @@ include top_menu.jade
             tooltip-placement='right'
         )
             i.icon-plus
-    .col-lg-12.project-line(ng-repeat="project in projects")
+    .col-lg-12.project-line(
+        ng-repeat="project in projects",
+        class='{{!project.last_task && "without-tasks" || ""}}'
+    )
         img.project-icon(ng-src='{{project.icon}}')
         i.icon-lock(ng-show="project.is_private")
         a(href='#/projects/{{project.name}}') {{project.name}}
