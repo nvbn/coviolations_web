@@ -27,7 +27,7 @@ include top_menu.jade
             data='project.chart.data', height=100, ng-show='$parent.project.last_task'
         )
         .last-commit.failed(ng-hide='project.last_task') Not tasks performed
-    .col-lg-12.project-line(ng-show='!projects.length')
+    .col-lg-12.project-line(ng-show='!projects.length && loaded')
         | You don't have enabled projects.
 
 .col-lg-12.row.last-tasks-row.dashboard-row
@@ -67,4 +67,4 @@ include top_menu.jade
                 p.preview-commit(ng-show='task.commitsToExpand')
                     a(href='#/tasks/{{task.id}}/') And {{task.commitsToExpand}} more commits.
             .percent-badge {{task.success_percent||0}}%
-        .col-lg-12(ng-show='!tasks.items.length') You don't have finished tasks.
+        .col-lg-12(ng-show='!tasks.items.length && loaded') You don't have finished tasks.

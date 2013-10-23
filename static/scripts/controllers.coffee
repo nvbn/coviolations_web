@@ -60,6 +60,7 @@ define [
             '/api/v1/projects/project/?limit=0&with_success_percent=true&with_last_task=true&with_trend=true'
         ).success (data) =>
             $scope.projects = data.objects
+            $scope.loaded = true
             failedTasks = 0
             _.each $scope.projects, (project) =>
                 plot = new plottings.SuccessPercentPlot project
