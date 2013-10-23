@@ -56,6 +56,16 @@ include top_menu.jade
                 .col-lg-12.row
                     span.description created:
                     span {{task.created}}
+                .col-lg-12.row(ng-show='(task.violations |filter:{status: 1}).length')
+                    span.description success:
+                    .violations-list
+                        span(ng-repeat='violation in task.violations |filter:{status: 1}')
+                            | {{violation.name}}{{!$last && ', ' || ''}}
+                .col-lg-12.row(ng-show='(task.violations |filter:{status: 2}).length')
+                    span.description failed:
+                    .violations-list
+                        span(ng-repeat='violation in task.violations |filter:{status: 2}')
+                            | {{violation.name}}{{!$last && ', ' || ''}}
             .col-lg-8.commit-info
                 p {{task.commit.summary}}
                 p.preview-commit(ng-repeat='commit in task.lastCommits')
