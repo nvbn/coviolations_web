@@ -49,7 +49,7 @@ config =
         angularBootstrap: '../angular-bootstrap/ui-bootstrap-tpls.min'
         ngInfiniteScroll: '../ngInfiniteScroll/ng-infinite-scroll'
         underscoreString: '../underscore.string/dist/underscore.string.min'
-        favico: '../favico.js/favico-0.3.0.min'
+        favico: '../favico.js/favico'
         angularUiJq: '../angular-ui-utils/modules/jq/jq'
         waypoints: '../jquery-waypoints/waypoints.min'
         chai: '../chai/chai'
