@@ -5,12 +5,12 @@ include top_menu
     p You have no access to {{target}}.
     p(for-anonymouse) Maybe you need login and try again?
     a.btn.btn-default(href='/login/github/', for-anonymouse)
-        i.icon-github
+        i.fa.fa-github
         |  Sign in with github
     p(for-authenticated) You can fetch permissions from github and try again.
     button.btn.btn-default(
         type='button', ng-click='tryAgain()', for-authenticated,
         ng-disabled='trying'
     )
-        i.icon-refresh
+        i.fa.fa-refresh
         |  Try again

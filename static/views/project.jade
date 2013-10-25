@@ -3,18 +3,18 @@ include top_menu.jade
 .col-lg-12.row.top-row.project-info.project-page-row
     h2
         a(href='{{project.url}}')
-            i.icon-github
+            i.fa.fa-github
             |  {{project.name}}&nbsp;
         a(
             href='', ng-click='$parent.showSettings()',
             ng-show='project.can_change',
             tooltip='Settings', tooltip-placement='right',
         )
-            i.icon-wrench
+            i.fa.fa-wrench
     .col-lg-12.row
         .col-lg-3.row
             a(href='', ng-click="toggleBadgeHelp()")
-                i.icon-collapse
+                i.fa.fa-collapse
                 |  Get badge&nbsp;
                 img(ng-src='{{project.badge_url}}')
         .col-lg-3.row
@@ -29,7 +29,7 @@ include top_menu.jade
                 type='button', tooltip='Regenerate', tooltip-placement='right',
                 ng-click='$parent.showConfirmRegenerateToken = true',
             )
-                i.icon-repeat
+                i.fa.fa-repeat
             .alert.alert-danger.col-lg-12(ng-show='showConfirmRegenerateToken')
                 h4 Are you sure wnat to regenerate token?
                 p It will break all applications depend on it.

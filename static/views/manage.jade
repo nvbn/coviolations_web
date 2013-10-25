@@ -8,7 +8,7 @@ include top_menu.jade
         tr(ng-repeat="project in projects")
             td
                 img.project-icon(ng-src='{{project.icon}}')
-                i.icon-lock(ng-show="project.is_private")
+                i.fa.fa-lock.lock-icon(ng-show="project.is_private")
                 a(href='/projects/{{project.name}}') {{project.name}}
             td
                 .btn-group.pull-right

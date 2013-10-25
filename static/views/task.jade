@@ -4,7 +4,7 @@ include top_menu.jade
     .col-lg-12.row.a-top-of-menu
         h2
             a(href='{{project.url}}')
-                i.icon-github
+                i.fa.fa-github
                 | &nbsp;
             a(href='#/projects/{{project.name}}/') {{project.name}}
             | : {{task.commit.range}}
@@ -25,14 +25,14 @@ include top_menu.jade
         ul.nav.nav-pills.col-lg-12.row
             li
                 a(href='', ng-click='scrollTo()')
-                    i.icon-long-arrow-up
+                    i.fa.fa-long-arrow-up
             li(
                 ng-repeat='violation in task.violations',
                 class='{{violation.active && "active" || ""}}'
             )
                 a(href='', ng-click='$parent.scrollTo(violation)')
                     | {{violation.name}}&nbsp;
-                    i.icon-warning-sign(ng-show='violation.status == 2')
+                    i.fa.fa-warning(ng-show='violation.status == 2')
 
 .col-lg-12.row.violation-row.task-row(
     ng-repeat='violation in task.violations',

@@ -7,13 +7,13 @@ include top_menu.jade
             href='#/projects/manage/', tooltip='Add new project',
             tooltip-placement='right'
         )
-            i.icon-plus
+            i.fa.fa-plus
     .col-lg-12.project-line(
         ng-repeat="project in projects",
         class='{{!project.last_task && "without-tasks" || ""}}'
     )
         img.project-icon(ng-src='{{project.icon}}')
-        i.icon-lock(ng-show="project.is_private")
+        i.fa.fa-lock.lock-icon(ng-show="project.is_private")
         a(href='#/projects/{{project.name}}') {{project.name}}
         .last-commit(
             ng-show='project.last_task',
