@@ -191,8 +191,12 @@ define [
                     $http: => $http
                     project: => $scope.project
 
-        $scope.getChartTooltip = (key, x, y) =>
-            key + ': ' + y
+        $scope.getChartTooltip = (chart) => (key, x, y) =>
+            task = $scope.tasks.getByCid x, 30
+            if task
+                '<strong>task: ' + task.commit.range + '</strong><br />' + key + ': ' + y
+            else
+                'Empty value'
 
         $scope.domain = window.domain
     module.controller 'ProjectCtrl', [
