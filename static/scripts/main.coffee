@@ -36,6 +36,10 @@ config =
             deps: ['angular', 'jquery']
         waypoints:
             deps: ['jquery']
+        nvd3:
+            deps: ['d3']
+        angularNvd3:
+            deps: ['angular', 'nvd3']
     paths:
         angular: '../angular/angular.min'
         jquery: '../jquery/jquery.min'
@@ -53,6 +57,9 @@ config =
         angularUiJq: '../angular-ui-utils/modules/jq/jq'
         waypoints: '../jquery-waypoints/waypoints.min'
         chai: '../chai/chai'
+        d3: '../d3/d3.min'
+        nvd3: '../nvd3/nv.d3.min'
+        angularNvd3: '../angularjs-nvd3-directives/dist/angularjs-nvd3-directives'
 
 if window.debug
     config.urlArgs = "bust=" + (new Date()).getTime()
