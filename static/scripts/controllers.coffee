@@ -65,7 +65,7 @@ define [
             $scope.loaded = true
             failedTasks = 0
             _.each $scope.projects, (project) =>
-                plot = new plottings.SuccessPercentPlot project
+                plot = new plottings.IndexSuccessPercentPlot project
                 project.chart = plot.createChartObject()
                 project.prettyTrend = _.sprintf '%.2f', project.trend if not _.isUndefined(project.trend)
                 project.trendClass = if project.trend >= 0.01 then 'success' else
