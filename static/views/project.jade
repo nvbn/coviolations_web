@@ -63,11 +63,14 @@ include top_menu.jade
         tab(heading='Metric charts')
             .col-lg-4.row.project-chart-row(ng-repeat='chart in charts')
                 h3 {{chart.name}}
-                canvas(
-                    linechart, options='chart.options', data='chart.data',
-                    width=350, height=220
+                nvd3-line-chart(
+                    id='chart-{{chart.id||chart.name}}',
+                    data='chart.data', width='350', height='220',
+                    showYAxis="true", interactive="true", tooltips="true",
+                    tooltipcontent='getChartTooltip(chart)', interpolate="linear",
+                    margin='{left:30,top:10,bottom:0,right:0}'
                 )
-                br
+                    svg
                 span.plot-color-line(ng-repeat='color in chart.colors')
                     span.plot-color-row(style="background-color: {{color.code}}")
                     |  {{color.name}}

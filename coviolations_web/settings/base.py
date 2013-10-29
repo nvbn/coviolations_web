@@ -141,6 +141,7 @@ BOWER_INSTALLED_APPS = (
     'sinon',
     'ngprogress',
     'angular-ui-utils',
+    'angularjs-nvd3-directives',
 )
 
 TEST_RUNNER = 'discover_runner.DiscoverRunner'

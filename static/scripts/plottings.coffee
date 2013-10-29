@@ -46,21 +46,15 @@ define ['underscore'], (_) ->
 
         _preparePlot: (plot) ->
             prepared = _.flatten [_.map(_.range(@limit), -> 0), [plot.reverse()]]
-            _.last prepared, @limit
+            _.map (_.last prepared, @limit), (item, num) -> [num, item]
 
         _checkDatasets: (datasets) ->
             datasets.length and (_.any datasets, (@item) ->
-                _.any item.data)
+                _.any item.values)
 
         _createChartObject: (name, datasets, colors) ->
             name: name
-            data:
-                labels: _.map(_.range(@limit), (-> ''))
-                datasets: datasets
-            options:
-                pointDot: false
-                datasetFill: false
-                animation: false
+            data: datasets
             colors: colors
 
         createChartObjects: ->
@@ -73,9 +67,9 @@ define ['underscore'], (_) ->
                     colors.push
                         name: plotName
                         code: color.strokeColor
-                    _.extend
-                        data: @_preparePlot plot
-                    , color
+                    values: @_preparePlot plot
+                    key: plotName
+                    color: color.strokeColor
 
                 if @_checkDatasets datasets
                     acc.push @_createChartObject name, datasets, colors
@@ -104,6 +98,26 @@ define ['underscore'], (_) ->
 
 
     class SuccessPercentPlot
+        ### Success percent plot ###
+
+        constructor: (@project, @limit=100, @options={}, @color="#5bc0de") ->
+            @prepareData()
+
+        prepareData: ->
+            prepared = _.flatten [_.map(_.range(@limit), -> 0), [
+                @project.success_percents.reverse()
+            ]]
+            @data = _.map (_.last prepared, @limit), (item, num) -> [num, item]
+
+        createChartObject: ->
+            data: [
+                key: 'success rate'
+                values: @data
+                color: @color
+            ]
+
+
+    class IndexSuccessPercentPlot
         ### Success percent plot ###
 
         constructor: (@project, @limit=100, @options={}, @color="#5bc0de") ->
@@ -177,3 +191,4 @@ define ['underscore'], (_) ->
     SuccessPercentPlot: SuccessPercentPlot
     WeekChart: WeekChart
     DayTimeChart: DayTimeChart
+    IndexSuccessPercentPlot: IndexSuccessPercentPlot

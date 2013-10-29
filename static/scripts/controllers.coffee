@@ -9,6 +9,7 @@ define [
     'ngprogress'
     'waypoints'
     'angularUiJq'
+    'angularNvd3'
     'models'
     'services'
     'directives'
@@ -21,6 +22,7 @@ define [
         'ui.jq'
         'infinite-scroll'
         'ngProgress'
+        'nvd3ChartDirectives'
         'coviolations.models'
         'coviolations.services'
         'coviolations.directives'
@@ -63,7 +65,7 @@ define [
             $scope.loaded = true
             failedTasks = 0
             _.each $scope.projects, (project) =>
-                plot = new plottings.SuccessPercentPlot project
+                plot = new plottings.IndexSuccessPercentPlot project
                 project.chart = plot.createChartObject()
                 project.prettyTrend = _.sprintf '%.2f', project.trend if not _.isUndefined(project.trend)
                 project.trendClass = if project.trend >= 0.01 then 'success' else
@@ -156,6 +158,7 @@ define [
                             name: 'success rate'
                         ]
                         name: 'project quality'
+                        id: 'project_quality'
                     $scope.charts = _.union [chart], charts
 
                     createCharts = (cls, field, name) => _.map [
@@ -187,6 +190,13 @@ define [
                 resolve:
                     $http: => $http
                     project: => $scope.project
+
+        $scope.getChartTooltip = (chart) => (key, x, y) =>
+            task = $scope.tasks.getByCid x, 30
+            if task
+                '<strong>task: ' + task.commit.range + '</strong><br />' + key + ': ' + y
+            else
+                'Empty value'
 
         $scope.domain = window.domain
     module.controller 'ProjectCtrl', [
