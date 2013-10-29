@@ -107,21 +107,14 @@ define ['underscore'], (_) ->
             prepared = _.flatten [_.map(_.range(@limit), -> 0), [
                 @project.success_percents.reverse()
             ]]
-            @data = _.last prepared, @limit
+            @data = _.map (_.last prepared, @limit), (item, num) -> [num, item]
 
         createChartObject: ->
-            data:
-                labels: _.map(_.range(@limit), (-> ''))
-                datasets: [
-                    fillColor: @color
-                    strokeColor: @color
-                    data: @data
-                ]
-            options: _.extend
-                pointDot: false
-                animation: false
-                scaleShowLabels: false
-            , @options
+            data: [
+                key: 'success rate'
+                values: @data
+                color: @color
+            ]
 
 
     class BaseByDateChart

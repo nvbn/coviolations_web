@@ -64,7 +64,7 @@ include top_menu.jade
             .col-lg-4.row.project-chart-row(ng-repeat='chart in charts')
                 h3 {{chart.name}}
                 nvd3-line-chart(
-                    id='chart-{{chart.name}}',
+                    id='chart-{{chart.id||chart.name}}',
                     data='chart.data', width='350', height='220',
                     showYAxis="true", interactive="true", tooltips="true",
                     tooltipcontent='getChartTooltip', interpolate="linear",

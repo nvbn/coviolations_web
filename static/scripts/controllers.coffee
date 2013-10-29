@@ -158,6 +158,7 @@ define [
                             name: 'success rate'
                         ]
                         name: 'project quality'
+                        id: 'project_quality'
                     $scope.charts = _.union [chart], charts
 
                     createCharts = (cls, field, name) => _.map [
