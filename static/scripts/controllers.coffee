@@ -9,6 +9,7 @@ define [
     'ngprogress'
     'waypoints'
     'angularUiJq'
+    'angularNvd3'
     'models'
     'services'
     'directives'
@@ -21,6 +22,7 @@ define [
         'ui.jq'
         'infinite-scroll'
         'ngProgress'
+        'nvd3ChartDirectives'
         'coviolations.models'
         'coviolations.services'
         'coviolations.directives'
@@ -187,6 +189,9 @@ define [
                 resolve:
                     $http: => $http
                     project: => $scope.project
+
+        $scope.getChartTooltip = (key, x, y) =>
+            key + ': ' + y
 
         $scope.domain = window.domain
     module.controller 'ProjectCtrl', [
