@@ -117,33 +117,6 @@ define ['underscore'], (_) ->
             ]
 
 
-    class IndexSuccessPercentPlot
-        ### Success percent plot ###
-
-        constructor: (@project, @limit=100, @options={}, @color="#5bc0de") ->
-            @prepareData()
-
-        prepareData: ->
-            prepared = _.flatten [_.map(_.range(@limit), -> 0), [
-                @project.success_percents.reverse()
-            ]]
-            @data = _.last prepared, @limit
-
-        createChartObject: ->
-            data:
-                labels: _.map(_.range(@limit), (-> ''))
-                datasets: [
-                    fillColor: @color
-                    strokeColor: @color
-                    data: @data
-                ]
-            options: _.extend
-                pointDot: false
-                animation: false
-                scaleShowLabels: false
-            , @options
-
-
     class BaseByDateChart
         ### Base by date chart ###
 
@@ -191,4 +164,3 @@ define ['underscore'], (_) ->
     SuccessPercentPlot: SuccessPercentPlot
     WeekChart: WeekChart
     DayTimeChart: DayTimeChart
-    IndexSuccessPercentPlot: IndexSuccessPercentPlot
