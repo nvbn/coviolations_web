@@ -33,7 +33,7 @@ include top_menu.jade
     .col-lg-12.project-line(ng-show='!projects.length && loaded')
         | You don't have enabled projects.
 
-.col-lg-12.row.last-tasks-row.dashboard-row
+.col-lg-12.row.last-tasks-row.dashboard-row.dashboard-tasks-row
     h2 Last performed tasks
     .col-lg-12.holder.row(
         infinite-scroll='tasks.load()',
