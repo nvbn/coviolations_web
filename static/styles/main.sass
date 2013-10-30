@@ -178,14 +178,18 @@ $description-color: #3b3b3b
     @include block($info-color)
     @include with-projects
     padding-bottom: $default-offset
+    padding-left: 0
+    padding-right: 0
+
+    h2
+        padding-left: 15px
 
     .add-project-button
         margin-left: $default-offset
 
     .project-line
         @include with-types
-        border: 3px solid $info-color
-        border-top: none
+        border-bottom: 3px solid $info-color
         padding-top: $default-offset
 
         canvas
