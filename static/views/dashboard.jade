@@ -12,23 +12,28 @@ include top_menu.jade
         ng-repeat="project in projects",
         class='{{!project.last_task && "without-tasks" || ""}}'
     )
-        img.project-icon(ng-src='{{project.icon}}')
-        i.fa.fa-lock.lock-icon(ng-show="project.is_private")
-        a(href='#/projects/{{project.name}}') {{project.name}}
-        .last-commit(
-            ng-show='project.last_task',
-        )
-            span(class='{{project.last_task.status == 1 && "success" || "failed"}}')
-                | Last task:&nbsp;
-                a(href='#/tasks/{{project.last_task._id}}/')
-                    | {{project.last_task.commit.author}}@{{project.last_task.commit.branch}}\#{{project.last_task.commit.range}}
-            span.trend(class='{{project.trendClass}}')
-                | Trend:&nbsp; {{project.prettyTrend}}
+        span.dashboard-chart-head
+            img.project-icon(ng-src='{{project.icon}}')
+            i.fa.fa-lock.lock-icon(ng-show="project.is_private")
+            a(href='#/projects/{{project.name}}') {{project.name}}
+            .last-commit(
+                ng-show='project.last_task',
+            )
+                span(class='{{project.last_task.status == 1 && "success" || "failed"}}')
+                    | Last task:&nbsp;
+                    a(href='#/tasks/{{project.last_task._id}}/')
+                        | {{project.last_task.commit.author}}@{{project.last_task.commit.branch}}\#{{project.last_task.commit.range}}
+                span.trend(class='{{project.trendClass}}')
+                    | Trend:&nbsp; {{project.prettyTrend}}
         br
-        canvas(
-            fullfill, linechart, options='project.chart.options',
-            data='project.chart.data', height=100, ng-show='$parent.project.last_task'
+        nvd3-line-chart(
+            id='chart-{{project.id}}', ng-show='$parent.project.last_task',
+            data='project.chart.data', height='100', fullfill,
+            interpolate="linear",
+            margin='{left:5,top:5,bottom:5,right:5}', isArea='true',
+            showYAxis="true", showXAxis="true"
         )
+            svg
         .last-commit.failed(ng-hide='project.last_task') Not tasks performed
     .col-lg-12.project-line(ng-show='!projects.length && loaded')
         | You don't have enabled projects.

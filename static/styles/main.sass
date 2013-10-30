@@ -199,9 +199,11 @@ $block-offset: 15px
         @include with-types
         border-top: 3px solid $info-color
         padding-top: $default-offset
+        padding-left: 0
+        padding-right: 0
 
-        canvas
-            margin-left: -10px
+        .dashboard-chart-head
+            padding-left: $block-offset
 
         .last-commit
             @include as-description
@@ -213,6 +215,10 @@ $block-offset: 15px
 
         .trend
             margin-left: 2px
+
+        svg
+            text, .nv-axis path.domain
+                display: none
 
     .without-tasks
         padding-bottom: $default-offset

@@ -4,7 +4,7 @@ define ['angular', 'jquery', 'prettify'], (angular, $, prettify) ->
     module.directive 'fullfill', ->
         (scope, element) ->
             $el = $(element)
-            $el.attr 'width', $el.parent().width() + 21
+            $el.attr 'width', $el.parent().width() + 36
 
     module.directive 'forAuthenticated', ->
         (scope, element) ->
