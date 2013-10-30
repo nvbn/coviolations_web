@@ -12,6 +12,7 @@ $hover-color: #f5f5f5
 $icon-size: 20pt
 $chart-background: #ffffff
 $description-color: #3b3b3b
+$block-offset: 15px
 
 
 @mixin block($color)
@@ -44,8 +45,9 @@ $description-color: #3b3b3b
     .task-line
         padding-top: $default-offset
         padding-bottom: $default-offset
-        border: 3px solid $info-color
+        border-bottom: 3px solid $info-color
         border-top: none
+        margin-left: 0
 
         .pusher-icon
             width: $description-size
@@ -173,6 +175,12 @@ $description-color: #3b3b3b
 
 .dashboard-row
     font-size: $main-font
+    padding-left: 0
+    padding-right: 0
+
+    h2
+        padding-left: $block-offset
+
 
 .enabled-projects-row
     @include block($info-color)
@@ -182,7 +190,7 @@ $description-color: #3b3b3b
     padding-right: 0
 
     h2
-        padding-left: 15px
+        padding-left: $block-offset
 
     .add-project-button
         margin-left: $default-offset
@@ -220,10 +228,12 @@ $description-color: #3b3b3b
     @include block($neutral-color)
     @include with-tasks
     padding-top: $default-offset
+    padding-right: 0
 
     .holder
         @include with-types
         padding-right: 0
+        padding-left: 0
 
 
 .manage-projects-row
