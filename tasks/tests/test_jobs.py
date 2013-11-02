@@ -364,3 +364,33 @@ class CommentLinesCase(MongoFlushMixin, TestCase):
         jobs.Github.return_value.get_repo.return_value\
             .get_commit.return_value.create_comment\
             .call_count.should.be.equal(4)
+
+    def test_not_create_duplicated_comments(self):
+        """Test not create duplicated comments"""
+        task = {
+            'project': 'test',
+            'violations': [
+                {
+                    'name': 'dummy', 'lines': [
+                        {
+                            'body': 'test', 'line': 1,
+                            'path': 'test', 'position': 12
+                        },
+                        {
+                            'body': 'test', 'line': 1,
+                            'path': 'cat', 'position': 12
+                        },
+                    ],
+                }
+            ],
+            'commit': {'hash': 'test'},
+        }
+        jobs.Github.return_value.get_repo.return_value\
+            .get_commit.return_value.get_comments.return_value = [
+                MagicMock(body='test', line=1, path='test', position=12),
+            ]
+        jobs.comment_lines(models.Tasks.save(task))
+        jobs.Github.return_value.get_repo.return_value\
+            .get_commit.return_value.create_comment.assert_called_once_with(
+                'test', 1, 'cat', 12,
+            )

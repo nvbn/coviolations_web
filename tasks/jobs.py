@@ -218,7 +218,15 @@ def comment_lines(task_id):
         )
     repo = github.get_repo(project.name)
     commit = repo.get_commit(task['commit']['hash'])
+    exists_comments = list(commit.get_comments())
     for line in lines:
+        if len(filter(
+            lambda comment: comment.body == line['body']
+            and comment.line == line['line'] and comment.path == line['path']
+            and comment.position == line['position'], exists_comments,
+        )):
+            continue
+
         commit.create_comment(
             line['body'], line['line'], line['path'], line.get('position', 0),
         )
