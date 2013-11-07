@@ -105,7 +105,6 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'south',
     'django_extensions',
-    'discover_runner',
     'djangobower',
     'django_rq',
     'social_auth',
@@ -143,8 +142,6 @@ BOWER_INSTALLED_APPS = (
     'angular-ui-utils',
     'angularjs-nvd3-directives',
 )
-
-TEST_RUNNER = 'discover_runner.DiscoverRunner'
 
 AUTHENTICATION_BACKENDS = (
     'social_auth.backends.contrib.github.GithubBackend',
