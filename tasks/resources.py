@@ -74,6 +74,7 @@ class RawTaskResource(BaseTaskResource):
         list_allowed_methods = ['post']
         detail_allowed_methods = []
         endpoint = 'tasks/status'
+        always_return_data = True
 
     def obj_create(self, bundle, **kwargs):
         """Create object"""

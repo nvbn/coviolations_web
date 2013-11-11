@@ -101,6 +101,25 @@ class RawTaskResourceCase(BaseTaskResourceCase):
         })
         response.status_code.should.be.equal(404)
 
+    def test_has_url_to_status_on_post(self):
+        """Test has url to status on post"""
+        response = self.api_client.post(self.url, data={
+            'service': {
+                'name': 'dummy',
+            },
+            'project': 'test',
+            'commit': {
+                'branch': 'develop',
+                'commit': 'asdfg',
+                'author': 'nvbn',
+            },
+            'violations': [
+                {'name': 'dummy', 'raw': '1'},
+            ]
+        })
+        data = self.deserialize(response)
+        'tasks/status'.should.be.within(data['resource_uri'])
+
 
 class TaskResourceCase(BaseTaskResourceCase):
     """Get tasks resource case"""
