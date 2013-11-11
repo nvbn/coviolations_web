@@ -28,7 +28,7 @@ class BaseTaskResource(Resource):
     ):
         """Get resource uri"""
         url_kwargs = {
-            'resource_name': 'tasks/task',
+            'resource_name': self._meta.endpoint,
             'api_name': 'v1',
         }
 
@@ -52,6 +52,14 @@ class BaseTaskResource(Resource):
             'pk': str(pk),
         }
 
+    def _get_task(self, pk):
+        """Get task"""
+        task = Tasks.find_one(pk)
+        if task:
+            return task
+        else:
+            raise Http404()
+
 
 class RawTaskResource(BaseTaskResource):
     """Raw task resource, for creating tasks from remote service"""
@@ -65,6 +73,7 @@ class RawTaskResource(BaseTaskResource):
         resource_name = 'tasks/raw'
         list_allowed_methods = ['post']
         detail_allowed_methods = []
+        endpoint = 'tasks/status'
 
     def obj_create(self, bundle, **kwargs):
         """Create object"""
@@ -159,6 +168,7 @@ class TaskResource(BaseTaskResource):
         list_allowed_methods = ['get']
         detail_allowed_methods = ['get']
         resource_name = 'tasks/task'
+        endpoint = resource_name
         detail_uri_name = 'pk'
         paginator_class = TaskPaginator
 
@@ -167,14 +177,6 @@ class TaskResource(BaseTaskResource):
         task = self._get_task(ObjectId(pk))
         self._check_access(task, bundle.request.user)
         return Document(task)
-
-    def _get_task(self, pk):
-        """Get task"""
-        task = Tasks.find_one(pk)
-        if task:
-            return task
-        else:
-            raise Http404()
 
     def _check_access(self, task, user):
         """Check access"""
@@ -282,3 +284,20 @@ class TaskResource(BaseTaskResource):
         if bundle.request.GET.get('branch'):
             find_kwargs['spec']['commit.branch'] = bundle.request.GET['branch']
         return find_kwargs
+
+
+class TaskStatusResource(BaseTaskResource):
+    """Provide status of task without authentication"""
+    status = fields.IntegerField(attribute='status', null=True)
+
+    class Meta:
+        list_allowed_methods = []
+        detail_allowed_methods = ['get']
+        resource_name = 'tasks/status'
+        endpoint = resource_name
+        detail_uri_name = 'pk'
+
+    def obj_get(self, bundle, pk, **kwargs):
+        """Get single task"""
+        task = self._get_task(ObjectId(pk))
+        return Document(task)

@@ -3,8 +3,7 @@ from django.contrib.auth.models import User
 from tastypie.test import ResourceTestCase
 from projects.tests.factories import ProjectFactory
 from tools.mongo import MongoFlushMixin
-from .. import models
-from ..const import STATUS_SUCCESS
+from .. import models, const
 
 
 class BaseTaskResourceCase(MongoFlushMixin, ResourceTestCase):
@@ -16,6 +15,29 @@ class BaseTaskResourceCase(MongoFlushMixin, ResourceTestCase):
         ResourceTestCase.setUp(self)
 
         self.project = ProjectFactory(name='test', is_enabled=True)
+
+    def _create_task(self, project='test', seed=0, **kwargs):
+        """Create single task"""
+        defaults = dict(
+            service={
+                'name': 'dummy',
+            },
+            project=project,
+            status=const.STATUS_SUCCESS,
+            commit={
+                'branch': 'develop',
+                'commit': 'asdfg',
+                'author': 'nvbn',
+            },
+            violations=[{
+                'name': 'dummy',
+                'raw': '1',
+                'status': 1,
+                'prepared': '123{}'.format(seed),
+            }],
+        )
+        defaults.update(kwargs)
+        return models.Tasks.save(defaults)
 
 
 class RawTaskResourceCase(BaseTaskResourceCase):
@@ -86,30 +108,6 @@ class TaskResourceCase(BaseTaskResourceCase):
     def setUp(self):
         super(TaskResourceCase, self).setUp()
         self.url = '/api/v1/tasks/task/'
-
-    def _create_task(self, project='test', seed=0, **kwargs):
-        """Create single task"""
-        return models.Tasks.save(
-            dict(
-                service={
-                    'name': 'dummy',
-                },
-                project=project,
-                status=STATUS_SUCCESS,
-                commit={
-                    'branch': 'develop',
-                    'commit': 'asdfg',
-                    'author': 'nvbn',
-                },
-                violations=[{
-                    'name': 'dummy',
-                    'raw': '1',
-                    'status': 1,
-                    'prepared': '123{}'.format(seed),
-                }],
-                **kwargs
-            )
-        )
 
     def _create_tasks(self, project='test', count=20, **kwargs):
         """Create tasks"""
@@ -213,3 +211,24 @@ class TaskResourceCase(BaseTaskResourceCase):
         task = self._create_task()
         response = self.api_client.get('{}{}/'.format(self.url, task))
         response.status_code.should.be.equal(404)
+
+
+class TaskStatusResourceCase(BaseTaskResourceCase):
+    """Task status resource case"""
+
+    def setUp(self):
+        super(TaskStatusResourceCase, self).setUp()
+        self.url = '/api/v1/tasks/status/'
+
+    def test_can_get_task_status(self):
+        """Test can get task status"""
+        task = self._create_task(status=const.STATUS_FAILED)
+        response = self.api_client.get('{}{}/'.format(self.url, task))
+        response.status_code.should.be.equal(200)
+        data = self.deserialize(response)
+        data['status'].should.be.equal(const.STATUS_FAILED)
+
+    def test_cant_list_task_statuses(self):
+        """Test can't list task statuses"""
+        response = self.api_client.get(self.url)
+        response.status_code.should.be.equal(405)
