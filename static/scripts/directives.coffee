@@ -21,3 +21,15 @@ define ['angular', 'jquery', 'prettify'], (angular, $, prettify) ->
                     $(el).html prettify.prettyPrintOne $(el).html()
                     $(el).addClass 'prettyprinted'
             , 100
+
+    module.directive 'ngBindHtmlUnsafe', ['$sce', ($sce) ->
+        scope:
+            ngBindHtmlUnsafe: '='
+        template: "<div ng-bind-html='trustedHtml'></div>"
+        link: ($scope) =>
+            $scope.updateView = =>
+                $scope.trustedHtml = $sce.trustAsHtml $scope.ngBindHtmlUnsafe
+
+            $scope.$watch 'ngBindHtmlUnsafe', (value) =>
+                $scope.updateView value
+    ]
