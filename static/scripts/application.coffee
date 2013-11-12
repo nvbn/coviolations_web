@@ -1,5 +1,5 @@
-define ['angular', 'controllers'], (angular) ->
-    angular.module('coviolations', ['coviolations.controllers'])
+define ['angular', 'angularRoute', 'controllers'], (angular) ->
+    angular.module('coviolations', ['ngRoute', 'coviolations.controllers'])
         .config ['$routeProvider', '$locationProvider', ($routeProvider, $locationProvider) ->
             $routeProvider
                 .when '/',

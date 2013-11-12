@@ -6,6 +6,8 @@ config =
         angular:
             exports: 'angular'
             deps: ['jquery']
+        angularRoute:
+            deps: ['angular']
         bootsrap:
             deps: ['jquery']
             exports: '$.fn.popover'
@@ -42,6 +44,7 @@ config =
             deps: ['angular', 'nvd3']
     paths:
         angular: '../angular/angular.min'
+        angularRoute: '../angular-route/angular-route.min'
         jquery: '../jquery/jquery.min'
         bootstrap: '../bootstrap/dist/js/bootstrap.min'
         underscore: '../underscore/underscore-min'

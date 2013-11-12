@@ -133,6 +133,7 @@ BOWER_INSTALLED_APPS = (
     'angular',
     'requirejs',
     'angles',
+    'angular-route',
     'angular-bootstrap',
     'ngInfiniteScroll',
     'underscore.string',
