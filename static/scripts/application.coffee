@@ -1,5 +1,5 @@
 define ['angular', 'angularRoute', 'controllers'], (angular) ->
-    angular.module('coviolations', ['ngRoute', 'coviolations.controllers'])
+    app = angular.module('coviolations', ['ngRoute', 'coviolations.controllers'])
         .config ['$routeProvider', '$locationProvider', ($routeProvider, $locationProvider) ->
             $routeProvider
                 .when '/',
@@ -31,3 +31,6 @@ define ['angular', 'angularRoute', 'controllers'], (angular) ->
                 .otherwise
                     redirectTo: '/not_found/'
         ]
+
+    app.run ($rootScope) ->
+        $rootScope.getId = (obj) -> obj._id if obj

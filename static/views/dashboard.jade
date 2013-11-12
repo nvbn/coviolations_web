@@ -21,7 +21,7 @@ include top_menu.jade
             )
                 span(class='{{project.last_task.status == 1 && "success" || "failed"}}')
                     | Last task:&nbsp;
-                    a(href='#/tasks/{{project.last_task._id}}/')
+                    a(href='#/tasks/{{$root.getId(project.last_task)}}/')
                         | {{project.last_task.commit.author}}@{{project.last_task.commit.branch}}\#{{project.last_task.commit.range}}
                 span.trend(class='{{project.trendClass}}')
                     | Trend:&nbsp; {{project.prettyTrend}}
