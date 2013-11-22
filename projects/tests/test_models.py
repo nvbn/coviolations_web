@@ -65,7 +65,9 @@ class ProjectManagerCase(MockGithubMixin, TestCase):
 
 class ProjectModelCase(MongoFlushMixin, TestCase):
     """Project model case"""
-    mongo_flush = ['tasks', 'week_statistic', 'day_time_statistic']
+    mongo_flush = [
+        'tasks', 'week_statistic', 'day_time_statistic', 'quality_game',
+    ]
 
     def test_project_branches(self):
         """Test getting project branches"""
@@ -233,6 +235,114 @@ class ProjectModelCase(MongoFlushMixin, TestCase):
         } for part in range(6)])
         project.update_day_time_statistic()
         len(project.day_time_statistic).should.be.ok
+
+    def test_update_quality_game_without_previous_task(self):
+        """Test update quality game without previous task"""
+        project = factories.ProjectFactory()
+        task = {
+            'project': project.name,
+            'success_percent': 10,
+            'status': STATUS_SUCCESS,
+            'created': datetime.now(),
+            'commit': {
+                'branch': 'test',
+                'author': 'test',
+            }
+        }
+        project.update_quality_game(task)
+        project.quality_game.should.be.equal({})
+
+    def test_update_quality_game_with_previous_tasks(self):
+        """Test update quality game with previous tasks"""
+        project = factories.ProjectFactory()
+        Tasks.save({
+            'project': project.name,
+            'success_percent': 10,
+            'status': STATUS_SUCCESS,
+            'created': datetime.now() - timedelta(hours=5),
+            'commit': {
+                'branch': 'test',
+                'author': 'test',
+            },
+            'violations': [],
+        })
+        project.update_quality_game({
+            'project': project.name,
+            'success_percent': 15,
+            'status': STATUS_SUCCESS,
+            'created': datetime.now(),
+            'commit': {
+                'branch': 'test',
+                'author': 'test',
+                'inner': [{'author': 'test'}]
+            },
+            'violations': [],
+        })
+        project.quality_game['total']['test']['value'].should.be.equal(1)
+
+    def test_update_quality_game_with_violations(self):
+        """Test update quality game with violations"""
+        project = factories.ProjectFactory()
+        Tasks.save({
+            'project': project.name,
+            'success_percent': 10,
+            'status': STATUS_SUCCESS,
+            'created': datetime.now() - timedelta(hours=5),
+            'commit': {
+                'branch': 'test',
+                'author': 'test',
+            },
+            'violations': [
+                {'name': 'cat', 'success_percent': 10},
+            ],
+        })
+        project.update_quality_game({
+            'project': project.name,
+            'success_percent': 15,
+            'status': STATUS_SUCCESS,
+            'created': datetime.now(),
+            'commit': {
+                'branch': 'test',
+                'author': 'test',
+                'inner': [{'author': 'test'}]
+            },
+            'violations': [
+                {'name': 'cat', 'success_percent': 15},
+            ],
+        })
+        project.quality_game['violations']['cat']['test']['value']\
+            .should.be.equal(1)
+
+    def test_update_quality_game_with_new_violation(self):
+        """Test update quality game with new violation"""
+        project = factories.ProjectFactory()
+        Tasks.save({
+            'project': project.name,
+            'success_percent': 10,
+            'status': STATUS_SUCCESS,
+            'created': datetime.now() - timedelta(hours=5),
+            'commit': {
+                'branch': 'test',
+                'author': 'test',
+            },
+            'violations': [],
+        })
+        project.update_quality_game({
+            'project': project.name,
+            'success_percent': 15,
+            'status': STATUS_SUCCESS,
+            'created': datetime.now(),
+            'commit': {
+                'branch': 'test',
+                'author': 'test',
+                'inner': [{'author': 'test'}]
+            },
+            'violations': [
+                {'name': 'cat', 'success_percent': 15},
+            ],
+        })
+        project.quality_game['violations']['cat']['test']['value']\
+            .should.be.equal(1)
 
 
 class OrganizationManagerCase(TestCase):
