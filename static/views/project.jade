@@ -85,6 +85,21 @@ include top_menu.jade
                     tooltipcontent="chart.tooltip"
                 )
                     svg
+        tab(heading='Quality game', ng-show='project.quality_game.project')
+            .col-lg-4.row.project-chart-row
+                h2 project quality
+                ol
+                    li(ng-repeat='item in project.qualityGame.total')
+                        a(href='{{item.user.url}}')
+                            img.pusher-icon(ng-src='{{item.user.avatar}}')
+                            |  {{item.user.name}}: {{item.value}}
+            .col-lg-4.row.project-chart-row(ng-repeat='game in project.qualityGame.violations')
+                h2 {{game.name}}
+                ol
+                    li(ng-repeat='item in game.value')
+                        a(href='{{item.user.url}}')
+                            img.pusher-icon(ng-src='{{item.user.avatar}}')
+                            |  {{item.user.name}}: {{item.value}}
 
 .col-lg-12.last-tasks-row.row.project-page-row.project-tasks-row
     .col-lg-12.holder(

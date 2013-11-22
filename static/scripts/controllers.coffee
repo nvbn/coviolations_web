@@ -129,7 +129,15 @@ define [
                     $location.path _.sprintf '/access/%s/', projectName
 
         loadProject (data) =>
+            prepareQualityGame = (game) ->
+                _.sortBy game, (value) -> 0 - value.value
+
             $scope.project = data
+            $scope.project.qualityGame =
+                total: prepareQualityGame data.quality_game.total
+                violations: _.map data.quality_game.violations, (value, name) ->
+                    name: name
+                    value: prepareQualityGame value
             $scope.branches = data.branches
             $scope.branch = $scope.project.default_branch
             ngProgress.complete()
