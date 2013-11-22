@@ -17,6 +17,7 @@ from . import const
 
 WeekStatistic = db.week_statistic
 DayTimeStatistic = db.day_time_statistic
+QualityGame = db.quality_game
 
 
 class OrganizationManager(models.Manager):
