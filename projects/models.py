@@ -377,16 +377,19 @@ class Project(models.Model):
             'commit.branch': task['commit']['branch'],
             'created': {'$lt': task['created']},
         })
-        if previous:
-            game = self._get_or_create_quality_game()
-            game['total'] = self._update_quality_object(
-                game['total'], task,
-                task['success_percent'] >= previous['success_percent'],
-            )
-            for violation in task['violations']:
-                is_better = violation['success_percent'] >=\
-                    self._get_violation_success_percent(task, violation['name'])
-                game['violations'][violation['name']] = self._update_quality_object(
+        if not previous:
+            return
+
+        game = self._get_or_create_quality_game()
+        game['total'] = self._update_quality_object(
+            game['total'], task,
+            task['success_percent'] >= previous['success_percent'],
+        )
+        for violation in task['violations']:
+            is_better = violation['success_percent'] >=\
+                self._get_violation_success_percent(task, violation['name'])
+            game['violations'][violation['name']] =\
+                self._update_quality_object(
                     game.get(violation['name'], {}), task, is_better,
                 )
-            QualityGame.save(game)
+        QualityGame.save(game)
