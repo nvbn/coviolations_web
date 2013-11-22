@@ -345,10 +345,15 @@ class Project(models.Model):
                 'violations': {},
             }
 
+    def _prepare_author(self, author):
+        """Prepare author to key"""
+        return author.replace('.', '__')
+
     def _get_quality_object(self, game_part, task):
         """Get quality object"""
-        if task['commit']['author'] in game_part:
-            return game_part[task['commit']['author']]
+        author = self._prepare_author(task['commit']['author'])
+        if author in game_part:
+            return game_part[author]
         else:
             return {
                 'user': task['commit']['inner'][-1]['author'],
@@ -362,7 +367,7 @@ class Project(models.Model):
             obj['value'] += 1
         else:
             obj['value'] = 0
-        game_part[task['commit']['author']] = obj
+        game_part[self._prepare_author(task['commit']['author'])] = obj
         return game_part
 
     def _get_violation_success_percent(self, task, name):
