@@ -132,7 +132,7 @@ define ['underscore', 'underscoreString'], (_, _s) ->
                 else
                     value = 0
                 key: @labels[num]
-                values: [[0, value]]
+                values: [[@labels[num], value]]
 
         createChartObject: ->
             data: @data
