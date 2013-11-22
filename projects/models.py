@@ -369,7 +369,7 @@ class Project(models.Model):
         """Get violation success percent"""
         for violation in task['violations']:
             if violation['name'] == name:
-                return violation['success_percent']
+                return violation.get('success_percent', 0)
 
     def update_quality_game(self, task):
         """Update quality game"""
@@ -383,10 +383,11 @@ class Project(models.Model):
         game = self._get_or_create_quality_game()
         game['total'] = self._update_quality_object(
             game['total'], task,
-            task['success_percent'] >= previous['success_percent'],
+            task.get('success_percent', 0) >=
+            previous.get('success_percent', 0),
         )
         for violation in task['violations']:
-            is_better = violation['success_percent'] >=\
+            is_better = violation.get('success_percent', 0) >=\
                 self._get_violation_success_percent(task, violation['name'])
             game['violations'][violation['name']] =\
                 self._update_quality_object(
