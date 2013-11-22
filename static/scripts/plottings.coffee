@@ -1,4 +1,6 @@
-define ['underscore'], (_) ->
+define ['underscore', 'underscoreString'], (_, _s) ->
+    _.mixin _s.exports()
+
     class PlotData
         ### Plot data organizer ###
 
@@ -124,20 +126,19 @@ define ['underscore'], (_) ->
             @initialize.apply @, params
 
         initialize: (data, @field, @color, @name) ->
-            @data = _.map _.range(@counter), (part) =>
+            @data = _.map _.range(@counter), (part, num) =>
                 if data[@attr][part] and data[@attr][part][@field]
-                    data[@attr][part][@field]
+                    value = data[@attr][part][@field]
                 else
-                    0
+                    value = 0
+                key: @labels[num]
+                values: [[0, value]]
 
         createChartObject: ->
-            data:
-                labels: @labels
-                datasets: [
-                    data: @data
-                    fillColor: @color
-                ]
+            data: @data
             name: @name
+            tooltip: (day, y ,x) ->
+                "<strong>#{day}</strong><br /> Value: #{x}"
 
 
     class WeekChart extends BaseByDateChart

@@ -77,10 +77,18 @@ include top_menu.jade
         tab(heading='Depend on time')
             .col-lg-4.row.project-chart-row(ng-repeat='chart in dateCharts')
                 h3 {{chart.name}}
-                canvas(
-                    barchart, options='chart.options', data='chart.data',
-                    width=350, height=220
+                nvd3-multi-bar-horizontal-chart(
+                    data='chart.data', width='350', height='220',
+                    id='depend_on_time_{{$index}}',
+                    margin='{left:0,top:10,bottom:0,right:0}',
+                    showYAxis="false", interactive="true", tooltips="true",
+                    tooltipcontent="chart.tooltip"
                 )
+                    svg
+                //canvas(
+                //    barchart, options='chart.options', data='chart.data',
+                //    width=350, height=220
+                //)
 
 .col-lg-12.last-tasks-row.row.project-page-row.project-tasks-row
     .col-lg-12.holder(
