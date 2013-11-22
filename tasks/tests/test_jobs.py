@@ -65,7 +65,13 @@ class PrepareViolationsJobCase(MongoFlushMixin, TestCase):
         super(PrepareViolationsJobCase, self).setUp()
         self._mock_mark_commit()
         self._mock_comment_lines()
+        self._mock_quality_game()
         ProjectFactory(name='test')
+
+    def _mock_quality_game(self):
+        """Mock quality game"""
+        self._orig_quality_game = jobs.Project.update_quality_game
+        jobs.Project.update_quality_game = MagicMock()
 
     def _mock_mark_commit(self):
         """Mock mark_commit_with_status job"""
@@ -85,6 +91,7 @@ class PrepareViolationsJobCase(MongoFlushMixin, TestCase):
     def tearDown(self):
         jobs.mark_commit_with_status = self._orig_mark_commit
         jobs.comment_lines = self._orig_comment_lines
+        jobs.Project.update_quality_game = self._orig_quality_game
         if hasattr(self, '_orig_library'):
             jobs.violations.base.library = self._orig_library
 

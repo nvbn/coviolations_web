@@ -6,6 +6,7 @@ class MockGithubMixin(object):
     """Mock github calls mixin"""
 
     def setUp(self):
+        super(MockGithubMixin, self).setUp()
         self._mock_github_call()
 
     def _mock_github_call(self):

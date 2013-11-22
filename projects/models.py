@@ -17,6 +17,7 @@ from . import const
 
 WeekStatistic = db.week_statistic
 DayTimeStatistic = db.day_time_statistic
+QualityGame = db.quality_game
 
 
 class OrganizationManager(models.Manager):
@@ -327,3 +328,69 @@ class Project(models.Model):
     def day_time_statistic(self):
         """Get day time statistic"""
         return self._get_statistic(DayTimeStatistic)
+
+    @property
+    def quality_game(self):
+        """Get project quality statistic"""
+        return self._get_statistic(QualityGame)
+
+    def _get_or_create_quality_game(self):
+        """Get or create quality game for project"""
+        if self.quality_game:
+            return self.quality_game
+        else:
+            return {
+                'project': self.name,
+                'total': {},
+                'violations': {},
+            }
+
+    def _get_quality_object(self, game_part, task):
+        """Get quality object"""
+        if task['commit']['author'] in game_part:
+            return game_part[task['commit']['author']]
+        else:
+            return {
+                'user': task['commit']['inner'][-1]['author'],
+                'value': 0,
+            }
+
+    def _update_quality_object(self, game_part, task, is_better):
+        """Update quality object"""
+        obj = self._get_quality_object(game_part, task)
+        if is_better:
+            obj['value'] += 1
+        else:
+            obj['value'] = 0
+        game_part[task['commit']['author']] = obj
+        return game_part
+
+    def _get_violation_success_percent(self, task, name):
+        """Get violation success percent"""
+        for violation in task['violations']:
+            if violation['name'] == name:
+                return violation.get('success_percent', 0)
+
+    def update_quality_game(self, task):
+        """Update quality game"""
+        previous = Tasks.find_one({
+            'commit.branch': task['commit']['branch'],
+            'created': {'$lt': task['created']},
+        })
+        if not previous:
+            return
+
+        game = self._get_or_create_quality_game()
+        game['total'] = self._update_quality_object(
+            game['total'], task,
+            task.get('success_percent', 0) >=
+            previous.get('success_percent', 0),
+        )
+        for violation in task['violations']:
+            is_better = violation.get('success_percent', 0) >=\
+                self._get_violation_success_percent(task, violation['name'])
+            game['violations'][violation['name']] =\
+                self._update_quality_object(
+                    game.get(violation['name'], {}), task, is_better,
+                )
+        QualityGame.save(game)

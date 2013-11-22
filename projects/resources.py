@@ -70,6 +70,9 @@ class ProjectsResource(ModelResource):
     day_time_statistic = fields.DictField(
         attribute='day_time_statistic', blank=True, null=True, readonly=True,
     )
+    quality_game = fields.DictField(
+        attribute='quality_game', blank=True, null=True, readonly=True,
+    )
 
     class Meta:
         queryset = Project.objects.all()
