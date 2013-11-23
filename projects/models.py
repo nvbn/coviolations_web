@@ -398,6 +398,7 @@ class Project(models.Model):
                 self._get_violation_success_percent(task, violation['name'])
             game['violations'][violation['name']] =\
                 self._update_quality_object(
-                    game.get(violation['name'], {}), task, is_better,
+                    game['violations'].get(violation['name'], {}), task,
+                    is_better,
                 )
         QualityGame.save(game)
