@@ -347,7 +347,7 @@ class Project(models.Model):
 
     def _prepare_author(self, author):
         """Prepare author to key"""
-        return author.replace('.', '__')
+        return author['url'].replace('.', '__')
 
     def _get_quality_object(self, game_part, task):
         """Get quality object"""

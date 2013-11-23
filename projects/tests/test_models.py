@@ -247,6 +247,7 @@ class ProjectModelCase(MongoFlushMixin, TestCase):
             'commit': {
                 'branch': 'test',
                 'author': 'test',
+                'inner': [{'author': {'url': 'test'}}]
             }
         }
         project.update_quality_game(task)
@@ -263,6 +264,7 @@ class ProjectModelCase(MongoFlushMixin, TestCase):
             'commit': {
                 'branch': 'test',
                 'author': 'test',
+                'inner': [{'author': {'url': 'test'}}]
             },
             'violations': [],
         })
@@ -274,7 +276,7 @@ class ProjectModelCase(MongoFlushMixin, TestCase):
             'commit': {
                 'branch': 'test',
                 'author': 'test',
-                'inner': [{'author': 'test'}]
+                'inner': [{'author': {'url': 'test'}}]
             },
             'violations': [],
         })
@@ -291,6 +293,7 @@ class ProjectModelCase(MongoFlushMixin, TestCase):
             'commit': {
                 'branch': 'test',
                 'author': 'test',
+                'inner': [{'author': {'url': 'test'}}]
             },
             'violations': [
                 {'name': 'cat', 'success_percent': 10},
@@ -304,7 +307,7 @@ class ProjectModelCase(MongoFlushMixin, TestCase):
             'commit': {
                 'branch': 'test',
                 'author': 'test',
-                'inner': [{'author': 'test'}]
+                'inner': [{'author': {'url': 'test'}}]
             },
             'violations': [
                 {'name': 'cat', 'success_percent': 15},
@@ -324,6 +327,7 @@ class ProjectModelCase(MongoFlushMixin, TestCase):
             'commit': {
                 'branch': 'test',
                 'author': 'test',
+                'inner': [{'author': {'url': 'test'}}]
             },
             'violations': [],
         })
@@ -335,7 +339,7 @@ class ProjectModelCase(MongoFlushMixin, TestCase):
             'commit': {
                 'branch': 'test',
                 'author': 'test',
-                'inner': [{'author': 'test'}]
+                'inner': [{'author': {'url': 'test'}}]
             },
             'violations': [
                 {'name': 'cat', 'success_percent': 15},
