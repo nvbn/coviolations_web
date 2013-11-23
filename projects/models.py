@@ -351,7 +351,7 @@ class Project(models.Model):
 
     def _get_quality_object(self, game_part, task):
         """Get quality object"""
-        author = self._prepare_author(task['commit']['author'])
+        author = self._prepare_author(task['commit']['inner'][-1]['author'])
         if author in game_part:
             return game_part[author]
         else:
@@ -367,7 +367,9 @@ class Project(models.Model):
             obj['value'] += 1
         else:
             obj['value'] = 0
-        game_part[self._prepare_author(task['commit']['author'])] = obj
+        game_part[self._prepare_author(
+            task['commit']['inner'][-1]['author'],
+        )] = obj
         return game_part
 
     def _get_violation_success_percent(self, task, name):
