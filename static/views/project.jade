@@ -45,18 +45,18 @@ include top_menu.jade
             strong Markdown
             pre.prettyprint.
                 [![Violations]({{project.badge_url}})]
-                (https://{{domain}}/#/project/{{project.name}})
+                (https://{{domain}}/#/projects/{{project.name}}/)
         .col-lg-4
             strong HTML
             pre.prettyprint.
-                &lt;a href='https://{{domain}}/#/project/{{project.name}} %}'&gt;
+                &lt;a href='https://{{domain}}/#/projects/{{project.name}}/'&gt;
                     &lt;img src='{{project.badge_url}}' alt='Violations' /&gt;
                 &lt;/a&gt;
         .col-lg-4
             strong RST
             pre.prettyprint.
                 .. image:: {{project.badge_url}}
-                :target: https://{{domain}}/#/project/{{project.name}}
+                :target: https://{{domain}}/#/projects/{{project.name}}/
 
 .col-lg-12.row.project-page-row.project-charts
     tabset
