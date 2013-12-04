@@ -2,8 +2,12 @@ include top_menu.jade
 
 .col-lg-12.row.top-row.project-info.project-page-row
     h2
-        a(href='{{project.url}}')
+        a(
+            href='{{project.url}}', tooltip='Go to project github',
+            tooltip-placement='left'
+        )
             i.fa.fa-github
+        span
             |  {{project.name}}&nbsp;
         a(
             href='', ng-click='$parent.showSettings()',
