@@ -63,9 +63,8 @@ define ['angular', 'underscore', 'underscoreString'], (angular, _, _s) ->
                     item.commitsToExpand = 0
                 return item
 
-            getByCid: (cid, limit) ->
-                filledTasks = _.flatten [_.map(_.range(limit), -> null), [@items]]
-                (_.last filledTasks, limit)[cid]
+            getByCid: (cid) ->
+                @items[cid]
     module.factory 'Tasks', getTaskModel
 
     getTaskModel: getTaskModel

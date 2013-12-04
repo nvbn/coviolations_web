@@ -200,7 +200,7 @@ define [
                     project: => $scope.project
 
         $scope.getChartTooltip = (chart) => (key, x, y) =>
-            task = $scope.tasks.getByCid x, 30
+            task = $scope.tasks.getByCid x
             if task
                 '<strong>task: ' + task.commit.range + '</strong><br />' + key + ': ' + y
             else
