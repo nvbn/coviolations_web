@@ -47,8 +47,7 @@ define ['underscore', 'underscoreString'], (_, _s) ->
                                 0
 
         _preparePlot: (plot) ->
-            prepared = _.flatten [_.map(_.range(@limit), -> 0), [plot.reverse()]]
-            _.map (_.last prepared, @limit), (item, num) -> [num, item]
+            _.map (_.last plot, @limit), (item, num) -> [num, item]
 
         _checkDatasets: (datasets) ->
             datasets.length and (_.any datasets, (@item) ->
