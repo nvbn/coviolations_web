@@ -140,7 +140,7 @@ include top_menu.jade
             .col-lg-8.commit-info
                 p {{task.commit.summary}}
                 p.preview-commit(ng-repeat='commit in task.lastCommits')
-                    a.commit-hash(href='{{commit.url}}') {{commit.hash}}&nbsp;
+                    a.commit-hash(href='#/tasks/{{task.id}}/') {{commit.hash}}&nbsp;
                     a(href='{{commit.author.url}}')
                         img.pusher-icon(ng-src='{{commit.author.avatar}}')
                         |  {{commit.author.name}}
