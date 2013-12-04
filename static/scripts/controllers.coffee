@@ -202,7 +202,11 @@ define [
         $scope.getChartTooltip = (chart) => (key, x, y) =>
             task = $scope.tasks.getByCid x
             if task
-                '<strong>task: ' + task.commit.range + '</strong><br />' + key + ': ' + y
+                '<strong>' + task.commit.branch + '#' + task.commit.range\
+                + '</strong><br />' + '<img class="popup-avatar" src="'\
+                + task.lastCommit.author.avatar + '" />'\
+                + task.lastCommit.author.name\
+                + '<br />' + key + ': ' + y
             else
                 'Empty value'
 
