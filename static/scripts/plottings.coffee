@@ -106,9 +106,7 @@ define ['underscore', 'underscoreString'], (_, _s) ->
             @prepareData()
 
         prepareData: ->
-            prepared = _.flatten [_.map(_.range(@limit), -> 0), [
-                @project.success_percents.reverse()
-            ]]
+            prepared = @project.success_percents
             @data = _.map (_.last prepared, @limit), (item, num) -> [num, item]
 
         createChartObject: ->
