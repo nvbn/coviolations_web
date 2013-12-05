@@ -10,6 +10,8 @@ define ['angular', 'angularRoute', 'controllers'], (angular) ->
             $routeProvider
                 .when '/',
                     redirectTo: getFirstPage()
+                .when '/dashboard/',
+                    redirectTo: getFirstPage()
                 .when '/welcome/',
                     templateUrl: '/static/views/index.html'
                     controller: 'IndexCtrl'
