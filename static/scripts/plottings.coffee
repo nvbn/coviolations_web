@@ -47,7 +47,7 @@ define ['underscore', 'underscoreString'], (_, _s) ->
                                 0
 
         _preparePlot: (plot) ->
-            _.map plot.reverse(), (item, num) -> [num, item]
+            _.map plot, (item, num) -> [num, item]
 
         _checkDatasets: (datasets) ->
             datasets.length and (_.any datasets, (@item) ->
