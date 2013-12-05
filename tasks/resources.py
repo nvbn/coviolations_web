@@ -286,6 +286,13 @@ class TaskResource(BaseTaskResource):
             find_kwargs['spec']['commit.branch'] = bundle.request.GET['branch']
         return find_kwargs
 
+    @filters.add
+    def _add_author_filter(self, find_kwargs, bundle):
+        """Add filter by author"""
+        if bundle.request.GET.get('author'):
+            find_kwargs['spec']['commit.author'] = bundle.request.GET['author']
+        return find_kwargs
+
 
 class TaskStatusResource(BaseTaskResource):
     """Provide status of task without authentication"""

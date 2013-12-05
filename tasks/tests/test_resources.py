@@ -231,6 +231,17 @@ class TaskResourceCase(BaseTaskResourceCase):
         response = self.api_client.get('{}{}/'.format(self.url, task))
         response.status_code.should.be.equal(404)
 
+    def test_filter_by_author(self):
+        """Test filter tasks by author"""
+        for _ in range(5):
+            self._create_task(commit={'author': 'cat'})
+        for _ in range(10):
+            self._create_task(commit={'author': 'dog'})
+        response = self.api_client.get('{}?author=cat'.format(self.url))
+        response.status_code.should.be.equal(200)
+        data = self.deserialize(response)
+        data['meta']['total_count'].should.be.equal(5)
+
 
 class TaskStatusResourceCase(BaseTaskResourceCase):
     """Task status resource case"""
