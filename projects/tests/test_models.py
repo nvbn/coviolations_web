@@ -62,6 +62,18 @@ class ProjectManagerCase(MockGithubMixin, TestCase):
             set(models.Project.objects.get_for_user(self.user)),
         )
 
+    def test_get_with_owner(self):
+        """Test get projects with github owner"""
+        projects = factories.ProjectFactory.create_batch(
+            5, name='cat/dog', is_enabled=True,
+        )
+        factories.ProjectFactory.create_batch(
+            5, name='test/dog', is_enabled=True,
+        )
+        set(projects).should.be.equal(
+            set(models.Project.objects.get_with_owner('cat')),
+        )
+
 
 class ProjectModelCase(MongoFlushMixin, TestCase):
     """Project model case"""

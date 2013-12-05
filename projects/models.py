@@ -110,6 +110,13 @@ class ProjectManager(models.Manager):
             Q(owner=user) | Q(organization__users=user)
         ).distinct()
 
+    def get_with_owner(self, owner):
+        """Get with owner username from github"""
+        return self.filter(
+            is_private=False, is_enabled=True,
+            name__startswith='{}/'.format(owner),
+        )
+
 
 class Project(models.Model):
     """Github project"""
