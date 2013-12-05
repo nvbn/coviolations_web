@@ -71,7 +71,8 @@ include top_menu.jade
                     id='chart-{{chart.id||chart.name}}',
                     data='chart.data', width='350', height='220',
                     showYAxis="true", interactive="true", tooltips="true",
-                    tooltipcontent='getChartTooltip(chart)', interpolate="linear",
+                    tooltipcontent='getChartTooltip(chart)',
+                    interpolate="basis",
                     margin='{left:30,top:10,bottom:0,right:0}'
                 )
                     svg
