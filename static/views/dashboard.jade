@@ -37,7 +37,7 @@ include top_menu.jade
         nvd3-line-chart(
             id='chart-{{project.id}}', ng-show='project.last_task',
             data='project.chart.data', height='100', fullfill,
-            interpolate="linear",
+            interpolate="basis",
             margin='{left:5,top:5,bottom:5,right:5}', isArea='true',
             showYAxis="true", showXAxis="true"
         )
