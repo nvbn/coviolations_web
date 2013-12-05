@@ -27,6 +27,8 @@ class ProjectsAuthorization(Authorization):
         """Return only user resources"""
         if bundle.request.GET.get('fetch'):
             return Project.objects.get_or_create_for_user(bundle.request.user)
+        elif bundle.request.GET.get('owner'):
+            return Project.objects.get_with_owner(bundle.request.GET['owner'])
         else:
             return Project.objects.get_enabled_for_user(bundle.request.user)
 

@@ -195,3 +195,15 @@ class ProjectsResourceCase(MockGithubMixin, ResourceTestCase):
             '{}{}/?with_trend=true'.format(self.url, project.name),
         )
         self.deserialize(response)['trend'].should.be.equal(0)
+
+    def test_get_projects_with_owner(self):
+        """Test get projects with owner"""
+        factories.ProjectFactory.create_batch(
+            5, name='cat/dog', is_enabled=True,
+        )
+        factories.ProjectFactory.create_batch(
+            10, name='test/dog', is_enabled=True,
+        )
+        response = self.api_client.get('{}?owner=cat'.format(self.url))
+        response.status_code.should.be.equal(200)
+        self.deserialize(response)['meta']['total_count'].should.be.equal(5)
