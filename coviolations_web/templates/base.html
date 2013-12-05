@@ -2,4 +2,7 @@
 var failedTasks = {{ failed }};
 var isAuthenticated = {% if user.is_authenticated %} true {% else %} false {% endif %};
 var domain = '{{ site.domain }}';
-var debug = {% if debug %} true {% else %} false {% endif %};;</script></head><body><div ng-view class="container"></div></body><script data-main="/static/scripts/main" src="/static/requirejs/require.js"></script></html>
+var debug = {% if debug %} true {% else %} false {% endif %};
+{% if user.is_authenticated %}
+    var user = '{{ user.username }}';
+{% endif %}</script></head><body><div ng-view class="container"></div></body><script data-main="/static/scripts/main" src="/static/requirejs/require.js"></script></html>
