@@ -33,7 +33,10 @@ class ProjectsAuthorization(Authorization):
             return Project.objects.get_enabled_for_user(bundle.request.user)
 
     def read_detail(self, object_list, bundle):
-        return bundle.obj.can_access(bundle.request.user)
+        if bundle.request.user.is_authenticated():
+            return bundle.obj.can_access(bundle.request.user)
+        else:
+            return not bundle.obj.is_private
 
     def update_list(self, object_list, bundle):
         return False
