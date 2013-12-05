@@ -47,7 +47,7 @@ define ['underscore', 'underscoreString'], (_, _s) ->
                                 0
 
         _preparePlot: (plot) ->
-            _.map (_.last plot.reverse(), @limit), (item, num) -> [num, item]
+            _.map plot.reverse(), (item, num) -> [num, item]
 
         _checkDatasets: (datasets) ->
             datasets.length and (_.any datasets, (@item) ->
@@ -106,7 +106,7 @@ define ['underscore', 'underscoreString'], (_, _s) ->
 
         prepareData: ->
             prepared = @project.success_percents.reverse()
-            @data = _.map (_.last prepared, @limit), (item, num) -> [num, item]
+            @data = _.map prepared, (item, num) -> [num, item]
 
         createChartObject: ->
             data: [
