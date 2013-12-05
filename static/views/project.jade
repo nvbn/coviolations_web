@@ -121,7 +121,7 @@ include top_menu.jade
                         {{task.commit.branch}}\#{{task.commit.range}}
                 .col-lg-12.row
                     span.description pusher:
-                    a(href='{{task.lastCommit.author.url}}')
+                    a(href='#/user/{{task.commit.author}}/')
                         img.pusher-icon(ng-src='{{task.lastCommit.author.avatar}}')
                         |  {{task.commit.author}}
                 .col-lg-12.row
@@ -141,7 +141,7 @@ include top_menu.jade
                 p {{task.commit.summary}}
                 p.preview-commit(ng-repeat='commit in task.lastCommits')
                     a.commit-hash(href='#/tasks/{{task.id}}/') {{commit.hash}}&nbsp;
-                    a(href='{{commit.author.url}}')
+                    a(href='#/tasks/{{task.id}}/')
                         img.pusher-icon(ng-src='{{commit.author.avatar}}')
                         |  {{commit.author.name}}
                     | : {{commit.message}}
