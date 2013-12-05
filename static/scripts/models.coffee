@@ -64,7 +64,7 @@ define ['angular', 'underscore', 'underscoreString'], (angular, _, _s) ->
                 return item
 
             getByCid: (cid) ->
-                @items[cid]
+                (_.last @items, 30).reverse()[cid]
     module.factory 'Tasks', getTaskModel
 
     getTaskModel: getTaskModel
