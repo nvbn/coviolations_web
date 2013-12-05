@@ -52,15 +52,18 @@ define [
         '$scope', 'favicoService', IndexCtrl,
     ]
 
-    DashboardCtrl = ($scope, $http, ngProgress, favicoService, Tasks) ->
-        ### Dashboard controller ###
-        if not window.isAuthenticated
-            window.location = '#'
-
+    UserPageCtrl = ($scope, $http, $routeParams, ngProgress, favicoService, Tasks) ->
         ngProgress.start()
-        $http.get(
-            '/api/v1/projects/project/?limit=0&with_success_percent=true&with_last_task=true&with_trend=true'
-        ).success (data) =>
+        if window.isAuthenticated and $routeParams.user == window.user
+            url = '/api/v1/projects/project/?limit=0&with_success_percent=true'\
+                + '&with_last_task=true&with_trend=true'
+            $scope.isSelf = true
+        else
+            url = '/api/v1/projects/project/?limit=0&with_success_percent=true'\
+                + '&with_last_task=true&with_trend=true&owner=' + $routeParams.user
+            $scope.isSelf = false
+            $scope.user = $routeParams.user
+        $http.get(url).success (data) =>
             $scope.projects = data.objects
             $scope.loaded = true
             failedTasks = 0
@@ -75,12 +78,18 @@ define [
             favicoService.badge(failedTasks)
             ngProgress.complete()
 
-        $scope.tasks = new Tasks 20,
-            withViolations: true
-            self: true
+        if $scope.isSelf
+            $scope.tasks = new Tasks 20,
+                withViolations: true
+                self: true
+        else
+            $scope.tasks = new Tasks 20,
+                withViolations: true
+                author: $routeParams.user
         $scope.tasks.load()
-    module.controller 'DashboardCtrl', [
-        '$scope', '$http', 'ngProgress', 'favicoService', 'Tasks', DashboardCtrl,
+    module.controller 'UserPageCtrl', [
+        '$scope', '$http', '$routeParams', 'ngProgress', 'favicoService',
+        'Tasks', UserPageCtrl,
     ]
 
     ManageCtrl = ($scope, $http, ngProgress, favicoService) ->
@@ -296,7 +305,7 @@ define [
     ]
 
     IndexCtrl: IndexCtrl
-    DashboardCtrl: DashboardCtrl
+    UserPageCtrl: UserPageCtrl
     ManageCtrl: ManageCtrl
     ProjectCtrl: ProjectCtrl
     ProjectSettingsCtrl: ProjectSettingsCtrl

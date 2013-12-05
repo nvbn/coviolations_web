@@ -1,16 +1,18 @@
 define ['angular', 'angularRoute', 'controllers'], (angular) ->
+    getFirstPage = ->
+        if window.isAuthenticated
+            '/user/' + window.user + '/'
+        else
+            '/welcome/'
+
     app = angular.module('coviolations', ['ngRoute', 'coviolations.controllers'])
         .config ['$routeProvider', '$locationProvider', ($routeProvider, $locationProvider) ->
             $routeProvider
                 .when '/',
-                    redirectTo:
-                        if window.isAuthenticated then '/dashboard/' else '/welcome/'
+                    redirectTo: getFirstPage()
                 .when '/welcome/',
                     templateUrl: '/static/views/index.html'
                     controller: 'IndexCtrl'
-                .when '/dashboard/',
-                    templateUrl: '/static/views/dashboard.html'
-                    controller: 'DashboardCtrl'
                 .when '/projects/manage/',
                     templateUrl: '/static/views/manage.html'
                     controller: 'ManageCtrl'
@@ -20,6 +22,9 @@ define ['angular', 'angularRoute', 'controllers'], (angular) ->
                 .when '/tasks/:pk/',
                     templateUrl: '/static/views/task.html'
                     controller: 'TaskCtrl'
+                .when '/user/:user/',
+                    templateUrl: '/static/views/dashboard.html'
+                    controller: 'UserPageCtrl'
                 .when '/not_found/',
                     templateUrl: '/static/views/not_found.html'
                 .when '/access/:task/',

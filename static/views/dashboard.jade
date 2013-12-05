@@ -1,13 +1,21 @@
 include top_menu.jade
 
 .col-lg-12.row.top-row.enabled-projects-row.dashboard-row
-    h2
+    h2(ng-show='isSelf')
         | Enabled projects
         a.btn.btn-default.add-project-button(
             href='#/projects/manage/', tooltip='Add new project',
             tooltip-placement='right'
         )
             i.fa.fa-plus
+    h2(ng-hide='isSelf')
+        a(
+            href='https://github.com/{{user}}', tooltip='Go to user github',
+            tooltip-placement='left'
+        )
+            i.fa.fa-github
+        |  {{user}}
+
     .col-lg-12.project-line(
         ng-repeat="project in projects",
         class='{{!project.last_task && "without-tasks" || ""}}'

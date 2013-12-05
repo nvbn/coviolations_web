@@ -7,7 +7,7 @@ define ['angular', 'underscore', 'underscoreString'], (angular, _, _s) ->
         class Tasks
             ### Tasks model ###
 
-            constructor: (@limit=20, @options={}) ->
+            constructor: (@limit=20, @options={}, @isSelf=false) ->
                 @items = []
                 @canLoad = true
                 @offset = 0
@@ -31,6 +31,7 @@ define ['angular', 'underscore', 'underscoreString'], (angular, _, _s) ->
                 ]
                 @addOption base, 'withViolations', 'with_violations'
                 @addOption base, 'self'
+                @addOption base, 'author'
                 @addOption base, 'project'
                 @addOption base, 'branch'
                 base.join('')
