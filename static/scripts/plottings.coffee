@@ -47,7 +47,7 @@ define ['underscore', 'underscoreString'], (_, _s) ->
                                 0
 
         _preparePlot: (plot) ->
-            _.map _.last(plot.reverse(), @limit), (item, num) -> [num, item]
+            _.map _.last(plot, @limit), (item, num) -> [num, item]
 
         _checkDatasets: (datasets) ->
             datasets.length and (_.any datasets, (@item) ->
@@ -116,6 +116,15 @@ define ['underscore', 'underscoreString'], (_, _s) ->
             ]
 
 
+    class ProjectSuccessPercentPlot extends SuccessPercentPlot
+        ### Project success percent plot ###
+
+        prepareData: ->
+            @project.success_percents = (_.last @project.success_percents, @limit)
+                .reverse()
+            super
+
+
     class BaseByDateChart
         ### Base by date chart ###
 
@@ -162,3 +171,4 @@ define ['underscore', 'underscoreString'], (_, _s) ->
     SuccessPercentPlot: SuccessPercentPlot
     WeekChart: WeekChart
     DayTimeChart: DayTimeChart
+    ProjectSuccessPercentPlot: ProjectSuccessPercentPlot

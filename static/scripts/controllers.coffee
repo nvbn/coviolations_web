@@ -156,7 +156,7 @@ define [
                 charts = plotData.createChartObjects()
 
                 loadProject (data) =>
-                    successPlot = new plottings.SuccessPercentPlot data, 30,
+                    successPlot = new plottings.ProjectSuccessPercentPlot data, 30,
                         datasetFill: false
                         scaleShowLabels: true
                     , "#5cb85c"
