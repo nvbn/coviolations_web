@@ -31,12 +31,22 @@ class NodeConnection(object):
     def __init__(
         self, image_id=settings.PYRAX_DEFAULT_IMAGE,
         flavor_id=settings.PYRAX_DEFAULT_FLAVOR,
+        image_name=None,
     ):
-        self._image = pyrax.cloudservers.images.find(human_id=image_id)
+        self._image = pyrax.cloudservers.images.find(**self._get_image_kwargs(
+            image_id, image_name,
+        ))
         self._flavor = pyrax.cloudservers.flavors.find(
             human_id=flavor_id,
         )
         self._name = pyrax.utils.random_ascii(8)
+
+    def _get_image_kwargs(self, image_id, image_name):
+        """Get image kwargs"""
+        if image_name:
+            return {'name': image_name}
+        else:
+            return {'human_id': image_id}
 
     def _get_ip(self):
         """Get server ip"""
