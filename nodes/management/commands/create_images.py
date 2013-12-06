@@ -27,9 +27,9 @@ class Command(BaseCommand):
 
     def _create_image(self, name, **kwargs):
         """Create image"""
-        raw_root = os.path.join(self._root, 'raw')
+        image_root = os.path.join(self._root, name)
         with connect_to_node(**kwargs) as node:
-            node.put(raw_root, '/root/{name}/'.format(name=name))
+            node.put(image_root, '/root/{name}/'.format(name=name))
             out = node.execute('''
                 cd /root/{name}/
                 bash bootstrap.sh
