@@ -22,10 +22,7 @@ class NodeOutput(object):
 
     def _prepare(self, channel):
         """Prepare output channel"""
-        for l in channel.readlines():
-            print l
-        # return channel.read().decode('utf8')
-        return ''
+        return channel.read().decode('utf8')
 
 
 class NodeConnection(object):
