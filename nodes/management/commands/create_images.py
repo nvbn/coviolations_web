@@ -18,9 +18,10 @@ class Command(BaseCommand):
         raw_root = os.path.join(self._root, 'raw')
         with connect_to_node(*kwargs) as node:
             node.put(raw_root, '/root/{name}/')
-            out = node.execute('''cd /root/{name}/
-            bash bootstrap.sh
-            '''.format(name))
+            out = node.execute('''
+                cd /root/{name}/
+                bash bootstrap.sh
+            '''.format(name=name))
             logger.info(out.stdout)
             logger.info(out.stderr)
             node.save_image(name)
