@@ -116,6 +116,7 @@ INSTALLED_APPS = (
     'violations',
     'services',
     'push',
+    'nodes',
 )
 
 BOWER_COMPONENTS_ROOT = os.path.join(PROJECT_ROOT, 'components')
@@ -153,3 +154,6 @@ LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/login/github/'
 
 GITHUB_EXTENDED_PERMISSIONS = ['public_repo', 'repo']
+
+PYRAX_DEFAULT_IMAGE = 'ubuntu-1204-lts-precise-pangolin'
+PYRAX_DEFAULT_FLAVOR = '1-gb-performance'
