@@ -1,7 +1,8 @@
 import os
+from time import sleep
 from django.core.management import BaseCommand
 from django.conf import settings
-from ...utils import connect_to_node, logger
+from ...utils import connect_to_node, logger, pyrax
 
 
 class Command(BaseCommand):
@@ -12,13 +13,23 @@ class Command(BaseCommand):
         self._create_image('raw')
         for image in os.listdir(self._root):
             if image != 'raw':
-                self._create_image(image, image_id='raw')
+                self._create_image(image, image_name='raw')
+
+    def _wait_raw_image(self):
+        """Wait raw image"""
+        sleep(1)
+        logger.info('Wait for raw image')
+        try:
+            if pyrax.cloudservers.images.find(name='raw').status != 'ACTIVE':
+                self._wait_raw_image()
+        except Exception:
+            self._wait_raw_image()
 
     def _create_image(self, name, **kwargs):
         """Create image"""
         raw_root = os.path.join(self._root, 'raw')
-        with connect_to_node(*kwargs) as node:
-            node.put(raw_root, '/root/{name}/')
+        with connect_to_node(**kwargs) as node:
+            node.put(raw_root, '/root/{name}/'.format(name=name))
             out = node.execute('''
                 cd /root/{name}/
                 bash bootstrap.sh
@@ -26,3 +37,6 @@ class Command(BaseCommand):
             logger.info(out.stdout)
             logger.info(out.stderr)
             node.save_image(name)
+
+            if name == 'raw':
+                self._wait_raw_image()
