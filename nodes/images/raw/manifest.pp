@@ -9,3 +9,7 @@ sudo::sudoers { 'worlddomination':
   cmnds    => ['ALL'],
   tags     => ['NOPASSWD'],
 }
+
+package { "build-essential":
+  ensure => "installed"
+}
