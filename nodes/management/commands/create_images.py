@@ -11,7 +11,8 @@ class Command(BaseCommand):
         self._root = os.path.join(settings.PROJECT_ROOT, 'nodes', 'images')
         self._create_image('raw')
         for image in os.listdir(self._root):
-            self._create_image(image, image_id='raw')
+            if image != 'raw':
+                self._create_image(image, image_id='raw')
 
     def _create_image(self, name, **kwargs):
         """Create image"""
