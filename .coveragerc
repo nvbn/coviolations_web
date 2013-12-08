@@ -1,2 +1,2 @@
 [run]
-include = violations*,projects*,tasks*,services*,app*,push*,tools*
+include = violations*,projects*,tasks*,services*,app*,push*,tools*, nodes*
