@@ -6,7 +6,6 @@ from gevent import sleep
 from django.conf import settings
 
 
-
 logger = logging.getLogger('nodes')
 pyrax.set_setting(*settings.PYRAX_SETTINGS)
 pyrax.set_credentials(*settings.PYRAX_CREDENTIALS)
@@ -108,12 +107,23 @@ class NodeConnection(object):
         _, stdout, stderr = self._client.exec_command(script)
         return NodeOutput(stdout, stderr, script)
 
+    def _wait_image(self, name):
+        """Wait when image creating"""
+        sleep(1)
+        logger.info('Wait for {} image'.format(name))
+        try:
+            if pyrax.cloudservers.images.find(name=name).status != 'ACTIVE':
+                self._wait_image(name)
+        except Exception:
+            self._wait_image(name)
+
     def save_image(self, name):
         """Save node image"""
         logger.info('Save image on {}: {}'.format(self._name, name))
         for image in pyrax.cloudservers.images.findall(name=name):
             image.delete()
         pyrax.cloudservers.servers.create_image(self._server.id, name)
+        self._wait_image(name)
 
     def put(self, local_path, remote_path):
         """Put files to node"""
