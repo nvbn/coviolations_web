@@ -1,5 +1,5 @@
 import logging
-import pyrax
+import pyrax as eager_pyrax
 import paramiko
 from scp import SCPClient
 from gevent import sleep
@@ -7,8 +7,31 @@ from django.conf import settings
 
 
 logger = logging.getLogger('nodes')
-pyrax.set_setting(*settings.PYRAX_SETTINGS)
-pyrax.set_credentials(*settings.PYRAX_CREDENTIALS)
+
+
+class LazyPyraxProxy(object):
+    """Lazy proxy to pyrax"""
+
+    def __init__(self):
+        self._is_initialized = False
+
+    def _initialize_pyrax(self):
+        """Initialize pyrax"""
+        eager_pyrax.set_setting(*settings.PYRAX_SETTINGS)
+        eager_pyrax.set_credentials(*settings.PYRAX_CREDENTIALS)
+        self._is_initialized = True
+
+    @property
+    def pyrax(self):
+        if not self._is_initialized:
+            self._initialize_pyrax()
+        return eager_pyrax
+
+    def __getattr__(self, item):
+        return getattr(self.pyrax, item)
+
+
+pyrax = LazyPyraxProxy()
 
 
 class NodeOutput(object):
