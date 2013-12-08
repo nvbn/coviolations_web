@@ -5,7 +5,7 @@ import gevent
 import os
 from django.core.management import BaseCommand
 from django.conf import settings
-from ...utils import connect_to_node, logger, pyrax
+from ...utils import connect_to_node, logger
 
 
 class Command(BaseCommand):
