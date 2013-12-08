@@ -1,4 +1,3 @@
-from __future__ import print_function
 import sure
 import pyrax
 from mock import MagicMock
@@ -58,3 +57,49 @@ class LazyPyraxProxyCase(TestCase):
         """Test proxy to pyrax work"""
         utils.LazyPyraxProxy().cloudservers.should.be\
             .equal(pyrax.cloudservers)
+
+
+class NodeConnectionCase(TestCase):
+    """Node connection case"""
+
+    def setUp(self):
+        self._mock_pyrax()
+        self._mock_logger()
+        self._mock_connection()
+
+    def _mock_pyrax(self):
+        """Mock pyrax"""
+        self._orig_pyrax = utils.pyrax
+        utils.pyrax = MagicMock()
+        utils.pyrax.utils.random_ascii.return_value = 'server'
+
+    def _mock_logger(self):
+        """Mock logger"""
+        self._orig_logger = utils.logger
+        utils.logger = MagicMock()
+
+    def _mock_connection(self):
+        """Mock node connection"""
+        self._orig_create_server = utils.NodeConnection._create_server
+        utils.NodeConnection._create_server = MagicMock(
+            side_effect=lambda: setattr(
+                utils.NodeConnection, '_server', MagicMock(name='server'),
+            ),
+        )
+        self._orig_create_ssh = utils.NodeConnection._create_ssh
+        utils.NodeConnection._create_ssh = MagicMock(
+            side_effect=lambda: setattr(
+                utils.NodeConnection, '_client', MagicMock(),
+            ),
+        )
+
+    def tearDown(self):
+        utils.NodeConnection._create_server = self._orig_create_server
+        utils.NodeConnection._create_ssh = self._orig_create_ssh
+        utils.pyrax = self._orig_pyrax
+        utils.logger = self._orig_logger
+
+    def test_create_node(self):
+        """Test create node"""
+        with utils.connect_to_node() as node:
+            node.should.be.ok
