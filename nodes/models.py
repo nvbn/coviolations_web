@@ -10,7 +10,9 @@ from .exceptions import TaskAlreadyPerformed
 
 class ProjectKeys(models.Model):
     """Project keys model"""
-    project = models.ForeignKey(Project, verbose_name=_('project'))
+    project = models.ForeignKey(
+        Project, unique=True, verbose_name=_('project'),
+    )
     public_key = models.TextField(verbose_name=_('public key'))
     private_key = models.TextField(verbose_name=_('private key'))
 
