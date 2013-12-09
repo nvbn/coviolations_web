@@ -2,9 +2,7 @@ from datetime import datetime, timedelta
 from pymongo import DESCENDING
 from html2text import html2text
 from github import Github
-from django.core.urlresolvers import reverse
 from django.template.loader import render_to_string
-from django.contrib.sites.models import Site
 from django.conf import settings
 from django_rq import job
 from tools.short import make_https
