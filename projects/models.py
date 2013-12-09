@@ -1,6 +1,9 @@
 from datetime import datetime
+from base64 import b64decode
+from github import GithubObject
 from pymongo import DESCENDING
 import numpy as np
+import yaml
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models import Q
@@ -409,3 +412,9 @@ class Project(models.Model):
                     is_better,
                 )
         QualityGame.save(game)
+
+    def get_covio(self, revision=GithubObject.NotSet):
+        """Get covio.yml content"""
+        encoded_content = self.repo.get_file_contents('.covio.yml', revision)
+        content = b64decode(encoded_content)
+        return yaml.load(content)
