@@ -1,6 +1,3 @@
-from gevent import monkey
-monkey.patch_all()
-
 import gevent
 import os
 from django.core.management import BaseCommand
@@ -16,9 +13,15 @@ class Command(BaseCommand):
         self._create_image('raw')
         tasks = [
             gevent.spawn(self._create_image, image, image_name='raw')
-            for image in os.listdir(self._root) if image != 'raw'
+            for image in self._iterate_images()
         ]
         gevent.joinall(tasks)
+
+    def _iterate_images(self):
+        """Iterate available images"""
+        for image in os.listdir(self._root):
+            if image != 'raw':
+                yield image
 
     def _create_image(self, name, **kwargs):
         """Create image"""
