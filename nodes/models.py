@@ -1,8 +1,10 @@
+import os
 from StringIO import StringIO
 from datetime import datetime
 import paramiko
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from django.conf import settings
 from projects.models import Project
 from .utils import connect_to_node, get_image, logger
 from .exceptions import TaskAlreadyPerformed
@@ -45,6 +47,24 @@ class ProjectKeys(models.Model):
                 self.public_key,
             ),
         )
+
+    @property
+    def file_paths(self):
+        """Get file paths"""
+        if not hasattr(self, '_file_paths'):
+            path = os.path.join(
+                settings.KEYS_TEMPORARY_ROOT, 'keys_{}'.format(self.id),
+            )
+            if not os.path.exists(path):
+                os.makedirs(path)
+            public_path = os.path.join(path, 'id_rsa.pub')
+            with open(public_path, 'w') as key_file:
+                key_file.write(self.public_key)
+            private_path = os.path.join(path, 'id_rsa.pub')
+            with open(private_path, 'w') as key_file:
+                key_file.write(self.private_key)
+            self._file_paths = public_path, private_path
+        return self._file_paths
 
 
 class NodeTask(models.Model):

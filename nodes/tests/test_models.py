@@ -32,6 +32,11 @@ class ProjectKeysCase(TestCase):
         factories.ProjectKeysFactory()
         models.Project.repo.create_key.call_count.should.be.equal(1)
 
+    def test_file_paths(self):
+        """Test file paths"""
+        keys = factories.ProjectKeysFactory()
+        keys.file_paths.should.be.ok
+
 
 class NodeTaskCase(TestCase):
     """Node task case"""
