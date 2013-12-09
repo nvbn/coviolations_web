@@ -157,3 +157,6 @@ GITHUB_EXTENDED_PERMISSIONS = ['public_repo', 'repo']
 
 PYRAX_DEFAULT_IMAGE = 'ubuntu-1204-lts-precise-pangolin'
 PYRAX_DEFAULT_FLAVOR = '1-gb-performance'
+
+PARALLEL_TASKS = 2
+PARALLEL_TIMEOUT = 1
