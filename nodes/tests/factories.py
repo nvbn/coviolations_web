@@ -9,6 +9,7 @@ class NodeTaskFactory(factory.DjangoModelFactory):
 
     project = factory.SubFactory(ProjectFactory)
     revision = factory.Sequence('rev_{}'.format)
+    branch = 'master'
 
 
 class ProjectKeysFactory(factory.DjangoModelFactory):
