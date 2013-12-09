@@ -36,14 +36,16 @@ class CreateImagesCase(TestCase):
     def test_create_raw_image(self):
         """Test create raw image"""
         node = MagicMock()
-        create_images.connect_to_node.return_value.__enter__.return_value = node
+        create_images.connect_to_node.return_value.__enter__.\
+            return_value = node
         call_command('create_images')
         node.save_image.assert_called_once_with('raw')
 
     def test_create_other_images(self):
         """Test create other images"""
         node = MagicMock()
-        create_images.connect_to_node.return_value.__enter__.return_value = node
+        create_images.connect_to_node.return_value.__enter__.\
+            return_value = node
         create_images.Command._iterate_images.return_value = ['cat', 'dog']
         call_command('create_images')
         node.save_image.call_count.should.be.equal(3)
