@@ -1,3 +1,4 @@
+import os
 import logging
 import pyrax as eager_pyrax
 import paramiko
@@ -158,3 +159,12 @@ class NodeConnection(object):
 def connect_to_node(*args, **kwargs):
     """Connect to node"""
     return NodeConnection(*args, **kwargs)
+
+
+def get_image(name):
+    """Get correct image by name"""
+    root = os.path.join(settings.PROJECT_ROOT, 'nodes', 'images')
+    if name in os.listdir(root):
+        return name
+    else:
+        return 'raw'
