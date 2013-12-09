@@ -1,9 +1,39 @@
+from StringIO import StringIO
 from datetime import datetime
+import paramiko
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from projects.models import Project
 from .utils import connect_to_node, get_image, logger
 from .exceptions import TaskAlreadyPerformed
+
+
+class ProjectKeys(models.Model):
+    """Project keys model"""
+    project = models.ForeignKey(Project, verbose_name=_('project'))
+    public_key = models.TextField(verbose_name=_('public key'))
+    private_key = models.TextField(verbose_name=_('private key'))
+
+    class Meta:
+        verbose_name = _('Project Keys')
+        verbose_name_plural = _('Project Keys')
+
+    def __unicode__(self):
+        return u'{}: {}'.format(self.project, self.public_key)
+
+    def save(self, *args, **kwargs):
+        """Generate keys and save"""
+        if not (self.public_key or self.private_key):
+            self._generate_keys()
+        return super(ProjectKeys, self).save(*args, **kwargs)
+
+    def _generate_keys(self):
+        """Generate keys"""
+        key = paramiko.RSAKey.generate(2048)
+        private_key = StringIO()
+        key.write_private_key(private_key)
+        self.public_key = key.get_base64()
+        self.private_key = private_key.getvalue()
 
 
 class NodeTask(models.Model):

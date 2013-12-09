@@ -7,6 +7,16 @@ from .. import models
 from . import factories
 
 
+class ProjectKeysCase(TestCase):
+    """Project keys case"""
+
+    def test_generate_keys_on_save(self):
+        """Test generate keys on save"""
+        keys = factories.ProjectKeysFactory()
+        keys.private_key.should.be.ok
+        keys.public_key.should.be.ok
+
+
 class NodeTaskCase(TestCase):
     """Node task case"""
 
