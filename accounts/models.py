@@ -10,5 +10,9 @@ class Profile(object):
     @property
     def github(self):
         """Github api instance with access from user"""
-        token = self.social_auth.get().extra_data['access_token']
-        return Github(token)
+        return Github(self.github_token)
+
+    @property
+    def github_token(self):
+        """Get github api token"""
+        return self.social_auth.get().extra_data['access_token']
