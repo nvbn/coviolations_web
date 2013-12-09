@@ -27,6 +27,7 @@ class ProjectKeys(models.Model):
         """Generate keys and save"""
         if not (self.public_key or self.private_key):
             self._generate_keys()
+            self._add_to_github()
         return super(ProjectKeys, self).save(*args, **kwargs)
 
     def _generate_keys(self):
@@ -36,6 +37,14 @@ class ProjectKeys(models.Model):
         key.write_private_key(private_key)
         self.public_key = key.get_base64()
         self.private_key = private_key.getvalue()
+
+    def _add_to_github(self):
+        """Add keys to github"""
+        self.project.repo.create_key(
+            'coviolations.io ci key', 'ssh-rsa {} ci@coviolations.io'.format(
+                self.public_key,
+            ),
+        )
 
 
 class NodeTask(models.Model):

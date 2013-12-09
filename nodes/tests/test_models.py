@@ -10,11 +10,27 @@ from . import factories
 class ProjectKeysCase(TestCase):
     """Project keys case"""
 
+    def setUp(self):
+        self._mock_project()
+
+    def _mock_project(self):
+        """Mock project github repo"""
+        self._orig_repo = models.Project.repo
+        models.Project.repo = MagicMock()
+
+    def tearDown(self):
+        models.Project.repo = property(self._orig_repo)
+
     def test_generate_keys_on_save(self):
         """Test generate keys on save"""
         keys = factories.ProjectKeysFactory()
         keys.private_key.should.be.ok
         keys.public_key.should.be.ok
+
+    def test_register_key_on_github(self):
+        """Test register key on github"""
+        factories.ProjectKeysFactory()
+        models.Project.repo.create_key.call_count.should.be.equal(1)
 
 
 class NodeTaskCase(TestCase):
