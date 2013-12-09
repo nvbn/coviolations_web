@@ -1,4 +1,5 @@
 import sure
+from io import StringIO
 import pyrax
 from mock import MagicMock
 from django.test import TestCase
@@ -99,7 +100,35 @@ class NodeConnectionCase(TestCase):
         utils.pyrax = self._orig_pyrax
         utils.logger = self._orig_logger
 
-    def test_create_node(self):
-        """Test create node"""
+    def test_create_and_delete_node(self):
+        """Test create and delete node"""
         with utils.connect_to_node() as node:
             node.should.be.ok
+        node._server.delete.assert_called_once_with()
+
+    def test_save_image(self):
+        """Test save image"""
+        with utils.connect_to_node() as node:
+            node._server.id = 'test_id'
+            node._wait_image = MagicMock()
+            node.save_image('test')
+            utils.pyrax.cloudservers.servers.create_image\
+                .assert_called_once_with('test_id', 'test')
+
+    def test_remove_exists_images_before_save(self):
+        """Test remove exists images before save"""
+        with utils.connect_to_node() as node:
+            node._server.id = 'test_id'
+            node._wait_image = MagicMock()
+            images = [MagicMock()]
+            utils.pyrax.cloudservers.images.findall.return_value = images
+            node.save_image('test')
+            images[0].delete.assert_called_once_with()
+
+    def test_execute_script(self):
+        """Test execute script"""
+        with utils.connect_to_node() as node:
+            node._client.exec_command.return_value =\
+                [None, StringIO(), StringIO()]
+            node.execute('test')
+            node._client.exec_command.assert_called_once_with('test')
