@@ -63,6 +63,9 @@ class NodeTask(models.Model):
     project = models.ForeignKey(Project, verbose_name=_('project'))
     revision = models.CharField(max_length=42, verbose_name=_('revision'))
     branch = models.CharField(max_length=300, verbose_name=_('branch'))
+    pull_request_id = models.PositiveIntegerField(
+        null=True, blank=True, verbose_name=_('pull request id'),
+    )
     created = models.DateTimeField(
         auto_now_add=True, verbose_name=_('created'),
     )
@@ -115,7 +118,7 @@ class NodeTask(models.Model):
         return '''
             export COVIO_TOKEN='{token}'
             export GITHUB_TOKEN='{github_token}'
-            export GIT_BRANCH='{branch}'
+            export NODE_TASK='{node_task}'
             cp /root/{image}/launch.sh /home/covio/
             chown covio /home/covio/launch.sh
             cd /home/covio/
@@ -125,5 +128,5 @@ class NodeTask(models.Model):
             token=self.project.token,
             image=image,
             github_token=self.project.owner.github_token,
-            branch=self.branch,
+            node_task=self.id,
         )
