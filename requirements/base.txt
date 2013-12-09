@@ -20,7 +20,7 @@ html2text
 numpy
 BeautifulSoup
 pyrax
-paramkio
+paramiko
 gevent
 scp
 pyyaml
