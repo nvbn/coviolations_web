@@ -19,6 +19,18 @@ package { "git":
   ensure => "installed"
 }
 
+package { "mercurial":
+  ensure => "installed"
+}
+
+package { "bzr":
+  ensure => "installed"
+}
+
+package { "subversion":
+  ensure => "installed"
+}
+
 package { "libyaml-dev":
   ensure => "installed"
 }
