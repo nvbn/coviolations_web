@@ -139,6 +139,7 @@ class NodeTask(models.Model):
         return '''
             export COVIO_TOKEN='{token}'
             export GITHUB_TOKEN='{github_token}'
+            export REPO_NAME='{repo_name}'
             export NODE_TASK='{node_task}'
             cp /root/{image}/launch.sh /home/covio/
             chown covio /home/covio/launch.sh
@@ -150,4 +151,5 @@ class NodeTask(models.Model):
             image=image,
             github_token=self.project.owner.github_token,
             node_task=self.id,
+            repo_name=self.project.name,
         )
