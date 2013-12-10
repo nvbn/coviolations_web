@@ -1,6 +1,6 @@
 image: python
 prepare:
-  - sudo apt-get install -qq sloccount
+  - sudo apt-get install -qq sloccount mongodb-server redis-server
   - pip install fabric
   - cp coviolations_web/settings/local_ci.py coviolations_web/settings/local.py
   - fab install:ci
@@ -16,3 +16,6 @@ violations:
   pip_review:
     command: pip-review
     nofail: true
+deploy:
+  master: fab update_production
+  _: fab update_dev:{branch}
