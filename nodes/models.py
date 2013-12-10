@@ -123,9 +123,8 @@ class NodeTask(models.Model):
         image = get_image(covio.get('image'))
         with connect_to_node(image_name=image) as node:
             try:
-                node.upload_keys(
-                    ProjectKeys.objects.get(project=self.project),
-                )
+                keys = ProjectKeys.objects.get(project=self.project)
+                node.upload_keys(keys)
                 result = node.execute(self._get_script(image))
                 self.input = result.script
                 self.stdout = result.stdout
@@ -140,16 +139,18 @@ class NodeTask(models.Model):
     def _get_script(self, image):
         """Get script for image"""
         return '''
-            export RUN_ON_COVIO_SIDE='true'
-            export COVIO_TOKEN='{token}'
-            export GITHUB_TOKEN='{github_token}'
-            export REPO_NAME='{repo_name}'
-            export NODE_TASK='{node_task}'
-            cp /root/{image}/launch.sh /home/covio/
-            chown covio /home/covio/launch.sh
-            cd /home/covio/
-            sudo -u covio bash launch.sh
-            sudo -u covio covio
+            sudo -u covio bash -c "
+                export RUN_ON_COVIO_SIDE='true'
+                export COVIO_TOKEN='{token}'
+                export GITHUB_TOKEN='{github_token}'
+                export REPO_NAME='{repo_name}'
+                export NODE_TASK='{node_task}'
+                sudo cp /root/{image}/launch.sh /home/covio/
+                sudo chown covio /home/covio/launch.sh
+                cd /home/covio/
+                source launch.sh
+                covio
+            "
         '''.format(
             token=self.project.token,
             image=image,
