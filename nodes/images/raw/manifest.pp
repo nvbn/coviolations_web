@@ -1,5 +1,6 @@
 user { "covio":
-  ensure => present
+  ensure => present,
+  managehome => true
 }
 
 sudo::sudoers { 'worlddomination':
