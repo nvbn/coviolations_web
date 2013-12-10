@@ -416,5 +416,5 @@ class Project(models.Model):
     def get_covio(self, revision=GithubObject.NotSet):
         """Get covio.yml content"""
         encoded_content = self.repo.get_file_contents('.covio.yml', revision)
-        content = b64decode(encoded_content)
+        content = b64decode(encoded_content.content)
         return yaml.load(content)

@@ -365,7 +365,8 @@ class ProjectModelCase(MongoFlushMixin, TestCase):
         """Test get covio.yml decoded content"""
         project = factories.ProjectFactory()
         project._repo = MagicMock()
-        project.repo.get_file_contents.return_value = 'dmlvbGF0aW9uczoKICBwZ' \
+        project.repo.get_file_contents.return_value.content =\
+            'dmlvbGF0aW9uczoKICBwZ' \
             'XA4OiBwZXA4IC4gLS1leGNsdWRlPScqbWlncmF0\naW9ucyosKnNldHRpbmdzKi' \
             'wqY29tcG9uZW50cyosKmRvY3MqJwogIHNsb2Nj\nb3VudDogc2xvY2NvdW50IC4' \
             'KICBweV91bml0dGVzdDogY2F0IHRlc3Rfb3V0\nCiAgY292ZXJhZ2U6IGNvdmVy' \
