@@ -159,9 +159,12 @@ class NodeConnection(object):
         """Upload keys to node"""
         logger.info('Upload keys on {}: {}'.format(self._name, keys))
         self.execute('mkdir /home/covio/.ssh/')
+        self.execute(
+            'ssh-keyscan -H github.com > /home/covio/.ssh/known_hosts',
+        )
         self.put(keys.file_paths, '/home/covio/.ssh/')
         self.execute('chown -R covio /home/covio/.ssh')
-        self.execute('chmod 700 /home/covio/.ssh')
+        self.execute('chmod -R 700 /home/covio/.ssh')
 
 
 def connect_to_node(*args, **kwargs):

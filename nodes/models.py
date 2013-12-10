@@ -60,7 +60,7 @@ class ProjectKeys(models.Model):
             public_path = os.path.join(path, 'id_rsa.pub')
             with open(public_path, 'w') as key_file:
                 key_file.write(self.public_key)
-            private_path = os.path.join(path, 'id_rsa.pub')
+            private_path = os.path.join(path, 'id_rsa')
             with open(private_path, 'w') as key_file:
                 key_file.write(self.private_key)
             self._file_paths = public_path, private_path
@@ -143,12 +143,15 @@ class NodeTask(models.Model):
                 export RUN_ON_COVIO_SIDE='true'
                 export COVIO_TOKEN='{token}'
                 export GITHUB_TOKEN='{github_token}'
-                export REPO_NAME='{repo_name}'
+                export REPO_NAME='{project_name}'
                 export NODE_TASK='{node_task}'
                 sudo cp /root/{image}/launch.sh /home/covio/
                 sudo chown covio /home/covio/launch.sh
                 cd /home/covio/
                 source launch.sh
+                git clone {repo_url}
+                cd {repo_name}
+                git checkout {revision}
                 covio
             "
         '''.format(
@@ -156,5 +159,8 @@ class NodeTask(models.Model):
             image=image,
             github_token=self.project.owner.github_token,
             node_task=self.id,
-            repo_name=self.project.name,
+            project_name=self.project.name,
+            repo_name=self.project.repo.name,
+            repo_url=self.project.repo.ssh_url,
+            revision=self.revision,
         )
