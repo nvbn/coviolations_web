@@ -119,10 +119,13 @@ class NodeTask(models.Model):
     def perform(self):
         """Perform task"""
         self._make_active()
-        image = get_image(self.project.get_covio().get('image'))
+        covio = self.project.get_covio(self.revision)
+        image = get_image(covio.get('image'))
         with connect_to_node(image_name=image) as node:
             try:
-                node.upload_keys()
+                node.upload_keys(
+                    ProjectKeys.objects.get(project=self.project),
+                )
                 result = node.execute(self._get_script(image))
                 self.input = result.script
                 self.stdout = result.stdout
