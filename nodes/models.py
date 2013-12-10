@@ -122,6 +122,7 @@ class NodeTask(models.Model):
         image = get_image(self.project.get_covio().get('image'))
         with connect_to_node(image_name=image) as node:
             try:
+                node.upload_keys()
                 result = node.execute(self._get_script(image))
                 self.input = result.script
                 self.stdout = result.stdout

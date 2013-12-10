@@ -155,6 +155,14 @@ class NodeConnection(object):
         client = SCPClient(self._client.get_transport())
         client.put(local_path, remote_path, recursive=True)
 
+    def upload_keys(self, keys):
+        """Upload keys to node"""
+        logger.info('Upload keys on {}: {}'.format(self._name, keys))
+        self._client.exec_command('mkdir /home/covio/.ssh')
+        self.put(keys.file_paths, '/home/covio/.ssh')
+        self._client.exec_command('chown -R covio /home/covio/.ssh')
+        self._client.exec_command('chmod 700 /home/covio/.ssh')
+
 
 def connect_to_node(*args, **kwargs):
     """Connect to node"""
