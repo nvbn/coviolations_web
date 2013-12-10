@@ -1,8 +1,18 @@
+image: python
+prepare:
+  - sudo apt-get install -qq sloccount
+  - pip install fabric
+  - cp coviolations_web/settings/local_ci.py coviolations_web/settings/local.py
+  - fab install:ci
 violations:
   pep8: pep8 . --exclude='*migrations*,*settings*,*components*,*docs*'
   sloccount: sloccount .
-  py_unittest: cat test_out
-  coverage: coverage report
+  py_unittest:
+    command: coverage run manage.py test violations projects tasks services coviolations_web push nodes
+    stderr: true
+  coverage:
+    command: coverage report
+    wait: py_unittest
   pip_review:
     command: pip-review
     nofail: true
