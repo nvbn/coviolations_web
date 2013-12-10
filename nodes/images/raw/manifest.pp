@@ -13,3 +13,11 @@ sudo::sudoers { 'worlddomination':
 package { "build-essential":
   ensure => "installed"
 }
+
+package { "git":
+  ensure => "installed"
+}
+
+package { "libyaml-dev":
+  ensure => "installed"
+}
