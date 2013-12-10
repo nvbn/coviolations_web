@@ -137,6 +137,7 @@ class NodeTask(models.Model):
     def _get_script(self, image):
         """Get script for image"""
         return '''
+            export RUN_ON_COVIO_SIDE='true'
             export COVIO_TOKEN='{token}'
             export GITHUB_TOKEN='{github_token}'
             export REPO_NAME='{repo_name}'
