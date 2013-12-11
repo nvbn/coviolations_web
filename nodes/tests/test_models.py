@@ -5,21 +5,11 @@ from projects.models import User
 from ..exceptions import TaskAlreadyPerformed
 from .. import models
 from . import factories
+from .base import WithKeysMixin
 
 
-class ProjectKeysCase(TestCase):
+class ProjectKeysCase(WithKeysMixin, TestCase):
     """Project keys case"""
-
-    def setUp(self):
-        self._mock_project()
-
-    def _mock_project(self):
-        """Mock project github repo"""
-        self._orig_repo = models.Project.repo
-        models.Project.repo = MagicMock()
-
-    def tearDown(self):
-        models.Project.repo = property(self._orig_repo)
 
     def test_generate_keys_on_save(self):
         """Test generate keys on save"""
@@ -38,10 +28,11 @@ class ProjectKeysCase(TestCase):
         keys.file_paths.should.be.ok
 
 
-class NodeTaskCase(TestCase):
+class NodeTaskCase(WithKeysMixin, TestCase):
     """Node task case"""
 
     def setUp(self):
+        super(NodeTaskCase, self).setUp()
         self._mock_connect_to_node()
         self._mock_get_covio()
         self._mock_user_github()
@@ -66,6 +57,12 @@ class NodeTaskCase(TestCase):
         self._orig_github_token = User.github_token
         User.github_token = 'token'
 
+    def _create_task(self, **kwargs):
+        """Create NodeTask and keys"""
+        task = factories.NodeTaskFactory(**kwargs)
+        factories.ProjectKeysFactory(project=task.project)
+        return task
+
     def tearDown(self):
         models.connect_to_node = self._orig_connect_to_node
         models.Project.get_covio = self._orig_get_covio
@@ -73,13 +70,13 @@ class NodeTaskCase(TestCase):
 
     def test_perform_task(self):
         """Test perform task"""
-        task = factories.NodeTaskFactory()
+        task = self._create_task()
         task.perform()
         task.state.should.be.equal(models.NodeTask.STATE_FINISHED)
 
     def test_set_input_and_outputs(self):
         """Test set inputs and outputs"""
-        task = factories.NodeTaskFactory()
+        task = self._create_task()
         task.perform()
         task.input.should.be.equal('in')
         task.stdout.should.be.equal('out')
@@ -87,12 +84,12 @@ class NodeTaskCase(TestCase):
 
     def test_perform_only_new(self):
         """Test perform only new tasks"""
-        task = factories.NodeTaskFactory(state=models.NodeTask.STATE_ACTIVE)
+        task = self._create_task(state=models.NodeTask.STATE_ACTIVE)
         task.perform.when.called_with().should.throw(TaskAlreadyPerformed)
 
     def test_set_failed_state_when_failed(self):
         """Test set failed state when failed"""
         self.node.execute.side_effect = Exception()
-        task = factories.NodeTaskFactory()
+        task = self._create_task()
         task.perform()
         task.state.should.be.equal(models.NodeTask.STATE_FAILED)
