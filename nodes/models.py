@@ -169,6 +169,7 @@ class NodeTask(models.Model):
 
     def kill(self):
         """Kill node"""
+        logger.warning('Node killed: {}'.format(self.id))
         if self.node:
             kill_node(self.node)
         self.state = self.STATE_FAILED
