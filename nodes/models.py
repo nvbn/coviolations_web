@@ -6,7 +6,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from projects.models import Project
-from .utils import connect_to_node, get_image, logger
+from .utils import connect_to_node, get_image, logger, kill_node
 from .exceptions import TaskAlreadyPerformed
 
 
@@ -166,3 +166,11 @@ class NodeTask(models.Model):
             repo_url=self.project.repo.ssh_url,
             revision=self.revision,
         )
+
+    def kill(self):
+        """Kill node"""
+        if self.node:
+            kill_node(self.node)
+        self.state = self.STATE_FAILED
+        self.finished = datetime.now()
+        self.save()

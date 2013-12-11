@@ -1,4 +1,5 @@
 import os
+from datetime import timedelta
 
 
 PROJECT_ROOT = os.path.abspath(
@@ -160,5 +161,7 @@ PYRAX_DEFAULT_FLAVOR = '1-gb-performance'
 
 PARALLEL_TASKS = 2
 PARALLEL_TIMEOUT = 1
+NODE_LIFETIME = timedelta(minutes=10)
+NODE_KILLER_INTERVAL = 60
 
 KEYS_TEMPORARY_ROOT = '/tmp'
