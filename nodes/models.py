@@ -122,6 +122,8 @@ class NodeTask(models.Model):
         covio = self.project.get_covio(self.revision)
         image = get_image(covio.get('image'))
         with connect_to_node(image_name=image) as node:
+            self.node = node.id
+            self.save()
             try:
                 keys = ProjectKeys.objects.get(project=self.project)
                 node.upload_keys(keys)
