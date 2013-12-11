@@ -166,6 +166,11 @@ class NodeConnection(object):
         self.execute('chown -R covio /home/covio/.ssh')
         self.execute('chmod -R 700 /home/covio/.ssh')
 
+    @property
+    def id(self):
+        """Get node id"""
+        return self._server.id
+
 
 def connect_to_node(*args, **kwargs):
     """Connect to node"""
