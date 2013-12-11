@@ -50,7 +50,7 @@ class NodeTaskCase(TestCase):
         """Mock connect to node"""
         self._orig_connect_to_node = models.connect_to_node
         models.connect_to_node = MagicMock()
-        self.node = MagicMock()
+        self.node = MagicMock(id='node_id')
         self.node.execute.return_value = MagicMock(
             script='in', stdout='out', stderr='err',
         )
