@@ -21,6 +21,20 @@
                                 btn-radio='false',
                                 class='{{ project.is_enabled && "btn-default" || "btn-danger" }}'
                             ) No
+                tr
+                    td Run tests on coviolations servers
+                    td
+                        .btn-group.pull-right
+                            button.btn.btn-default(
+                                type='button', ng-model='project.run_here',
+                                btn-radio='true',
+                                class='{{ project.run_here && "btn-success" || "btn-default" }}'
+                            ) Yes
+                            button.btn.btn-default(
+                                type='button', ng-model='project.run_here',
+                                btn-radio='false',
+                                class='{{ project.run_here && "btn-default" || "btn-danger" }}'
+                            ) No
                 tr(ng-show='project.is_private')
                     td Comment pull requests from owner account
                     td
