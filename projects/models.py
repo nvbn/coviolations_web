@@ -157,6 +157,7 @@ class Project(models.Model):
         max_length=300, blank=True, null=True,
         verbose_name=_('dashboard branch'),
     )
+    run_here = models.BooleanField(default=True, verbose_name=_('run here'))
 
     objects = ProjectManager()
 

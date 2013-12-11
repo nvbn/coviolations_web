@@ -89,6 +89,7 @@ class ProjectsResource(ModelResource):
             'name', 'is_enabled', 'id',
             'is_private', 'icon',
             'comment_from_owner_account',
+            'run_here',
         )
 
     def dehydrate(self, bundle):
