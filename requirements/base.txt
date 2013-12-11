@@ -24,5 +24,6 @@ paramiko
 gevent
 scp
 pyyaml
+rq-scheduler
 # south 0.8.2 not work with django 1.6
 -e hg+http://bitbucket.org/andrewgodwin/south/#egg=south

@@ -184,3 +184,9 @@ def get_image(name):
         return name
     else:
         return 'raw'
+
+
+def kill_node(node_id):
+    """Kill node"""
+    server = pyrax.cloudservers.servers.find(id=node_id)
+    server.delete()
