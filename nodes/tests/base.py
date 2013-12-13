@@ -14,4 +14,4 @@ class WithKeysMixin(object):
         models.Project.repo = MagicMock()
 
     def tearDown(self):
-        models.Project.repo = property(self._orig_repo)
+        models.Project.repo = self._orig_repo

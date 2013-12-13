@@ -64,6 +64,7 @@ class NodeTaskCase(WithKeysMixin, TestCase):
         return task
 
     def tearDown(self):
+        super(NodeTaskCase, self).tearDown()
         models.connect_to_node = self._orig_connect_to_node
         models.Project.get_covio = self._orig_get_covio
         User.github_token = property(self._orig_github_token)
