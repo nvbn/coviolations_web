@@ -3,7 +3,7 @@ from .. import models
 
 
 class WithKeysMixin(object):
-    """With project keys misin"""
+    """With project keys mixin"""
 
     def setUp(self):
         self._mock_project()
