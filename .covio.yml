@@ -16,6 +16,3 @@ violations:
   pip_review:
     command: pip-review
     nofail: true
-deploy:
-  master: fab update_production
-  _: fab update_dev:{branch}
