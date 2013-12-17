@@ -29,6 +29,7 @@ class ProjectFactory(factory.DjangoModelFactory):
     name = factory.Sequence(lambda n: 'project{}'.format(n))
     url = factory.Sequence(lambda n: 'http://test{}.com'.format(n))
     organization = factory.SubFactory(OrganizationFactory)
+    run_here = False
 
     @factory.sequence
     def owner(n):
