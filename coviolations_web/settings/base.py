@@ -155,7 +155,7 @@ LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/login/github/'
 
 GITHUB_EXTENDED_PERMISSIONS = ['public_repo', 'repo']
-GITHUB_HOOK_NAME = 'coviolations'
+GITHUB_HOOK_NAME = 'web'
 GITHUB_HOOK_EVENTS = ['push', 'create', 'pull_request']
 
 PYRAX_DEFAULT_IMAGE = 'ubuntu-1204-lts-precise-pangolin'

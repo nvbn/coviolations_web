@@ -7,6 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.contrib.sites.models import Site
 from projects.models import Project
 from .utils import connect_to_node, get_image, logger, kill_node
 from .exceptions import TaskAlreadyPerformed
@@ -80,14 +81,16 @@ def generate_project_keys(instance, **kwargs):
 @receiver(post_save, sender=Project)
 def update_hook(instance, **kwargs):
     """Update project hook"""
+    site = Site.objects.get_current()
+    url = 'https://{}/api/v1/nodes/hook/'.format(site.domain)
     exists = [
         hook for hook in instance.repo.get_hooks()
-        if hook.name == settings.GITHUB_HOOK_NAME
+        if hook.config.get('url') == url
     ]
     if instance.is_enabled and instance.run_here and not exists:
         instance.repo.create_hook(
             settings.GITHUB_HOOK_NAME, {
-                'url': '',
+                'url': url,
                 'content_type': 'json',
             }, settings.GITHUB_HOOK_EVENTS, True,
         )
