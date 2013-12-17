@@ -2,7 +2,9 @@ import sure
 from mock import MagicMock
 from django.test import TestCase
 from django.contrib.auth.models import User
+from django.conf import settings
 from projects.tests.factories import ProjectFactory
+from projects.models import Project
 from ..exceptions import TaskAlreadyPerformed
 from .. import models
 from . import factories
@@ -40,6 +42,24 @@ class ProjectKeysCase(WithKeysMixin, TestCase):
         project.save()
         models.ProjectKeys.objects.filter(project=project).count()\
             .should.be.equal(1)
+
+
+class ProjectPostSaveCase(WithKeysMixin, TestCase):
+    """Project post_save case"""
+
+    def test_add_hook_if_need(self):
+        """Test add hook if need"""
+        project = ProjectFactory.create(run_here=True)
+        project.repo.create_hook.call_count.should.be.equal(1)
+
+    def test_remove_hook_if_need(self):
+        """Test remove hook if need"""
+        project = ProjectFactory.create(run_here=False)
+        hook = MagicMock()
+        hook.name = settings.GITHUB_HOOK_NAME
+        project.repo.get_hooks.return_value = [hook]
+        project.save()
+        hook.delete.call_count.should.be.equal(1)
 
 
 class NodeTaskCase(WithKeysMixin, TestCase):

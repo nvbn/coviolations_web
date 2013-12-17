@@ -77,6 +77,25 @@ def generate_project_keys(instance, **kwargs):
         ProjectKeys.objects.create(project=instance)
 
 
+@receiver(post_save, sender=Project)
+def update_hook(instance, **kwargs):
+    """Update project hook"""
+    exists = [
+        hook for hook in instance.repo.get_hooks()
+        if hook.name == settings.GITHUB_HOOK_NAME
+    ]
+    if instance.run_here and not exists:
+        instance.repo.create_hook(
+            settings.GITHUB_HOOK_NAME, {
+                'url': '',
+                'content_type': 'json',
+            }, settings.GITHUB_HOOK_EVENTS, True,
+        )
+    elif not instance.run_here and exists:
+        for hook in exists:
+            hook.delete()
+
+
 class NodeTask(models.Model):
     """Node task"""
     STATE_NEW = 0
