@@ -1,5 +1,4 @@
 import sure
-import json
 from mock import MagicMock
 from tastypie.test import ResourceTestCase
 from tools.tests import MockGithubMixin
