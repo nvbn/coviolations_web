@@ -91,6 +91,10 @@ LOGGING = {
             'handlers': ['console', 'sentry'],
             'propagate': False,
         },
+        'nodes': {
+            'handlers': ['console', 'sentry'],
+            'level': 'INFO',
+        },
     },
 }
 
