@@ -20,7 +20,7 @@ class ProjectKeysCase(WithKeysMixin, TestCase):
 
     def test_register_key_on_github(self):
         """Test register key on github"""
-        factories.ProjectKeysFactory()
+        ProjectFactory(run_here=True)
         models.Project.repo.create_key.call_count.should.be.equal(1)
 
     def test_file_paths(self):
@@ -73,8 +73,11 @@ class NodeTaskCase(WithKeysMixin, TestCase):
 
     def _create_task(self, **kwargs):
         """Create NodeTask and keys"""
-        task = factories.NodeTaskFactory(**kwargs)
-        factories.ProjectKeysFactory(project=task.project)
+        defaults = {
+            'project__run_here': True,
+        }
+        defaults.update(kwargs)
+        task = factories.NodeTaskFactory(**defaults)
         return task
 
     def tearDown(self):
