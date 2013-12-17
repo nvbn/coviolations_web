@@ -1,4 +1,9 @@
 image: python
+prepare:
+  - sudo apt-get install -qq sloccount mongodb-server redis-server
+  - pip install fabric
+  - cp coviolations_web/settings/local_ci.py coviolations_web/settings/local.py
+  - fab install:ci
 violations:
   pep8: pep8 . --exclude='*migrations*,*settings*,*components*,*docs*'
   sloccount: sloccount .
