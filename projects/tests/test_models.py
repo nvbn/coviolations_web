@@ -76,7 +76,7 @@ class ProjectManagerCase(MockGithubMixin, TestCase):
         )
 
 
-class ProjectModelCase(MongoFlushMixin, TestCase):
+class ProjectModelCase(MockGithubMixin, MongoFlushMixin, TestCase):
     """Project model case"""
     mongo_flush = [
         'tasks', 'week_statistic', 'day_time_statistic', 'quality_game',

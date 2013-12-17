@@ -3,12 +3,13 @@ from datetime import datetime
 from django.test import TestCase
 from django.core.urlresolvers import reverse
 from tools.mongo import MongoFlushMixin
+from tools.tests import MockGithubMixin
 from tasks.models import Tasks
 from tasks import const
 from . import factories
 
 
-class ProjectBadgeViewCase(MongoFlushMixin, TestCase):
+class ProjectBadgeViewCase(MockGithubMixin, MongoFlushMixin, TestCase):
     """Project badge view case"""
     mongo_flush = ['tasks']
 
