@@ -1,8 +1,8 @@
 import sure
 from mock import MagicMock
 from django.test import TestCase
+from django.contrib.sites.models import Site
 from django.contrib.auth.models import User
-from django.conf import settings
 from projects.tests.factories import ProjectFactory
 from ..exceptions import TaskAlreadyPerformed
 from .. import models
@@ -54,8 +54,9 @@ class ProjectPostSaveCase(WithKeysMixin, TestCase):
     def test_remove_hook_if_need(self):
         """Test remove hook if need"""
         project = ProjectFactory.create(run_here=False)
-        hook = MagicMock()
-        hook.name = settings.GITHUB_HOOK_NAME
+        site = Site.objects.get_current()
+        url = 'https://{}/api/v1/nodes/hook/'.format(site.domain)
+        hook = MagicMock(config={'url': url})
         project.repo.get_hooks.return_value = [hook]
         project.save()
         hook.delete.call_count.should.be.equal(1)
