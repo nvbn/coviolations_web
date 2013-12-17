@@ -131,7 +131,7 @@ class NodeTask(models.Model):
     stdout = models.TextField(blank=True, null=True, verbose_name=_('stdout'))
     stderr = models.TextField(blank=True, null=True, verbose_name=_('stderr'))
     node = models.CharField(
-        max_length=30, blank=True, null=True, verbose_name=_('node'),
+        max_length=256, blank=True, null=True, verbose_name=_('node'),
     )
 
     class Meta:
