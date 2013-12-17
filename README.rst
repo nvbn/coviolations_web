@@ -1,12 +1,6 @@
 coviolations.io web
 ===================
 
-.. image:: https://travis-ci.org/nvbn/coviolations_web.png
-   :alt: Build Status
-   :target: https://travis-ci.org/nvbn/coviolations_web
-.. image:: https://coveralls.io/repos/nvbn/coviolations_web/badge.png?branch=develop
-   :alt: Coverage Status
-   :target: https://coveralls.io/r/nvbn/coviolations_web
 .. image:: https://coviolations.io/projects/nvbn/coviolations_web/badge/
    :target: http://coviolations.io/#/projects/nvbn/coviolations_web/
 
