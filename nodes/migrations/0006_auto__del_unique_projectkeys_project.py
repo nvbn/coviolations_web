@@ -1,25 +1,21 @@
 # -*- coding: utf-8 -*-
 from south.utils import datetime_utils as datetime
 from south.db import db
-from south.v2 import DataMigration
+from south.v2 import SchemaMigration
 from django.db import models
 
-class Migration(DataMigration):
+
+class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        from pymongo import ASCENDING
-        from projects.models import Project, QualityGame
-        from tasks.models import Tasks
-        QualityGame.remove()
-        for project in Project.objects.all():
-            for task in Tasks.find({
-                'project': project.name,
-            }, sort=[('created', ASCENDING)]):
-                if len(task['commit'].get('inner', [])):
-                    project.update_quality_game(task)
+        # Removing unique constraint on 'ProjectKeys', fields ['project']
+        db.delete_unique(u'nodes_projectkeys', ['project_id'])
+
 
     def backwards(self, orm):
-        pass
+        # Adding unique constraint on 'ProjectKeys', fields ['project']
+        db.create_unique(u'nodes_projectkeys', ['project_id'])
+
 
     models = {
         u'auth.group': {
@@ -58,6 +54,28 @@ class Migration(DataMigration):
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
+        u'nodes.nodetask': {
+            'Meta': {'object_name': 'NodeTask'},
+            'branch': ('django.db.models.fields.CharField', [], {'max_length': '300'}),
+            'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'finished': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'input': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
+            'node': ('django.db.models.fields.CharField', [], {'max_length': '30', 'null': 'True', 'blank': 'True'}),
+            'project': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['projects.Project']"}),
+            'pull_request_id': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'revision': ('django.db.models.fields.CharField', [], {'max_length': '42'}),
+            'state': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '0'}),
+            'stderr': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
+            'stdout': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'})
+        },
+        u'nodes.projectkeys': {
+            'Meta': {'object_name': 'ProjectKeys'},
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'private_key': ('django.db.models.fields.TextField', [], {}),
+            'project': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['projects.Project']"}),
+            'public_key': ('django.db.models.fields.TextField', [], {})
+        },
         u'projects.organization': {
             'Meta': {'object_name': 'Organization'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
@@ -78,10 +96,10 @@ class Migration(DataMigration):
             'name': ('django.db.models.fields.CharField', [], {'max_length': '300'}),
             'organization': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['projects.Organization']", 'null': 'True', 'blank': 'True'}),
             'owner': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']"}),
+            'run_here': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'token': ('django.db.models.fields.CharField', [], {'max_length': '36', 'null': 'True', 'blank': 'True'}),
             'url': ('django.db.models.fields.URLField', [], {'max_length': '200'})
         }
     }
 
-    complete_apps = ['projects']
-    symmetrical = True
+    complete_apps = ['nodes']

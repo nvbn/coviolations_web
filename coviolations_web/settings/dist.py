@@ -56,6 +56,10 @@ MONGO_DB = 'coviolations'
 REDIS_PUSH = 'covio_push'
 PUSH_BIND = 'http://localhost:9999/sub'
 
+PYRAX_SETTINGS = tuple()
+PYRAX_CREDENTIALS = tuple()
+PYRAX_PASSWORD = ''
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,

@@ -6,9 +6,10 @@ from tasks.models import Tasks
 from tasks.const import STATUS_SUCCESS, STATUS_FAILED
 from ..forms import FindTaskForBadgeForm
 from . import factories
+from tools.tests import MockGithubMixin
 
 
-class FindTaskForBadgeFormCase(MongoFlushMixin, TestCase):
+class FindTaskForBadgeFormCase(MockGithubMixin, MongoFlushMixin, TestCase):
     """Find task for badge form case"""
     mongo_flush = ['tasks']
 

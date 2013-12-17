@@ -3,15 +3,17 @@ from mock import MagicMock
 from django.core.exceptions import PermissionDenied
 from django.test import TestCase
 from accounts.tests.factories import UserFactory
+from tools.tests import MockGithubMixin
 from ..utils import ProjectAccessMixin
 from ..models import Project
 from . import factories
 
 
-class ProjectAccessMixinCase(TestCase):
+class ProjectAccessMixinCase(MockGithubMixin, TestCase):
     """Project access mixin case"""
 
     def setUp(self):
+        super(ProjectAccessMixinCase, self).setUp()
         self._orig_can_access = Project.can_access
         Project.can_access = MagicMock()
         self._orig_update = Project.objects.update_user_projects

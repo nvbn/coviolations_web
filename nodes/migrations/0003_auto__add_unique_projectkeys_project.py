@@ -1,24 +1,21 @@
 # -*- coding: utf-8 -*-
 from south.utils import datetime_utils as datetime
 from south.db import db
-from south.v2 import DataMigration
+from south.v2 import SchemaMigration
 from django.db import models
 
-class Migration(DataMigration):
+
+class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        from pymongo import ASCENDING
-        from projects.models import Project
-        from tasks.models import Tasks
-        for project in Project.objects.all():
-            for task in Tasks.find({
-                'project': project.name,
-            }, sort=[('created', ASCENDING)]):
-                if len(task['commit'].get('inner', [])):
-                    project.update_quality_game(task)
+        # Adding unique constraint on 'ProjectKeys', fields ['project']
+        db.create_unique(u'nodes_projectkeys', ['project_id'])
+
 
     def backwards(self, orm):
-        "Write your backwards methods here."
+        # Removing unique constraint on 'ProjectKeys', fields ['project']
+        db.delete_unique(u'nodes_projectkeys', ['project_id'])
+
 
     models = {
         u'auth.group': {
@@ -57,6 +54,26 @@ class Migration(DataMigration):
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
+        u'nodes.nodetask': {
+            'Meta': {'object_name': 'NodeTask'},
+            'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'finished': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'input': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
+            'node': ('django.db.models.fields.CharField', [], {'max_length': '30', 'null': 'True', 'blank': 'True'}),
+            'project': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['projects.Project']"}),
+            'revision': ('django.db.models.fields.CharField', [], {'max_length': '42'}),
+            'state': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '0'}),
+            'stderr': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
+            'stdout': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'})
+        },
+        u'nodes.projectkeys': {
+            'Meta': {'object_name': 'ProjectKeys'},
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'private_key': ('django.db.models.fields.TextField', [], {}),
+            'project': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['projects.Project']", 'unique': 'True'}),
+            'public_key': ('django.db.models.fields.TextField', [], {})
+        },
         u'projects.organization': {
             'Meta': {'object_name': 'Organization'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
@@ -82,5 +99,4 @@ class Migration(DataMigration):
         }
     }
 
-    complete_apps = ['projects']
-    symmetrical = True
+    complete_apps = ['nodes']

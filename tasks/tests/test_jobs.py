@@ -1,13 +1,13 @@
 import sure
 from mock import MagicMock
 from django.test import TestCase
-from django_rq import get_worker
 from tools.mongo import MongoFlushMixin
+from tools.tests import MockGithubMixin
 from projects.tests.factories import ProjectFactory
 from .. import jobs, models, const
 
 
-class CreateTaskJobCase(MongoFlushMixin, TestCase):
+class CreateTaskJobCase(MockGithubMixin, MongoFlushMixin, TestCase):
     """Create task job case"""
     mongo_flush = ['tasks']
 
@@ -57,7 +57,7 @@ class CreateTaskJobCase(MongoFlushMixin, TestCase):
         jobs.prepare_violations.delay.assert_called_once_with(task['_id'])
 
 
-class PrepareViolationsJobCase(MongoFlushMixin, TestCase):
+class PrepareViolationsJobCase(MockGithubMixin, MongoFlushMixin, TestCase):
     """Prepare violations job case"""
     mongo_flush = ['tasks']
 
@@ -240,7 +240,7 @@ class PrepareViolationsJobCase(MongoFlushMixin, TestCase):
         task['success_percent'].should.be.equal(100)
 
 
-class CommentPullRequestJob(MongoFlushMixin, TestCase):
+class CommentPullRequestJob(MockGithubMixin, MongoFlushMixin, TestCase):
     """Comment pull request job case"""
     mongo_flush = ['tasks']
 
@@ -270,7 +270,7 @@ class CommentPullRequestJob(MongoFlushMixin, TestCase):
             .should_not.throw(Exception)
 
 
-class MarkCommitWithStatusCase(MongoFlushMixin, TestCase):
+class MarkCommitWithStatusCase(MockGithubMixin, MongoFlushMixin, TestCase):
     """Test mark commit with status job"""
     mongo_flush = ['tasks']
 
@@ -324,7 +324,7 @@ class MarkCommitWithStatusCase(MongoFlushMixin, TestCase):
             )
 
 
-class CommentLinesCase(MongoFlushMixin, TestCase):
+class CommentLinesCase(MockGithubMixin, MongoFlushMixin, TestCase):
     """Comment lines case"""
     mongo_flush = ['tasks']
 

@@ -21,6 +21,6 @@ class MongoFlushMixin(object):
     mongo_flush = []
 
     def setUp(self):
+        super(MongoFlushMixin, self).setUp()
         for collection in self.mongo_flush:
             db[collection].remove()
-        super(MongoFlushMixin, self).setUp()

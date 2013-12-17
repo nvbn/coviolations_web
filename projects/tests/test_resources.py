@@ -3,18 +3,21 @@ from datetime import datetime
 from mock import MagicMock
 from django.contrib.auth.models import User
 from tastypie.test import ResourceTestCase
+from tools.mongo import MongoFlushMixin
 from tools.tests import MockGithubMixin
 from tasks.models import Tasks
 from .. import models
 from . import factories
 
 
-class ProjectsResourceCase(MockGithubMixin, ResourceTestCase):
+class ProjectsResourceCase(MongoFlushMixin, MockGithubMixin, ResourceTestCase):
     """User projects resources case"""
+    mongo_flush = [
+        'tasks', 'week_statistic', 'day_time_statistic', 'quality_game',
+    ]
 
     def setUp(self):
-        MockGithubMixin.setUp(self)
-        ResourceTestCase.setUp(self)
+        super(ProjectsResourceCase, self).setUp()
         self._mock_make_https()
         self.user = User.objects.create_user(
             'test', 'test@test.test', 'test',

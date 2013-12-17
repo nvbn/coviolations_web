@@ -1,5 +1,6 @@
 from mock import MagicMock
 from django.contrib.auth.models import User
+from projects.models import Project
 
 
 class MockGithubMixin(object):
@@ -13,9 +14,12 @@ class MockGithubMixin(object):
         """Mock github call"""
         self._orig_github = User.github
         User.github = MagicMock()
+        Project._repo = MagicMock()
+        Project._repo.get_hooks.return_value = []
 
     def tearDown(self):
         User.github = self._orig_github
+        del Project._repo
 
     def _create_repo(self, n):
         """Create repo"""
@@ -25,4 +29,5 @@ class MockGithubMixin(object):
             private=False,
         )
         repo.full_name = 'project {}'.format(n)
+        repo.get_hooks.return_value = []
         return repo

@@ -1,4 +1,5 @@
 import os
+from datetime import timedelta
 
 
 PROJECT_ROOT = os.path.abspath(
@@ -116,6 +117,7 @@ INSTALLED_APPS = (
     'violations',
     'services',
     'push',
+    'nodes',
 )
 
 BOWER_COMPONENTS_ROOT = os.path.join(PROJECT_ROOT, 'components')
@@ -153,3 +155,15 @@ LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/login/github/'
 
 GITHUB_EXTENDED_PERMISSIONS = ['public_repo', 'repo']
+GITHUB_HOOK_NAME = 'web'
+GITHUB_HOOK_EVENTS = ['push', 'create', 'pull_request']
+
+PYRAX_DEFAULT_IMAGE = 'ubuntu-1204-lts-precise-pangolin'
+PYRAX_DEFAULT_FLAVOR = '1-gb-performance'
+
+PARALLEL_TASKS = 2
+PARALLEL_TIMEOUT = 1
+NODE_LIFETIME = timedelta(minutes=10)
+NODE_KILLER_INTERVAL = 60
+
+KEYS_TEMPORARY_ROOT = '/tmp'
