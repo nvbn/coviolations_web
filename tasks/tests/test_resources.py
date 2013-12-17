@@ -3,17 +3,16 @@ from django.contrib.auth.models import User
 from tastypie.test import ResourceTestCase
 from projects.tests.factories import ProjectFactory
 from tools.mongo import MongoFlushMixin
+from tools.tests import MockGithubMixin
 from .. import models, const
 
 
-class BaseTaskResourceCase(MongoFlushMixin, ResourceTestCase):
+class BaseTaskResourceCase(MockGithubMixin, MongoFlushMixin, ResourceTestCase):
     """Base task resource case"""
     mongo_flush = ['tasks']
 
     def setUp(self):
-        MongoFlushMixin.setUp(self)
-        ResourceTestCase.setUp(self)
-
+        super(BaseTaskResourceCase, self).setUp()
         self.project = ProjectFactory(name='test', is_enabled=True)
 
     def _create_task(self, project='test', seed=0, **kwargs):
