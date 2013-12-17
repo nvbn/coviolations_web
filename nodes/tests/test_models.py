@@ -4,7 +4,6 @@ from django.test import TestCase
 from django.contrib.auth.models import User
 from django.conf import settings
 from projects.tests.factories import ProjectFactory
-from projects.models import Project
 from ..exceptions import TaskAlreadyPerformed
 from .. import models
 from . import factories
@@ -22,7 +21,7 @@ class ProjectKeysCase(WithKeysMixin, TestCase):
 
     def test_register_key_on_github(self):
         """Test register key on github"""
-        ProjectFactory(run_here=True)
+        ProjectFactory(run_here=True, is_enabled=True)
         models.Project.repo.create_key.call_count.should.be.equal(1)
 
     def test_file_paths(self):
@@ -32,13 +31,13 @@ class ProjectKeysCase(WithKeysMixin, TestCase):
 
     def test_create_when_project_enabled(self):
         """Test create keys when project enabled"""
-        project = ProjectFactory.create(run_here=True)
+        project = ProjectFactory.create(run_here=True, is_enabled=True)
         models.ProjectKeys.objects.filter(project=project).exists()\
             .should.be.true
 
     def test_not_create_duplicated_keys_on_save(self):
         """Test not create duplicated keys on save"""
-        project = ProjectFactory.create(run_here=True)
+        project = ProjectFactory.create(run_here=True, is_enabled=True)
         project.save()
         models.ProjectKeys.objects.filter(project=project).count()\
             .should.be.equal(1)
@@ -49,7 +48,7 @@ class ProjectPostSaveCase(WithKeysMixin, TestCase):
 
     def test_add_hook_if_need(self):
         """Test add hook if need"""
-        project = ProjectFactory.create(run_here=True)
+        project = ProjectFactory.create(run_here=True, is_enabled=True)
         project.repo.create_hook.call_count.should.be.equal(1)
 
     def test_remove_hook_if_need(self):
@@ -95,6 +94,7 @@ class NodeTaskCase(WithKeysMixin, TestCase):
         """Create NodeTask and keys"""
         defaults = {
             'project__run_here': True,
+            'project__is_enabled': True,
         }
         defaults.update(kwargs)
         task = factories.NodeTaskFactory(**defaults)
