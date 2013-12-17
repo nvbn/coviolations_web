@@ -1,7 +1,8 @@
 import sure
 from mock import MagicMock
 from django.test import TestCase
-from projects.models import User
+from django.contrib.auth.models import User
+from projects.tests.factories import ProjectFactory
 from ..exceptions import TaskAlreadyPerformed
 from .. import models
 from . import factories
@@ -26,6 +27,19 @@ class ProjectKeysCase(WithKeysMixin, TestCase):
         """Test file paths"""
         keys = factories.ProjectKeysFactory()
         keys.file_paths.should.be.ok
+
+    def test_create_when_project_enabled(self):
+        """Test create keys when project enabled"""
+        project = ProjectFactory.create(run_here=True)
+        models.ProjectKeys.objects.filter(project=project).exists()\
+            .should.be.true
+
+    def test_not_create_duplicated_keys_on_save(self):
+        """Test not create duplicated keys on save"""
+        project = ProjectFactory.create(run_here=True)
+        project.save()
+        models.ProjectKeys.objects.filter(project=project).count()\
+            .should.be.equal(1)
 
 
 class NodeTaskCase(WithKeysMixin, TestCase):

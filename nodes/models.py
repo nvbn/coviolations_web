@@ -5,6 +5,8 @@ import paramiko
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from projects.models import Project
 from .utils import connect_to_node, get_image, logger, kill_node
 from .exceptions import TaskAlreadyPerformed
@@ -12,9 +14,7 @@ from .exceptions import TaskAlreadyPerformed
 
 class ProjectKeys(models.Model):
     """Project keys model"""
-    project = models.ForeignKey(
-        Project, unique=True, verbose_name=_('project'),
-    )
+    project = models.ForeignKey(Project, verbose_name=_('project'))
     public_key = models.TextField(verbose_name=_('public key'))
     private_key = models.TextField(verbose_name=_('private key'))
 
@@ -65,6 +65,16 @@ class ProjectKeys(models.Model):
                 key_file.write(self.private_key)
             self._file_paths = public_path, private_path
         return self._file_paths
+
+
+@receiver(post_save, sender=Project)
+def generate_project_keys(instance, **kwargs):
+    """Generate project keys on save"""
+    if (
+        instance.run_here and
+        not ProjectKeys.objects.filter(project=instance).exists()
+    ):
+        ProjectKeys.objects.create(project=instance)
 
 
 class NodeTask(models.Model):
