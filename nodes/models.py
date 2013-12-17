@@ -71,7 +71,7 @@ class ProjectKeys(models.Model):
 def generate_project_keys(instance, **kwargs):
     """Generate project keys on save"""
     if (
-        instance.run_here and
+        instance.is_enabled and instance.run_here and
         not ProjectKeys.objects.filter(project=instance).exists()
     ):
         ProjectKeys.objects.create(project=instance)
@@ -84,7 +84,7 @@ def update_hook(instance, **kwargs):
         hook for hook in instance.repo.get_hooks()
         if hook.name == settings.GITHUB_HOOK_NAME
     ]
-    if instance.run_here and not exists:
+    if instance.is_enabled and instance.run_here and not exists:
         instance.repo.create_hook(
             settings.GITHUB_HOOK_NAME, {
                 'url': '',
