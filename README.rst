@@ -62,4 +62,10 @@ And run rq worker:
 
     ./manage.py rqworker
 
+And run rq scheduler:
+
+.. code-block:: bash
+
+    ./manage.py rqscheduler
+
 And `open <http://localhost:8000>`_ in browser.
