@@ -161,9 +161,10 @@ GITHUB_HOOK_EVENTS = ['push', 'create', 'pull_request']
 PYRAX_DEFAULT_IMAGE = 'ubuntu-1204-lts-precise-pangolin'
 PYRAX_DEFAULT_FLAVOR = '1-gb-performance'
 
-PARALLEL_TASKS = 2
+PARALLEL_TASKS = 20
 PARALLEL_TIMEOUT = 1
-NODE_LIFETIME = timedelta(minutes=10)
+NODE_LIFETIME = timedelta(minutes=30)
 NODE_KILLER_INTERVAL = 60
+NODE_MAX_WAIT_TIME = 3600
 
 KEYS_TEMPORARY_ROOT = '/tmp'

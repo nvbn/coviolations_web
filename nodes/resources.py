@@ -1,4 +1,6 @@
 from django.http import Http404
+from django.conf import settings
+from django_rq import enqueue
 from tastypie.resources import Resource
 from tastypie import fields
 from projects.models import Project
@@ -41,7 +43,10 @@ class NodeTaskHookResource(Resource):
             revision=bundle.data['after'],
             branch=self._get_branch(bundle.data['ref']),
         )
-        run_node_task.delay(task.id)
+        enqueue(
+            run_node_task, args=(task.id,),
+            timeout=settings.NODE_MAX_WAIT_TIME,
+        )
 
     def _get_branch(self, ref):
         """Get branch from ref"""
