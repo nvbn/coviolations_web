@@ -8,7 +8,7 @@ from .models import NodeTask
 @job
 def run_node_task(node_task_id):
     """Run node task"""
-    node_task = NodeTask.objects.get(node_task_id)
+    node_task = NodeTask.objects.get(id=node_task_id)
     while True:
         active = NodeTask.objects.filter(state=NodeTask.STATE_ACTIVE).count()
         if active < settings.PARALLEL_TASKS:
