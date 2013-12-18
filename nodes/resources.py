@@ -4,6 +4,7 @@ from tastypie import fields
 from projects.models import Project
 from .models import NodeTask
 from .jobs import run_node_task
+from .utils import logger
 
 
 class NodeTaskHookResource(Resource):
@@ -20,12 +21,20 @@ class NodeTaskHookResource(Resource):
 
     def obj_create(self, bundle, **kwargs):
         """Create task from received data"""
+        logger.info('Node task started: {}'.format(bundle.data['ref']))
+        project_name = '{}/{}'.format(
+            bundle.data['repository']['owner']['name'],
+            bundle.data['repository']['name'],
+        )
         try:
-            project = Project.objects.get(name='{}/{}'.format(
-                bundle.data['repository']['owner']['name'],
-                bundle.data['repository']['name'],
-            ), is_enabled=True, run_here=True)
+            project = Project.objects.get(
+                name=project_name, is_enabled=True, run_here=True,
+            )
         except Project.DoesNotExist:
+            logger.warning(
+                'Project for node task not found: {}'.
+                format(project_name),
+            )
             raise Http404('Project not found')
         task = NodeTask.objects.create(
             project=project,

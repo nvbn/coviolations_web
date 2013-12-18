@@ -3,6 +3,7 @@ from datetime import datetime
 from django.conf import settings
 from django_rq import job, get_scheduler
 from .models import NodeTask
+from .utils import logger
 
 
 @job
@@ -15,6 +16,8 @@ def run_node_task(node_task_id):
             break
         else:
             sleep(settings.PARALLEL_TIMEOUT)
+            logger.info('Wait parallel tasks: {}'.format(node_task_id))
+    logger.info('Start node task: {}'.format(node_task_id))
     node_task.perform()
 
 
