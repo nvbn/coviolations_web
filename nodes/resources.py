@@ -24,20 +24,11 @@ class NodeTaskHookResource(Resource):
     def obj_create(self, bundle, **kwargs):
         """Create task from received data"""
         logger.info('Node task started: {}'.format(bundle.data['ref']))
-        project_name = '{}/{}'.format(
-            bundle.data['repository']['owner']['name'],
-            bundle.data['repository']['name'],
-        )
-        try:
-            project = Project.objects.get(
-                name=project_name, is_enabled=True, run_here=True,
-            )
-        except Project.DoesNotExist:
-            logger.warning(
-                'Project for node task not found: {}'.
-                format(project_name),
-            )
-            raise Http404('Project not found')
+        project = self._get_project(bundle)
+        self._create_task(bundle, project)
+
+    def _create_task(self, bundle, project):
+        """Create node task for project"""
         task = NodeTask.objects.create(
             project=project,
             revision=bundle.data['after'],
@@ -47,6 +38,23 @@ class NodeTaskHookResource(Resource):
             run_node_task, args=(task.id,),
             timeout=settings.NODE_MAX_WAIT_TIME,
         )
+
+    def _get_project(self, bundle):
+        """Get project instance"""
+        project_name = '{}/{}'.format(
+            bundle.data['repository']['owner']['name'],
+            bundle.data['repository']['name'],
+        )
+        try:
+            return Project.objects.get(
+                name=project_name, is_enabled=True, run_here=True,
+            )
+        except Project.DoesNotExist:
+            logger.warning(
+                'Project for node task not found: {}'.
+                format(project_name),
+            )
+            raise Http404('Project not found')
 
     def _get_branch(self, ref):
         """Get branch from ref"""
