@@ -34,3 +34,7 @@ package { "subversion":
 package { "libyaml-dev":
   ensure => "installed"
 }
+
+package { "sloccount":
+  ensure => "installed"
+}

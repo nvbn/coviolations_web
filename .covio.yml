@@ -1,6 +1,6 @@
 image: python
 prepare:
-  - sudo apt-get install -qq sloccount mongodb-server redis-server
+  - sudo apt-get install -qq mongodb-server redis-server
   - pip install fabric
   - cp coviolations_web/settings/local_ci.py coviolations_web/settings/local.py
   - fab install:ci
