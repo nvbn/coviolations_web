@@ -32,7 +32,7 @@ class NodeTaskHookResource(Resource):
             revision=bundle.data['after'],
             branch=self._get_branch(bundle.data['ref']),
         )
-        run_node_task.delay(task)
+        run_node_task.delay(task.id)
 
     def _get_branch(self, ref):
         """Get branch from ref"""
