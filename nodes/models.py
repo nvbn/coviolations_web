@@ -85,7 +85,7 @@ def update_hook(instance, **kwargs):
     url = 'https://{}/api/v1/nodes/hook/'.format(site.domain)
     exists = [
         hook for hook in instance.repo.get_hooks()
-        if hook.config.get('url') == url
+        if hook and hook.config and hook.config.get('url') == url
     ]
     if instance.is_enabled and instance.run_here and not exists:
         instance.repo.create_hook(
