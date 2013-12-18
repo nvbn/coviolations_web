@@ -30,11 +30,12 @@ class NodeTaskHookResourceCase(MockGithubMixin, ResourceTestCase):
 
     def _mock_job(self):
         """Mock task performing job"""
-        self._orig_job = resources.run_node_task
-        resources.run_node_task = MagicMock()
+        self._orig_job = resources.enqueue
+        resources.enqueue = MagicMock()
 
     def tearDown(self):
         super(NodeTaskHookResourceCase, self).tearDown()
+        resources.enqueue = self._orig_job
 
     def test_create_task(self):
         """Test create node task"""
@@ -45,15 +46,6 @@ class NodeTaskHookResourceCase(MockGithubMixin, ResourceTestCase):
         response = self.api_client.post(self._url, data=self._data)
         response.status_code.should.be.equal(201)
         NodeTask.objects.count().should.be.equal(1)
-
-    def test_perform_node_task(self):
-        """Test perform node task"""
-        ProjectFactory(
-            name='octokitty/testing',
-            run_here=True, is_enabled=True,
-        )
-        self.api_client.post(self._url, data=self._data)
-        resources.run_node_task.delay.call_count.should.be.equal(1)
 
     def test_404_if_project_not_available(self):
         """Test send 404 if project not available"""
