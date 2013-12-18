@@ -88,13 +88,13 @@ LOGGING = {
             'propagate': False,
         },
         'coviolations_projects': {
-            'level': 'DEBUG',
+            'level': 'WARNING',
             'handlers': ['console', 'sentry'],
             'propagate': False,
         },
         'nodes': {
             'handlers': ['console', 'sentry'],
-            'level': 'INFO',
+            'level': 'WARNING',
         },
     },
 }
