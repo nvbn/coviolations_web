@@ -3,11 +3,11 @@ include top_menu
 .col-lg-12.top-row.no-access.row
     h2 Access denied
     p You have no access to {{target}}.
-    p(for-anonymouse) Maybe you need login and try again?
+    p(for-anonymouse) Maybe you need to login and try again?
     a.btn.btn-default(href='/login/github/', for-anonymouse)
         i.fa.fa-github
-        |  Sign in with github
-    p(for-authenticated) You can fetch permissions from github and try again.
+        |  Sign in with GitHub
+    p(for-authenticated) You can fetch permissions from GitHub and try again.
     button.btn.btn-default(
         type='button', ng-click='tryAgain()', for-authenticated,
         ng-disabled='trying'
