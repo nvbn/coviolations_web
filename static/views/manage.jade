@@ -4,7 +4,7 @@ include top_menu.jade
     h2 Manage projects
     table.table.table-hover
         tr(ng-show='loading')
-            td Fetching repositories from github...
+            td Fetching repositories from GitHub...
         tr(ng-repeat="project in projects")
             td
                 img.project-icon(ng-src='{{project.icon}}')

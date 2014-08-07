@@ -3,7 +3,7 @@ include top_menu.jade
 .col-lg-12.row.top-row.project-info.project-page-row
     h2
         a(
-            href='{{project.url}}', tooltip='Go to project github',
+            href='{{project.url}}', tooltip='Go To Project GitHub',
             tooltip-placement='left'
         )
             i.fa.fa-github
@@ -35,8 +35,8 @@ include top_menu.jade
             )
                 i.fa.fa-repeat
             .alert.alert-danger.col-lg-12(ng-show='showConfirmRegenerateToken')
-                h4 Are you sure wnat to regenerate token?
-                p It will break all applications depend on it.
+                h4 Are you sure you want to regenerate the token?
+                p It will break all applications that depend on it.
                 p
                     button.btn.btn-danger(
                         ng-click='regenerateToken(); showConfirmRegenerateToken = false'
@@ -149,4 +149,4 @@ include top_menu.jade
                 p.preview-commit(ng-show='task.commitsToExpand')
                     a(href='#/tasks/{{task.id}}/') And {{task.commitsToExpand}} more commits.
             .percent-badge {{task.success_percent||0}}%
-        .col-lg-12(ng-show='!tasks.items.length && loaded') This project don't have finished tasks.
+        .col-lg-12(ng-show='!tasks.items.length && loaded') This project doesn't have finished tasks.

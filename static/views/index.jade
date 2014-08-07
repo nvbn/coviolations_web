@@ -4,11 +4,10 @@
             h1 coviolations.io
             p.
                 With coviolations you can check your code with pep8, coverage
-                and many other tools automatically after each push to source
-                code repository.
+                and many other tools after each push to your source code repository.
             a.btn.btn-default(href='/login/github/')
                 i.fa.fa-github
-                |  Sign in with github
+                |  Sign in with GitHub
             a.btn.btn-default(href='https://coviolationsio.readthedocs.org/en/latest/')
                 i.fa.fa-book
                 |  Documentation
@@ -20,16 +19,16 @@
         img.col-lg-6.img-rounded(src='/static/images/metrics.png')
         .col-lg-6
             p.
-                You can detect code "smell", track source code quality and
-                see trends with available code metrics.
+                You can detect "code smells", track source code quality and
+                see trends with the following code metrics:
             p.
-                Currently supported metrics:
+                Supported metrics:
                 <code>pep8</code>, <code>sloccount</code>, <code>python unittest</code>,
                 <code>pip-review</code>, <code>testem</code>, <code>coverage</code>,
                 <code>xUnit</code> and<code>jslint</code>
             p.
-                If you not found needed metric, you could easily write it
-                 and we will add it to project.
+                If the metric you need isn't in the list, you could easily write it
+                and we will add it to the project.
             a.btn.btn-default(href='https://coviolationsio.readthedocs.org/en/latest/violations.html')
                 i.fa.fa-plus
                 |  Show how
@@ -39,14 +38,14 @@
         .col-lg-6.row
             h2 Visualise test results
             p
-                | Coviolations work as companion with ci tools like
+                | Coviolations works as a companion to CI tools like
                 a(href='https://travis-ci.org/')  travis-ci
                 |,
                 a(href='https://drone.io/')  drone.io
                 |  and
                 a(href='http://jenkins-ci.org/')  jenkins-ci
-                |. And it will create convenient represntation with trend graphics, code examples and many more.
-            p You can see total success/failed tasks charts here.
+                |. It creates convenient graphical representations of trends, code examples and many other code metrics.
+            p You can see the total success/failed task charts here.
             a.btn.btn-default(href='#/projects/nvbn/coviolations_web/')
                 i.fa.fa-bar-chart
                 |  Show for this project
@@ -61,41 +60,41 @@
                 |  failed {{failedPercent}}%
 
 .col-lg-12.row.index-block.index-even-block
-    h2 Find best and worst time of day and week
+    h2 Find the best and worst time of day and week for your project
     .col-lg-12.row
         img.col-lg-6.img-rounded(src='/static/images/by_date.png')
         .col-lg-5.pull-right
             p.
-                Coviolations will calculate success percent, failed and success tasks
-                per week day and day part.
-            p With this metrics you can find your best time to writting code.
+                Coviolations calculates total success percentage, and the number of successful
+                and failed tasks (grouped by day of week and time of day).
+            p With these metrics you can pinpoint the time that you write your best code.
             a.btn.btn-default(href='#/projects/nvbn/coviolations_web/')
                 i.fa.fa-bar-chart
                 |  Show for this project
 
 
 .col-lg-12.row.index-block.index-odd-block
-    h2 Monitoring projects lifetime
+    h2 Project monitoring over time
     .col-lg-12.row
         .col-lg-5
-            p You can follow the ups and downs of the quality of the project code.
-            p Also, we expect the trend of the project over the past 100 pushes.
-            p You need sign in for using dashboard:
+            p You can follow the ups and downs of the quality of your project.
+            p We calculate and display trends over the last 100 pushes to the repository.
+            p To access the dashboard, you need to sign in:
             a.btn.btn-default(href='/login/github/')
                 i.fa.fa-github
-                |  Sign in with github
+                |  Sign in with GitHub
         img.col-lg-6.row.img-rounded.pull-right(src='/static/images/export.png')
 
 .col-lg-12.row.index-block.index-even-block
-    h2 Perfect integration with github
+    h2 Perfect integration with GitHub
     .col-lg-5.row
         img(src='/static/images/octocat.png')
     .col-lg-7.row
-        p Coviolations have perfect integration with github, it can:
+        p Coviolations has perfect integration with GitHub. It can:
         ul
-            li build metrics for each push to repository;
-            li set success or failed status to commits;
-            li create summary report for pull requests;
+            li build metrics for each push to your repository;
+            li set a success or failed status to each commit;
+            li create a summary report for Pull Requests;
             li comment lines of code with errors and warnings.
         a.btn.btn-default(href='https://github.com/nvbn/coviolations_web/commit/78aef2c2ea868888fd7dc9b8d29f66a3b0021a74')
             i.fa.fa-external-link
@@ -103,7 +102,7 @@
 
 .col-lg-12.row.index-block.index-odd-block
     br
-    span Coviolations is an open-source software, you can obtain source code on github:&nbsp;
+    span Coviolations is an open-source software, so you can access the source code on GitHub:&nbsp;
     a.btn.btn-default(href='https://github.com/nvbn/coviolations_web')
         i.fa.fa-github
         |  Server code
